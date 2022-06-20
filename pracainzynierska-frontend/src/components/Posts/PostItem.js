@@ -1,37 +1,34 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import './Posts.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Posts.css";
 
-function PostItem() {
+function PostItem({ idUserOwner, title, context }) {
   return (
     <>
-        <li className="posts__item">
-            <div className="posts__item__container">
-                <div className="posts__item__postedby">
-                    <h4>Posted by: User1</h4>
-                    <i class="fa-solid fa-ellipsis fa-xl"></i>
-                </div>
-                <div className="posts__item__title">
-                    <h3>Example Title</h3>
-                </div>
-                <div className="posts__item__content">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                    Iste numquam blanditiis repellat a quibusdam aperiam.
-                </div>
-                <div className='posts__item__comments'>
-                    <Link to='/' className="posts__item__comments__link">
-                        <h2>
-                            <i class="fa-solid fa-comments"></i> Comments
-                        </h2>
-                    </Link>
-                </div>
-            </div>
-        </li>
+      <li className="posts__item">
+        <div className="posts__item__container">
+          <div className="posts__item__postedby">
+            <h4>Posted by: user id {idUserOwner}</h4>
+            <i class="fa-solid fa-ellipsis fa-xl"></i>
+          </div>
+          <div className="posts__item__title">
+            <h3>{title}</h3>
+          </div>
+          <div className="posts__item__content">{context}</div>
+          <div className="posts__item__comments">
+            <Link to="/" className="posts__item__comments__link">
+              <h2>
+                <i class="fa-solid fa-comments"></i> Comments
+              </h2>
+            </Link>
+          </div>
+        </div>
+      </li>
     </>
-  )
+  );
 }
 
-export default PostItem
+export default PostItem;
 
 /*
 
