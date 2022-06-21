@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Posts.css";
 
-function PostItem({ idUserOwner, title, context }) {
+function PostItem({ idUserOwner, title, context, userLogin, postId }) {
   return (
-    <>
+    <Link to={`/posts/${postId}`} className="link-wrapper">
       <li className="posts__item">
         <div className="posts__item__container">
           <div className="posts__item__postedby">
-            <h4>Posted by: user id {idUserOwner}</h4>
+            <h4>Posted by: {userLogin}</h4>
             <i class="fa-solid fa-ellipsis fa-xl"></i>
           </div>
           <div className="posts__item__title">
@@ -24,7 +24,7 @@ function PostItem({ idUserOwner, title, context }) {
           </div>
         </div>
       </li>
-    </>
+    </Link>
   );
 }
 

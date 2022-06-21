@@ -7,15 +7,29 @@ namespace pracaInzynierska_backend.Services
     public class SqlDatabase : IDatabase
     {
         DatabaseContext _data;
+        string errorMessage;
 
         public SqlDatabase()
         {
             _data = new DatabaseContext();
         }
 
+        public async Task<Tuple<List<Game>, string>> GetGamesAsync()
+        {
+            errorMessage = "";
+            var result = await _data.Games
+                .ToListAsync();
+
+            return new Tuple<List<Game>, string>(result, errorMessage);
+
+
+
+
+        }
+
         public async Task<Tuple<List<GetPostDto>,string>> GetPostsAsync(int gameId)
         {
-            var errorMessage = "";
+            errorMessage = "";
             var checkGameId = await _data.Games
                 .Where(e => e.GameId == gameId)
                 .FirstOrDefaultAsync();
@@ -27,20 +41,22 @@ namespace pracaInzynierska_backend.Services
 
             var posts = await _data.Posts
                 .Where(e => e.IdGame == gameId)
-                .Select(  e => new GetPostDto
+                .Select(e => new GetPostDto
                 {
                     PostId = e.PostId,
                     Title = e.Title,
                     Context = e.Context,
                     IdUserOwner = e.IdUser,
+                    User = _data.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
-                    Comments =  _data.Comments
+                    Comments = _data.Comments
                     .Where(x => x.IdPost == e.PostId)
                     .Select(y => new GetCommentDto
                     {
                         CommentId = y.CommentId,
                         Date = y.Date,
                         Context = y.Context,
+                        User = _data.Users.Where(x => x.UserId == y.IdUser).Select(x => x.Login).First(),
                         IdUser = y.IdUser
 
                     })

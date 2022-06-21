@@ -1,43 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PostItem from "../Posts/PostItem";
 import "./Posts.css";
-import http from "../Services/HttpService.js";
-import config from "../config.json";
 
-function Posts() {
-  const [posts, setPosts] = useState([
-    {
-      postId: 0,
-      title: "",
-      context: "",
-      idUserOwner: 0,
-      idGame: 0,
-      comments: {
-        commentId: 0,
-        date: "",
-        context: "",
-        idUser: 0,
-      },
-    },
-  ]);
-
-  async function fetchPosts() {
-    try {
-      //temporary argument.number means gameid.
-      const reqParameters = JSON.stringify({ gameId: 1 });
-      const { data } = await http.get(config.apiUrl + "posts", {
-        params: { gameId: 1 },
-      });
-      setPosts(data);
-    } catch (error) {
-      console.log("error: " + error);
-    }
-  }
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
+function Posts({ posts }) {
+  console.log(posts);
   return (
     <div className="posts">
       <div className="posts__container">
@@ -61,9 +27,12 @@ function Posts() {
           <ul className="posts__items">
             {posts.map((item) => (
               <PostItem
+                key={item.postId}
                 idUserOwner={item.idUserOwner}
+                userLogin={item.user}
                 title={item.title}
                 context={item.context}
+                postId={item.postId}
               />
             ))}
           </ul>
