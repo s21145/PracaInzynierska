@@ -85,3 +85,35 @@ h1{
     width: 350px;
     padding-left: 24px;
 }
+.post-wrapper{
+    cursor:pointer;
+}
+
+.post-with-comments-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6%;
+}
+.post-context  * {
+    background-color: blue;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 600px;
+    height: auto;
+    display: flex;
+
+    padding: 0.5rem;
+}
+.comment-wrapper {
+    background-color: gold;
+    width: 600px;
+    padding: 0.5rem;
+}
+.comment-top  * {
+    padding: 5px;
+}
+.link-wrapper {
+    text-decoration: none;
+}
