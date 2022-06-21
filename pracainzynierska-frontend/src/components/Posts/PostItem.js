@@ -9,7 +9,7 @@ function PostItem({ idUserOwner, title, context }) {
         <div className="posts__item__container">
           <div className="posts__item__postedby">
             <h4>Posted by: user id {idUserOwner}</h4>
-            <i class="fa-solid fa-ellipsis fa-xl"></i>
+            <i className="fa-solid fa-ellipsis fa-xl"></i>
           </div>
           <div className="posts__item__title">
             <h3>{title}</h3>
@@ -18,7 +18,7 @@ function PostItem({ idUserOwner, title, context }) {
           <div className="posts__item__comments">
             <Link to="/" className="posts__item__comments__link">
               <h2>
-                <i class="fa-solid fa-comments"></i> Comments
+                <i className="fa-solid fa-comments"></i> Comments
               </h2>
             </Link>
           </div>

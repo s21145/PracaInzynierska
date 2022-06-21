@@ -60,7 +60,7 @@ function Posts() {
         <div className="posts__wrapper">
           <ul className="posts__items">
             {posts.map((item) => (
-              <PostItem
+              <PostItem key={item.postId}
                 idUserOwner={item.idUserOwner}
                 title={item.title}
                 context={item.context}
