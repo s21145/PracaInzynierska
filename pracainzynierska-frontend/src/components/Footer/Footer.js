@@ -14,7 +14,7 @@ function Footer() {
             <div className="footer-links-wrapper">
                 <div className="footer-logo">
                     <Link to='/' className="footer-social-logo">
-                        E-MATES <i class="fa-solid fa-gamepad" />
+                        E-MATES <i className="fa-solid fa-gamepad" />
                     </Link>
                 </div>
             </div>

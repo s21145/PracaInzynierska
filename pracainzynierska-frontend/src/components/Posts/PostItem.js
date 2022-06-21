@@ -18,7 +18,7 @@ function PostItem({ idUserOwner, title, context, userLogin, postId }) {
           <div className="posts__item__comments">
             <Link to="/" className="posts__item__comments__link">
               <h2>
-                <i class="fa-solid fa-comments"></i> Comments
+                <i className="fa-solid fa-comments"></i> Comments
               </h2>
             </Link>
           </div>

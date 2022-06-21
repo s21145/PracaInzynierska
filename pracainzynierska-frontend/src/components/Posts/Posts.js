@@ -26,6 +26,7 @@ function Posts({ posts }) {
         <div className="posts__wrapper">
           <ul className="posts__items">
             {posts.map((item) => (
+
               <PostItem
                 key={item.postId}
                 idUserOwner={item.idUserOwner}

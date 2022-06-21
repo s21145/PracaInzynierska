@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import ProfileDropdown from '../ProfileDropdown/ProfileDropdown';
 import './Navbar.css';
 
 
@@ -10,6 +11,8 @@ function Navbar() {
 
     const handleClick = () => setClick(!click);
     const closeMobileMenu = () => setClick(false);
+    const openProfileMenu = () => setProfile(true);
+
 
     const showButton = () => {
         if(window.innerWidth <= 960){
@@ -18,6 +21,14 @@ function Navbar() {
             setButton(true)
         }
     };
+
+    const onMouseLeave = () => {
+        if (window.innerWidth < 960) {
+          setProfile(false);
+        } else {
+          setProfile(false);
+        }
+      };
 
     useEffect(() => {
         showButton();
@@ -29,7 +40,7 @@ function Navbar() {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to="/" className='navbar-logo' onClick={closeMobileMenu}>
-                    E-MATES<i class="fa-solid fa-gamepad"></i>
+                    E-MATES<i className="fa-solid fa-gamepad"></i>
                 </Link>
                 <div className="menu-icon" onClick={handleClick} >
                     <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -51,22 +62,30 @@ function Navbar() {
                         </Link>
                     </li>
                     <li className='nav-item'>
-                        <Link to='/posts' className='nav-links' onClick={closeMobileMenu}>
+                        <Link to='/PostsPage' className='nav-links' onClick={closeMobileMenu}>
                             POSTS
                         </Link>
                     </li>
-                    <li className='nav-item'>
+                    <li className='nav-item' >
                         <Link to='/contact' className='nav-links' onClick={closeMobileMenu}>
                             CONTACT
                         </Link>
                     </li>
                     {window.innerWidth<=960 ? <li className='nav-item'>
                         <Link to='/contact' className='nav-links' onClick={closeMobileMenu}>
-                            Settings <i class="fa-solid fa-gears"></i>
+                            Settings <i className="fa-solid fa-gears"></i>
                         </Link>
                     </li> : null}
                 </ul>
-                {window.innerWidth>960 ? <h2>Profile</h2> : null}
+                {window.innerWidth>960 ? 
+                        <div className='profile-span' onClick={openProfileMenu} onMouseLeave={onMouseLeave} >
+                        <div className='profile-link' >
+                            <h2 className='profile-wrap' >Your profile</h2>
+                        </div>
+                        
+                        {profile && <ProfileDropdown /> }
+                        </div>
+                    : null}
                 
             </div>
         </nav>
