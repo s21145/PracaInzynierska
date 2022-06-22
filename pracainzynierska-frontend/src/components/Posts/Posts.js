@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import PostItem from "../Posts/PostItem";
 import "./Posts.css";
 
@@ -26,7 +27,7 @@ function Posts({ posts }) {
         <div className="posts__wrapper">
           <ul className="posts__items">
             {posts.map((item) => (
-
+              
               <PostItem
                 key={item.postId}
                 idUserOwner={item.idUserOwner}
@@ -34,6 +35,7 @@ function Posts({ posts }) {
                 title={item.title}
                 context={item.context}
                 postId={item.postId}
+                
               />
             ))}
           </ul>
