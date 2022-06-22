@@ -4,7 +4,7 @@
     {
         public int PostId { get; set; }
         public string Title { get; set; }
-        public string Context { get; set; }
+        public string Content { get; set; }
         public int IdUserOwner { get; set; }
         public string User { get; set; }
         public int IdGame { get; set; }

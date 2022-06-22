@@ -45,7 +45,7 @@ namespace pracaInzynierska_backend.Services
                 {
                     PostId = e.PostId,
                     Title = e.Title,
-                    Context = e.Context,
+                    Content = e.Content,
                     IdUserOwner = e.IdUser,
                     User = _data.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
@@ -55,7 +55,7 @@ namespace pracaInzynierska_backend.Services
                     {
                         CommentId = y.CommentId,
                         Date = y.Date,
-                        Context = y.Context,
+                        Content = y.Content,
                         User = _data.Users.Where(x => x.UserId == y.IdUser).Select(x => x.Login).First(),
                         IdUser = y.IdUser
 

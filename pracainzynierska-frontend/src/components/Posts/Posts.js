@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import PostItem from "../Posts/PostItem";
 import "./Posts.css";
 
-function Posts({ posts }) {
-  console.log(posts);
+function Posts({ posts, selectedGame }) {
+  var filteredPosts = posts.filter((e) => e.IdGame === selectedGame.gameId);
+
   return (
     <div className="posts">
       <div className="posts__container">
@@ -26,16 +27,14 @@ function Posts({ posts }) {
         </div>
         <div className="posts__wrapper">
           <ul className="posts__items">
-            {posts.map((item) => (
-              
+            {filteredPosts.map((item) => (
               <PostItem
                 key={item.postId}
                 idUserOwner={item.idUserOwner}
                 userLogin={item.user}
                 title={item.title}
-                context={item.context}
+                content={item.content}
                 postId={item.postId}
-                
               />
             ))}
           </ul>

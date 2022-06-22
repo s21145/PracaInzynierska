@@ -7,7 +7,7 @@ namespace pracaInzynierska_backend.Models
         [Key]
         public int PostId { get; set; }
         public string Title { get; set; }
-        public string Context { get; set; }
+        public string Content { get; set; }
         public int IdUser { get; set; }
         public User User { get; set; }
         public ICollection<Comment> Comments { get; set; }

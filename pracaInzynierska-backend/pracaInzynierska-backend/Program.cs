@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
 
 
 
-builder.Services.AddSingleton<IDatabase, SqlDatabase>();
+builder.Services.AddTransient<IDatabase, SqlDatabase>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
