@@ -7,7 +7,7 @@ const PostWithComments = ({ posts }) => {
   console.log(posts);
   console.log(posts[0].postId);
   console.log(posts.find((e) => e.postId === postId));
-  const post = posts.find((e) => e.postId === postId)[0];
+  const post = posts.find((e) => e.postId === parseInt(postId));
   console.log(post);
   return (
     <div className="post-with-comments-wrapper">
