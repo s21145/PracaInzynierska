@@ -1,28 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pracaInzynierska_backend.Services;
+using pracaInzynierska_backend.Services.IRepository;
 
 namespace pracaInzynierska_backend.Controllers
 {
     [ApiController]
     public class PostController : ControllerBase
     {
-        IDatabase Database;
-        public PostController(IDatabase data)
+        IUnitOfWork _unitOfWork;
+        public PostController(IUnitOfWork unitOfWork)
         {
-            Database = data;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [Route("posts")]
         public async Task<IActionResult> GetPostsAsync(int gameId)
         {
-            var posts = await Database.GetPostsAsync(gameId);
-            if(posts.Item2 != "")
-            {
-                return StatusCode(404,posts.Item2);
-               
-            }
-            return Ok(posts.Item1);
+            var posts = _unitOfWork.Post.GetPostsWithComments(gameId);
+            return Ok(posts);
         }
     }
    

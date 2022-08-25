@@ -1,11 +1,11 @@
-import "./App.css";
+import "./assets/App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
-import PostsPage from "./components/pages/PostsPage";
-import Footer from "./components/Footer/Footer";
-import PostWithComments from "./components/Posts/PostWithComments";
+import Navbar from "./pages/Navbar/Navbar";
+import PostsPage from "./pages/Post/PostsPage";
+import Footer from "./pages/Footer/Footer";
+import PostWithComments from "./pages/Posts/PostWithComments";
 import { useState, useEffect } from "react";
-import http from "./components/Services/HttpService";
+import http from "./Services/HttpService";
 import config from "./config.json";
 
 function App() {

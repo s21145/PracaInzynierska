@@ -1,4 +1,4 @@
-import "../../App.css";
+import "../../assets/App.css";
 import React, { useState } from "react";
 import Posts from "../Posts/Posts";
 import "./PostsPage.css";

@@ -10,11 +10,11 @@ namespace pracaInzynierska_backend.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Game> Games { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            options.UseSqlServer(
-                "Server=(localdb)\\mssqllocaldb;Database=inzynierka;Trusted_Connection=True;");
+
         }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
