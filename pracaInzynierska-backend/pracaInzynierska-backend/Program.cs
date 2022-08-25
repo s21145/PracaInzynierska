@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Services;
+using pracaInzynierska_backend.Services.IRepository;
+using pracaInzynierska_backend.Services.Repository;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,8 +30,9 @@ builder.Services.AddCors(options =>
 
 
 
-
-builder.Services.AddTransient<IDatabase, SqlDatabase>();
+builder.Services.AddDbContext<DatabaseContext>(opt => opt
+                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=inzynierka;Trusted_Connection=True;"));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

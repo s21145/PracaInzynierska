@@ -1,7 +1,7 @@
 import React from "react";
 import "./GamesDropdown.css";
 import { useState, useEffect } from "react";
-import http from "../Services/HttpService.js";
+import http from "../../Services/HttpService";
 import config from "../../config.json";
 
 function GamesDropdown({ selected, setSelected }) {

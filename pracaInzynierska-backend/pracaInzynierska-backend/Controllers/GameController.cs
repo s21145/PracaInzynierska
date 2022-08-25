@@ -1,21 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pracaInzynierska_backend.Services;
+using pracaInzynierska_backend.Services.IRepository;
+using pracaInzynierska_backend.Services.Repository;
 
 namespace pracaInzynierska_backend.Controllers
 {
     public class GameController : ControllerBase
     {
-        IDatabase Database;
-        public GameController(IDatabase data)
+       
+        IUnitOfWork _unitOfWork;
+        public GameController(IUnitOfWork unitOfWork)
         {
-            Database = data;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet]
         [Route("games")]
         public async Task<IActionResult> GetGamesAsync()
         {
-            var games = await Database.GetGamesAsync();
-            return Ok(games.Item1);
+
+            var games = _unitOfWork.Game.Get();
+            return Ok(games);
         }
     }
 }
