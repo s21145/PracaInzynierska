@@ -11,5 +11,6 @@ namespace pracaInzynierska_backend.Services.IRepository
         public TEntity GetByID(object id);
         public void Insert(TEntity entity);
         public void Delete(object id);
+        public void Update(TEntity entityToUpdate);
     }
 }
