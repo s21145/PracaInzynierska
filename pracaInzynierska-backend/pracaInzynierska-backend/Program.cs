@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Services;
 using pracaInzynierska_backend.Services.IRepository;
 using pracaInzynierska_backend.Services.Repository;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +30,43 @@ builder.Services.AddCors(options =>
                           AllowAnyMethod();
                       });
 });
+
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.FromMinutes(3),
+        ValidIssuer = "https://localhost:7194",
+        ValidAudience = "https://localhost:7194",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))
+    };
+
+    opt.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = context =>
+        {
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                context.Response.Headers.Add("Token-expired", "true");
+            }
+            return Task.CompletedTask;
+        }
+    };
+
+});
+
+
 
 
 

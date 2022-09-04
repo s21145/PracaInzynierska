@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pracaInzynierska_backend.Models;
 
@@ -11,9 +12,10 @@ using pracaInzynierska_backend.Models;
 namespace pracaInzynierska_backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220901164655_added jwt fields to user")]
+    partial class addedjwtfieldstouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 1,
                             Content = "Komentarz 1",
-                            Date = new DateTime(2022, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(5886),
+                            Date = new DateTime(2022, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(6901),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -64,7 +66,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 2,
                             Content = "Komentarz 2",
-                            Date = new DateTime(2022, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(5898),
+                            Date = new DateTime(2022, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(6913),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -72,7 +74,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 3,
                             Content = "Komentarz 3",
-                            Date = new DateTime(2022, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(5901),
+                            Date = new DateTime(2022, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(6915),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -80,7 +82,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 4,
                             Content = "Komentarz 4",
-                            Date = new DateTime(2022, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(5903),
+                            Date = new DateTime(2022, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(6917),
                             IdPost = 1,
                             IdUser = 1
                         });
@@ -221,9 +223,11 @@ namespace pracaInzynierska_backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Login")
@@ -245,7 +249,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2002, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(1745),
+                            BirthDate = new DateTime(2002, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(2504),
                             Description = "Lubie CS GO",
                             Email = "adres@o2.pl",
                             Login = "Czarek12",
@@ -254,7 +258,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 2,
-                            BirthDate = new DateTime(1997, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(1775),
+                            BirthDate = new DateTime(1997, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(2536),
                             Description = "Lubie CS GO",
                             Email = "tendrugiUser@gmail.com",
                             Login = "kozak5222",
@@ -263,7 +267,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 3,
-                            BirthDate = new DateTime(1992, 9, 1, 19, 7, 58, 665, DateTimeKind.Local).AddTicks(1779),
+                            BirthDate = new DateTime(1992, 9, 1, 18, 46, 54, 761, DateTimeKind.Local).AddTicks(2538),
                             Description = "Lubie CS GO",
                             Email = "Zielony@o2.pl",
                             Login = "Garo",

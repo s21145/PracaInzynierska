@@ -55,5 +55,10 @@ namespace pracaInzynierska_backend.Services.Repository
             TEntity entityToDelete = _dbSet.Find(id);
             Delete(entityToDelete);
         }
+        public  void Update(TEntity entityToUpdate)
+        {
+            _dbSet.Attach(entityToUpdate);
+            _context.Entry(entityToUpdate).State = EntityState.Modified;
+        }
     }
 }
