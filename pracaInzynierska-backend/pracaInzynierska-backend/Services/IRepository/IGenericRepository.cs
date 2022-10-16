@@ -4,13 +4,13 @@ namespace pracaInzynierska_backend.Services.IRepository
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        public IEnumerable<TEntity> Get(
+        public Task<IEnumerable<TEntity>> GetAsync(
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
            string includeProperties = "");
-        public TEntity GetByID(object id);
-        public void Insert(TEntity entity);
-        public void Delete(object id);
+        public Task<TEntity> GetByIDAsync(object id);
+        public Task InsertAsync(TEntity entity);
+        public Task DeleteAsync(object id);
         public void Update(TEntity entityToUpdate);
     }
 }

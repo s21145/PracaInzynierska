@@ -9,7 +9,7 @@ namespace pracaInzynierska_backend.Services.Repository
         public PostRepository(DatabaseContext context) : base(context)
         {
         }
-        public List<GetPostDto> GetPostsWithComments(int gameId)
+        public async Task<List<GetPostDto>> GetPostsWithCommentsAsync(int gameId)
         {
             //errorMessage = "";
             //var checkGameId = await _data.Games
@@ -21,7 +21,7 @@ namespace pracaInzynierska_backend.Services.Repository
             //    return new Tuple<List<GetPostDto>, string>(null, errorMessage);
             //}
 
-            var posts =  _context.Posts
+            var posts =   _context.Posts
                 .Where(e => e.IdGame == gameId)
                 .Select(e => new GetPostDto
                 {
