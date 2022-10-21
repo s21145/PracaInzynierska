@@ -1,0 +1,181 @@
+.modal-background{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container{
+    width: 500px;
+    height: 500px;
+    border-radius: 20px;
+    background-color: #1b1818;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    justify-content: center;
+    text-align: center;
+    
+}
+.modal-title{
+    
+    text-align: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 3rem;
+    padding-left: 20px;
+    width: 90vw;
+}
+
+.modal-title .modal-container{
+    display: inline-block;
+    text-align: center;
+    font-size: 30px;
+}
+
+.modal-container .modal-signup-body{
+    flex: 50%;
+    display: flex;
+    font-size: 1.5rem;
+}
+
+
+.modal-close-button{
+    display: flex;
+}
+
+.modal-close-button button{
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+.modal-container .modal-buttons{
+    display: flex;
+    align-items: center;
+}
+.modal-button{
+    background: transparent;
+    border-width: 3px;
+    border-color: transparent;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-signup-button{
+    background: transparent;
+    border-width: 3px;
+    border-color: transparent;
+    border-bottom-color: var(--color-orange);
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-login-button{
+    background: transparent;
+    border-width: 3px;
+    border-color: transparent;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-login-button:hover{
+    border-bottom-color: aliceblue;
+    transition: all 0.15s ease-out;
+}
+
+
+
+/*--------------------------------------------*/
+.modal-select-login-signup{
+    padding-top: 10px;
+    display: flex;
+    padding-left: 20px;
+    gap: 20px;
+}
+.modal-selected-option{
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 20px;
+}
+.modal-select-option:hover{
+    border-bottom: 4px solid var(--color-orange);
+    transition: all 0.2s ease-out;
+}
+.modal-selected-login{
+    background-color: #434343;
+    border-color: var(--color-orange);
+}
+
+.modal-buttons
+/*--------------------------------------------*/
+.modal-signup-form{
+    box-sizing: border-box;
+    border: 1px solid red;
+}
+
+.modal-signup-body{
+    display: flex;
+    flex-direction: column;
+}
+.modal-signup-form-wrapper{
+    display: grid;
+    grid-template-columns: auto;
+    text-align: center;
+    width: auto;
+}
+
+.modal-signup-form-fields{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    text-align: left;
+    align-items: left;
+    padding-top: 20px;
+    padding-left: 5px;
+    gap: 5px;
+    width: auto;
+    
+}
+
+.signup-form-input{
+    color: gray;
+    width: 55%;
+    height: 30px;
+    border-radius: 5px;
+    border-color: transparent;
+    
+}
+
+.signup-form-label{
+    font-size: 17px;
+    color: rgba(255,255,255,0.7);
+}
+
+.signup-form-button{
+    background-color: var(--color-orange);
+    margin-top: 10px;
+    font-size: 20px;
+    width: 90px;
+    height: 40px;
+    border-color: transparent;
+    border-radius: 25px;
+    color: white;
+    
+}
+
+
+
