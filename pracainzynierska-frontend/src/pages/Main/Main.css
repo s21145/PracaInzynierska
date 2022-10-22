@@ -1,0 +1,66 @@
+.main-page-container{
+    background-image: url("../../assets/resources/csgo-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 60vw;
+}
+
+.main-page-signup{
+    background-color: rgba(0,0,0, 0.6);
+    padding: 10% 0;
+    text-align: center;
+    height: 66%;
+    align-items: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+img {
+    height: 100%;
+    width: 28%;
+    margin-left: 3%;
+    padding: 20px 20px;
+    opacity: 1;
+}
+.separator{
+    margin: 0;
+    padding: 0;
+}
+.main-page-games{
+    background-color: rgba(20,17,21,0.85);
+    display: flexbox;
+    text-align: center;
+    height: 34%;
+    padding:5px;
+    margin-left: 5px;
+}
+
+.background-image{
+    width: 100vw;
+    min-width: 10vw;
+}
+
+.signup-button{
+    background-color: var(--color-orange);
+    margin-top: 10px;
+    font-size: 20px;
+    width: 150px;
+    height: 40px;
+    border-color: transparent;
+    border-radius: 25px;
+    color: white;
+}
+
+.login-button{
+    font-size: 26px;
+    font-weight: bold;
+    border-color: transparent;
+    background-color: transparent;
+    text-decoration: underline;
+}
+.signup-button:hover{
+    cursor: pointer;
+}
+.login-button:hover {
+    cursor: pointer;
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
-import "./Navbar.css";
+import "./NavbarLoggedOut.css";
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -37,7 +37,7 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          <Link to="/main" className="navbar-logo" onClick={closeMobileMenu}>
+          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
             E-MATES<i className="fa-solid fa-gamepad"></i>
           </Link>
           <div className="menu-icon" onClick={handleClick}>
