@@ -17,7 +17,7 @@ namespace pracaInzynierska_backend.Controllers
         [Route("posts")]
         public async Task<IActionResult> GetPostsAsync(int gameId)
         {
-            var posts = _unitOfWork.Post.GetPostsWithComments(gameId);
+            var posts = await _unitOfWork.Post.GetPostsWithCommentsAsync(gameId);
             return Ok(posts);
         }
     }

@@ -18,7 +18,7 @@ namespace pracaInzynierska_backend.Controllers
         public async Task<IActionResult> GetGamesAsync()
         {
 
-            var games = _unitOfWork.Game.Get();
+            var games = await _unitOfWork.Game.GetAsync();
             return Ok(games);
         }
     }
