@@ -9,8 +9,12 @@ import { useState, useEffect } from "react";
 import http from "./Services/HttpService";
 import Contact from "./pages/Contact/Contact";
 import config from "./config.json";
+import { UserContext } from "./Services/UserContext";
+import { useMemo } from "react";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const value = useMemo(() => ({ user, setUser }), [user, setUser]);
   const [posts, setPosts] = useState([]);
 
   async function fetchPosts() {
@@ -31,20 +35,23 @@ function App() {
   }, []);
   return (
     <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/posts" element={<PostsPage posts={posts} />} />
-          <Route
-            path="/posts/:postId"
-            element={<PostWithComments posts={posts} />}
-          />
+      <UserContext.Provider value={value}>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/posts" element={<PostsPage posts={posts} />} />
+            <Route
+              path="/posts/:postId"
+              element={<PostWithComments posts={posts} />}
+            />
 
-          <Route path="/main" element={<Main />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-        <Footer />
-      </Router>
+            <Route path="/main" element={<Main />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+
+          <Footer />
+        </Router>
+      </UserContext.Provider>
     </>
   );
 }

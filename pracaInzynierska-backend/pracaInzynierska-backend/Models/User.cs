@@ -6,7 +6,7 @@ namespace pracaInzynierska_backend.Models
     {
         [Key]
         public int UserId { get; set; }
-        public string? Email { get; set; } // change
+        public string Email { get; set; } 
         public string Login { get; set; }
         public DateTime BirthDate { get; set; }
         public string Password { get; set; }
