@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import "./Navbar.css";
+import { UserContext } from "../../Services/UserContext";
+import { useContext } from "react";
 
 function Navbar() {
+  const { user } = useContext(UserContext);
+
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const [profile, setProfile] = useState(false);
@@ -64,15 +68,17 @@ function Navbar() {
                 E-MATES
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="/findplayers"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                FIND PLAYERS
-              </Link>
-            </li>
+            {user && (
+              <li className="nav-item">
+                <Link
+                  to="/findplayers"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  FIND PLAYERS
+                </Link>
+              </li>
+            )}
             <li className="nav-item">
               <Link to="/posts" className="nav-links" onClick={closeMobileMenu}>
                 POSTS

@@ -41,11 +41,11 @@ namespace pracaInzynierska_backend.Controllers
         }
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] LoginDTO login)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO register)
         {
 
             var query = await _unitOfWork.User
-                .GetAsync(user => user.Login == login.Login);
+                .GetAsync(user => user.Login == register.Login || user.Email == register.Email);
             var userDb = query.FirstOrDefault();
             if(userDb != default)
             {
@@ -53,8 +53,10 @@ namespace pracaInzynierska_backend.Controllers
             }
             User newUser = new User
             {
-                Login = login.Login,
-                Password = login.Password
+                Login = register.Login,
+                Password = register.Password,
+                Email = register.Email,
+                BirthDate = register.Birthday
             };
             await _unitOfWork.User.InsertAsync(newUser);
             await _unitOfWork.SaveAsync();
@@ -100,6 +102,12 @@ namespace pracaInzynierska_backend.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        private bool ValidateRegister()
+        {
+            //to do
+            return true;
+        }
+        
 
 
     }
