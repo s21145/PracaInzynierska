@@ -22,16 +22,17 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
         {
-            var user = _unitOfWork.User
-                .Get(user => user.Login == loginRequest.Login && user.Password == loginRequest.Password)
-                .FirstOrDefault();
+            var query = await _unitOfWork.User
+                .GetAsync(user => user.Login == loginRequest.Login && user.Password == loginRequest.Password);
+            var user = query.FirstOrDefault();
+                
             if (user == default)
             {
                 return StatusCode(404, "Nie znaleziono Uzytkownika");
             }
             user.CurrentRefreshToken = SecurityHelpers.GenerateRefreshToken();
             user.RefreshTokenExp = DateTime.Now.AddDays(1);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return Ok(new
             {
                 accessToken = CreateJwtTokenAsync(user),
@@ -43,9 +44,9 @@ namespace pracaInzynierska_backend.Controllers
         public async Task<IActionResult> Register([FromBody] LoginDTO login)
         {
 
-            var userDb = _unitOfWork.User
-                .Get(user => user.Login == login.Login)
-                .FirstOrDefault();
+            var query = await _unitOfWork.User
+                .GetAsync(user => user.Login == login.Login);
+            var userDb = query.FirstOrDefault();
             if(userDb != default)
             {
                 return StatusCode(400, "Istnieje juz taki uzytkownik");
@@ -55,8 +56,8 @@ namespace pracaInzynierska_backend.Controllers
                 Login = login.Login,
                 Password = login.Password
             };
-            _unitOfWork.User.Insert(newUser);
-            _unitOfWork.Save();
+            await _unitOfWork.User.InsertAsync(newUser);
+            await _unitOfWork.SaveAsync();
 
 
             return Ok(newUser);
@@ -64,9 +65,9 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(string token)
         {
-            var user = _unitOfWork.User
-                .Get(user => user.CurrentRefreshToken == token && user.RefreshTokenExp > DateTime.Now)
-                .FirstOrDefault();
+            var query = await _unitOfWork.User
+                .GetAsync(user => user.CurrentRefreshToken == token && user.RefreshTokenExp > DateTime.Now);
+            var user = query.FirstOrDefault();
             // seperately condtion for expired token?
             if(user == default)
             {
@@ -85,8 +86,6 @@ namespace pracaInzynierska_backend.Controllers
             Claim[] userclaim = new[]
             {
                 new Claim(ClaimTypes.Name,user.Login)
-
-
             };
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -98,8 +97,6 @@ namespace pracaInzynierska_backend.Controllers
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds
                 );
-
-
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

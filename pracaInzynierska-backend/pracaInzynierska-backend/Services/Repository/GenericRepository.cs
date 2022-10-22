@@ -14,7 +14,7 @@ namespace pracaInzynierska_backend.Services.Repository
             _context = context;
             _dbSet =  context.Set<TEntity>();  
         }
-        public  IEnumerable<TEntity> Get(
+        public  async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "")
@@ -34,28 +34,37 @@ namespace pracaInzynierska_backend.Services.Repository
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return  await orderBy(query).ToListAsync();
             }
             else
             {
-                return query.ToList();
+                return await query.ToListAsync();
             }
         }
-        public  TEntity GetByID(object id)
+        public async Task<TEntity> GetByIDAsync(object id)
         {
-            return _dbSet.Find(id);
+            
+            return await _dbSet.FindAsync(id);
         }
 
-        public  void Insert(TEntity entity)
+        public async Task InsertAsync(TEntity entity)
         {
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
         }
-        public  void Delete(object id)
+        public async Task DeleteAsync(object id)
         {
-            TEntity entityToDelete = _dbSet.Find(id);
+            TEntity entityToDelete = await _dbSet.FindAsync(id);
             Delete(entityToDelete);
         }
-        public  void Update(TEntity entityToUpdate)
+        public  void Delete(TEntity entityToDelete)
+        {
+            if (_context.Entry(entityToDelete).State == EntityState.Detached)
+            {
+                _dbSet.Attach(entityToDelete);
+            }
+            _dbSet.Remove(entityToDelete);
+        }
+        public void Update(TEntity entityToUpdate)
         {
             _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
