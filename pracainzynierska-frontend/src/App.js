@@ -4,6 +4,7 @@ import Navbar from "./pages/Navbar/Navbar";
 import PostsPage from "./pages/Post/PostsPage";
 import Footer from "./pages/Footer/Footer";
 import PostWithComments from "./pages/Posts/PostWithComments";
+import Main from "./pages/Main/Main";
 import { useState, useEffect } from "react";
 import http from "./Services/HttpService";
 import Contact from "./pages/Contact/Contact";
@@ -38,6 +39,8 @@ function App() {
             path="/posts/:postId"
             element={<PostWithComments posts={posts} />}
           />
+
+          <Route path="/main" element={<Main />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
         <Footer />
