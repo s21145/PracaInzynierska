@@ -67,7 +67,7 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(string token)
         {
-            var query = await _unitOfWork.User
+             var query = await _unitOfWork.User
                 .GetAsync(user => user.CurrentRefreshToken == token && user.RefreshTokenExp > DateTime.Now);
             var user = query.FirstOrDefault();
             // seperately condtion for expired token?
@@ -81,6 +81,29 @@ namespace pracaInzynierska_backend.Controllers
             {
                 accessToken = CreateJwtTokenAsync(user)
             });
+
+        }
+        [HttpGet("reload")]
+        public async Task<IActionResult> Reload(string refreshToken)
+        {
+            var query = await _unitOfWork.User
+                .GetAsync(user => user.CurrentRefreshToken == refreshToken && user.RefreshTokenExp > DateTime.Now);
+            var user = query.FirstOrDefault();
+            if(user == default)
+            {
+                return StatusCode(400, "Niepoprawny Token");
+            }
+
+            user.CurrentRefreshToken = SecurityHelpers.GenerateRefreshToken();
+            user.RefreshTokenExp = DateTime.Now.AddDays(1);
+            await _unitOfWork.SaveAsync();
+            return Ok(new
+            {
+                login = user.Login,
+                accessToken = CreateJwtTokenAsync(user),
+                refreshToken = user.CurrentRefreshToken
+            });
+
 
         }
         private string CreateJwtTokenAsync(User user)
