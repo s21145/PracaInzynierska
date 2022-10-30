@@ -6,7 +6,7 @@ export async function RefreshToken() {
   var refreshToken = GetRefreshToken();
   try {
     const response = await http.post(
-      config.apiUrl + "refresh",
+      config.apiUrl + "Login/refresh",
       {},
       {
         params: { token: refreshToken },
@@ -36,7 +36,7 @@ export async function LoginAfterReload() {
   var refreshToken = GetRefreshToken();
   try {
     const response = await http.get(
-      config.apiUrl + "reload",
+      config.apiUrl + "Login/reload",
       {
         params: { refreshToken: refreshToken },
       },
@@ -71,7 +71,7 @@ export async function RegisterUser(user) {
   });
   console.log(req);
   try {
-    const response = await http.post(config.apiUrl + "register", req, {
+    const response = await http.post(config.apiUrl + "Login/register", req, {
       headers: {},
     });
     return response;
@@ -91,7 +91,7 @@ export async function Login(credentials) {
   });
   console.log(req);
   try {
-    const response = await http.post(config.apiUrl + "login", req, {
+    const response = await http.post(config.apiUrl + "Login/login", req, {
       headers: {
         "Content-type": "application/json",
       },

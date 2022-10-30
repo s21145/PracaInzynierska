@@ -10,6 +10,7 @@ using System.Text;
 
 namespace pracaInzynierska_backend.Controllers
 {
+    [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
         IUnitOfWork _unitOfWork;
@@ -39,8 +40,7 @@ namespace pracaInzynierska_backend.Controllers
                 refreshToken = user.CurrentRefreshToken
             });
         }
-        [HttpPost]
-        [Route("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO register)
         {
 

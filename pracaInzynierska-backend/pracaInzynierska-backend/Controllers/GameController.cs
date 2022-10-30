@@ -5,6 +5,7 @@ using pracaInzynierska_backend.Services.Repository;
 
 namespace pracaInzynierska_backend.Controllers
 {
+    [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
        
