@@ -1,6 +1,6 @@
 import config from "../config.json";
 import http from "../Services/HttpService";
-import jwtDecode from "jwt-decode";
+//import jwtDecode from "jwt-decode";
 
 export async function RefreshToken() {
   var refreshToken = GetRefreshToken();
@@ -120,7 +120,7 @@ export function GetCurrentUser() {
       return null;
     }
 
-    return jwtDecode(userData);
+    return 0;//jwtDecode(userData);
   } catch (error) {
     return {};
   }

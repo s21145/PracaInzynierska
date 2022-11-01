@@ -1,0 +1,45 @@
+.profile-games-wrapper{
+    background-color: black;
+    height: 100%;
+    width: 100%;
+}
+
+.profile-games-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-start: 3;
+    gap: 20px;
+    padding: 30px;
+    background-color: aquamarine;
+}
+
+.game-button{
+    width: 350px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: aqua;
+    border-width: 3px;
+    border-style: solid;
+    
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: right, left;
+}
+
+.game-button:hover{
+    cursor: pointer;
+}
+
+#leagueoflegends{
+    background-image:url('../../../assets/resources/leaguelogo.png');
+}
+
+#countestrikeglobaloffensive{
+    background-image:url('../../../assets/resources/csgo-icon.jpg');
+}
+
+#rust{
+    background-image:url('../../../assets/resources/rust.jpg');
+}

@@ -5,6 +5,7 @@ import PostsPage from "./pages/Post/PostsPage";
 import Footer from "./pages/Footer/Footer";
 import PostWithComments from "./pages/Posts/PostWithComments";
 import Main from "./pages/Main/Main";
+import ProfileMain from "./pages/ProfileMain/ProfileMain";
 import { useState, useEffect } from "react";
 import http from "./Services/HttpService";
 import Contact from "./pages/Contact/Contact";
@@ -82,6 +83,7 @@ function App() {
 
             <Route path="/main" element={<Main />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/ProfileMain" element={<ProfileMain />} />
           </Routes>
 
           <Footer />
