@@ -2,6 +2,7 @@ import React from 'react';
 import "./ProfileMain.css";
 import ProfileMainSettings from './ProfileMainSubPages/ProfileMainSettings';
 import ProfileMainGames from './ProfileMainSubPages/ProfileMainGames';
+import ProfileMainStarter from './ProfileMainSubPages/ProfileMainStarter';
 
 function ProfileMain() {
   return (
@@ -31,11 +32,9 @@ function ProfileMain() {
             </div>
         </div>
         <div className="profile-main-content-area">
-            {/*<ProfileMainSettings></ProfileMainSettings>*/}
-
-            <ProfileMainGames>
-
-            </ProfileMainGames>
+            {/*<ProfileMainSettings />*/}
+            {/*<ProfileMainGames />*/}
+            <ProfileMainStarter />
         </div>
     </div>
   )

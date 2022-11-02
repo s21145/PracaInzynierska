@@ -1,5 +1,4 @@
 .profile-games-wrapper{
-    background-color: black;
     height: 100%;
     width: 100%;
 }
@@ -10,7 +9,6 @@
     grid-column-start: 3;
     gap: 20px;
     padding: 30px;
-    background-color: aquamarine;
 }
 
 .game-button{
@@ -19,9 +17,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: aqua;
     border-width: 3px;
     border-style: solid;
+    border-radius: 10px;
     
     background-size: 100% 100%;
     background-repeat: no-repeat;
