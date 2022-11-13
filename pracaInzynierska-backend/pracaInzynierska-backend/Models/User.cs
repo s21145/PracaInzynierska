@@ -13,6 +13,8 @@ namespace pracaInzynierska_backend.Models
         public string? Description { get; set; }
         public string? CurrentRefreshToken { get; set; }
         public DateTime? RefreshTokenExp { get; set; }
+        public string? SteamId { get; set; }
+        public string IconPath { get; set; }
 
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }

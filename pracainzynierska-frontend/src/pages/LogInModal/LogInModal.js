@@ -14,7 +14,7 @@ function LogInModal({ closeLogInModal }) {
   });
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await Login(login);
+    const response = await Login(login, setUser);
     if (response.status !== 200) {
       // bad register
       console.log("bad");

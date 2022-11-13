@@ -27,12 +27,17 @@ function App() {
   useEffect(() => {
     async function reloadUser() {
       if (user === null && GetCurrentUser() !== null) {
-        const response = await LoginAfterReload();
+        const response = await LoginAfterReload(setUser);
         if (response.status !== 200) {
           Logout();
         } else {
+          const age = new Date(response.data.age);
           setUser({
             login: response.data.login,
+            image: response.data.image,
+            steamId: response.data.steamId,
+            age: age,
+            description: response.data.description,
           });
         }
       }
@@ -55,7 +60,7 @@ function App() {
   }, [user]);
   async function fetchPosts() {
     try {
-      //temporary argument.number means gameid.
+      //to delete
       const reqParameters = JSON.stringify({ gameId: 1 });
       const { data } = await http.get(config.apiUrl + "posts", {
         params: { gameId: 1 },

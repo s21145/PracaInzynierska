@@ -37,7 +37,15 @@ namespace pracaInzynierska_backend.Controllers
             return Ok(new
             {
                 accessToken = CreateJwtTokenAsync(user),
-                refreshToken = user.CurrentRefreshToken
+                refreshToken = user.CurrentRefreshToken,
+                image = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory,user.IconPath))),
+                login = user.Login,
+                steamId = user.SteamId,
+                age = user.BirthDate,
+                description = user.Description
+
             });
         }
         [HttpPost("register")]
@@ -99,9 +107,15 @@ namespace pracaInzynierska_backend.Controllers
             await _unitOfWork.SaveAsync();
             return Ok(new
             {
-                login = user.Login,
                 accessToken = CreateJwtTokenAsync(user),
-                refreshToken = user.CurrentRefreshToken
+                refreshToken = user.CurrentRefreshToken,
+                image = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory, user.IconPath))),
+                login = user.Login,
+                steamId = user.SteamId,
+                age = user.BirthDate,
+                description = user.Description
             });
 
 

@@ -6,7 +6,7 @@ export async function RefreshToken() {
   var refreshToken = GetRefreshToken();
   try {
     const response = await http.post(
-      config.apiUrl + "Login/refresh",
+      config.apiUrl + "/Login/refresh",
       {},
       {
         params: { token: refreshToken },
@@ -32,11 +32,11 @@ export async function RefreshToken() {
   }
 }
 
-export async function LoginAfterReload() {
+export async function LoginAfterReload(setUser) {
   var refreshToken = GetRefreshToken();
   try {
     const response = await http.get(
-      config.apiUrl + "Login/reload",
+      config.apiUrl + "/Login/reload",
       {
         params: { refreshToken: refreshToken },
       },
@@ -52,8 +52,16 @@ export async function LoginAfterReload() {
     };
     localStorage.setItem("userData", JSON.stringify(userData));
 
+    setUser({
+      login: response.data.login,
+      image: response.data.image,
+      steamId: response.data.steamId,
+      age: response.data.age,
+      description: response.data.description,
+    });
     return response;
   } catch (error) {
+    console.log(error);
     const response = {
       status: error.response.status,
       data: error.response.data,
@@ -71,7 +79,7 @@ export async function RegisterUser(user) {
   });
   console.log(req);
   try {
-    const response = await http.post(config.apiUrl + "Login/register", req, {
+    const response = await http.post(config.apiUrl + "/Login/register", req, {
       headers: {},
     });
     return response;
@@ -84,20 +92,26 @@ export async function RegisterUser(user) {
   }
 }
 
-export async function Login(credentials) {
+export async function Login(credentials, setUser) {
   const req = JSON.stringify({
     login: credentials.login,
     password: credentials.password,
   });
   console.log(req);
   try {
-    const response = await http.post(config.apiUrl + "Login/login", req, {
+    const response = await http.post(config.apiUrl + "/Login/login", req, {
       headers: {
         "Content-type": "application/json",
       },
     });
     localStorage.setItem("userData", JSON.stringify(response.data));
-
+    setUser({
+      login: response.data.login,
+      image: response.data.image,
+      steamId: response.data.steamId,
+      age: response.data.age,
+      description: response.data.description,
+    });
     //setAuthorization();
     return response;
   } catch (error) {
