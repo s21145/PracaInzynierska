@@ -86,7 +86,7 @@ function App() {
               element={<PostWithComments posts={posts} />}
             />
 
-            <Route path="/main" element={<Main />} />
+            <Route path="/" element={<Main />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/ProfileMain" element={<ProfileMain />} />
           </Routes>

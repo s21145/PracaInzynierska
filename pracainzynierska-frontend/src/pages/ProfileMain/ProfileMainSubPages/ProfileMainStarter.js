@@ -31,7 +31,7 @@ function ProfileMainStarter() {
             </div>
           </div>
         </div>
-        <div className="starter-posts">3</div>
+        <div className="starter-posts"></div>
       </div>
     </div>
   );

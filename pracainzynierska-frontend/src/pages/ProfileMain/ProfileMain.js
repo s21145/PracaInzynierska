@@ -5,9 +5,11 @@ import ProfileMainGames from "./ProfileMainSubPages/ProfileMainGames";
 import ProfileMainStarter from "./ProfileMainSubPages/ProfileMainStarter";
 import { useContext } from "react";
 import { UserContext } from "../../Services/UserContext";
+import { useState } from "react";
 
 function ProfileMain() {
   const { user } = useContext(UserContext);
+  const [profile, setProfile] = useState(0);
 
   return (
     <div className="profile-wrapper">
@@ -27,15 +29,17 @@ function ProfileMain() {
         </div>
 
         <div className="profile-sidebar-buttons">
-          <button className="profile-sidebar-button">MAIN PROFILE</button>
-          <button className="profile-sidebar-button">GAMES</button>
-          <button className="profile-sidebar-button">SETTINGS</button>
+          <button className="profile-sidebar-button" onClick={() => {setProfile(0);}}>MAIN PROFILE</button>
+          <button className="profile-sidebar-button" onClick={() => {setProfile(1);}}>GAMES</button>
+          <button className="profile-sidebar-button" onClick={() => {setProfile(2);}}>SETTINGS</button>
         </div>
       </div>
       <div className="profile-main-content-area">
-        {/*<ProfileMainSettings />*/}
-        {/*<ProfileMainGames />*/}
-        <ProfileMainStarter />
+        {profile === 2 &&
+          <ProfileMainSettings />
+        }
+        {profile === 1 && <ProfileMainGames />}
+        {profile === 0 && <ProfileMainStarter />}
       </div>
     </div>
   );
