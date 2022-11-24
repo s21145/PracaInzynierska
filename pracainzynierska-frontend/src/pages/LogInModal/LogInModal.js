@@ -14,17 +14,20 @@ function LogInModal({ closeLogInModal }) {
   });
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await Login(login, setUser);
+    const response = await Login(login);
     if (response.status !== 200) {
       // bad register
       console.log("bad");
       console.log(response.data);
     } else {
       // successful register
-      console.log("successful");
-      console.log(response);
+      const age = new Date(response.data.age);
       setUser({
-        login: login.login,
+        login: response.data.login,
+        image: response.data.image,
+        steamId: response.data.steamId,
+        age: age,
+        description: response.data.description,
       });
       closeLogInModal(false);
     }
