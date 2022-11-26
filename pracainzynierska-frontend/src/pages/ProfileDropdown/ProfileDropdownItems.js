@@ -6,7 +6,7 @@ export const ProfileDropdownItems = [
   },
   {
     title: "Settings",
-    path: "/",
+    path: "/ProfileMain?tab=settings",
     className: "profile-dropdown-link",
   },
   {

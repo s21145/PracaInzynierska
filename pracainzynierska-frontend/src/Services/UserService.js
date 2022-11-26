@@ -1,6 +1,7 @@
 import config from "../config.json";
 import http from "../Services/HttpService";
 import jwtDecode from "jwt-decode";
+import { setAuthorization } from "../Services/HttpService";
 
 export async function RefreshToken() {
   var refreshToken = GetRefreshToken();
@@ -32,7 +33,7 @@ export async function RefreshToken() {
   }
 }
 
-export async function LoginAfterReload(setUser) {
+export async function LoginAfterReload() {
   var refreshToken = GetRefreshToken();
   try {
     const response = await http.get(
@@ -51,14 +52,7 @@ export async function LoginAfterReload(setUser) {
       refreshToken: response.data.refreshToken,
     };
     localStorage.setItem("userData", JSON.stringify(userData));
-
-    setUser({
-      login: response.data.login,
-      image: response.data.image,
-      steamId: response.data.steamId,
-      age: response.data.age,
-      description: response.data.description,
-    });
+    setAuthorization();
     return response;
   } catch (error) {
     console.log(error);
@@ -92,12 +86,12 @@ export async function RegisterUser(user) {
   }
 }
 
-export async function Login(credentials, setUser) {
+export async function Login(credentials) {
   const req = JSON.stringify({
     login: credentials.login,
     password: credentials.password,
   });
-  console.log(req);
+
   try {
     const response = await http.post(config.apiUrl + "/Login/login", req, {
       headers: {
@@ -105,14 +99,7 @@ export async function Login(credentials, setUser) {
       },
     });
     localStorage.setItem("userData", JSON.stringify(response.data));
-    setUser({
-      login: response.data.login,
-      image: response.data.image,
-      steamId: response.data.steamId,
-      age: response.data.age,
-      description: response.data.description,
-    });
-    //setAuthorization();
+    setAuthorization();
     return response;
   } catch (error) {
     const response = {
@@ -149,5 +136,92 @@ export function GetRefreshToken() {
     return userData.refreshToken;
   } catch (error) {
     return {};
+  }
+}
+
+export async function ChangeDescription(description) {
+  try {
+    const response = await http.post(
+      config.apiUrl + "/User/description",
+      description,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    console.log(response);
+    return response;
+  }
+}
+export function GetJwt() {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  if (userData === null) {
+    return null;
+  }
+  return userData.accessToken;
+}
+export async function ChangeEmail(email) {
+  try {
+    const response = await http.post(config.apiUrl + "/User/email", email, {
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    console.log(response);
+    return response;
+  }
+}
+export async function ChangePassword(oldPassword, newPassword) {
+  const req = JSON.stringify({
+    oldPassword: oldPassword,
+    password: newPassword,
+  });
+
+  try {
+    const response = await http.post(config.apiUrl + "/User/password", req, {
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}
+
+export async function AddSteamId(steamId) {
+  const body = `"${steamId}"`;
+  try {
+    const response = await http.post(config.apiUrl + "/User/steamId", body, {
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
   }
 }

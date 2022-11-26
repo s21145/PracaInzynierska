@@ -1,7 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 const SteamAuth = require("node-steam-openid");
 
 const steam = new SteamAuth({
@@ -11,6 +15,12 @@ const steam = new SteamAuth({
 });
 
 app.use(cors());
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.get("/auth/steam", async (req, res) => {
   const redirectUrl = await steam.getRedirectUrl();
   return res.redirect(redirectUrl);
@@ -21,7 +31,9 @@ app.get("/auth/steam/authenticate", async (req, res) => {
     const user = await steam.authenticate(req);
 
     console.log(user);
-    res.redirect("http://localhost:3000");
+    res.redirect(
+      `http://localhost:3000/ProfileMain?tab=settings&steamId=${user.steamid}`
+    );
   } catch (error) {
     console.error("tutaj " + error);
   }

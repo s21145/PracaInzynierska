@@ -5,7 +5,6 @@ import { useContext } from "react";
 
 function ProfileMainStarter() {
   const { user } = useContext(UserContext);
-
   return (
     <div className="starter-wrapper">
       <div className="starter-bio">
@@ -17,7 +16,7 @@ function ProfileMainStarter() {
           <div className="starter-age-container">
             <div className="starter-age-title">Age:</div>
             <div className="starter-age">
-              {user && user.age.toLocaleDateString("en-GB")}
+              {user && user.age && user.age.toLocaleDateString("en-GB")}
             </div>
           </div>
 

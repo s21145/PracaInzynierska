@@ -11,6 +11,7 @@ import http from "./Services/HttpService";
 import Contact from "./pages/Contact/Contact";
 import config from "./config.json";
 import { UserContext } from "./Services/UserContext";
+import { MessageContext } from "./Services/MessageContext";
 import { useMemo } from "react";
 import {
   GetCurrentUser,
@@ -23,9 +24,19 @@ function App() {
   const MINUTE_MS = 60000;
   const [user, setUser] = useState(null);
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
-  const [posts, setPosts] = useState([]);
+
+  const [message, setMessage] = useState({
+    content: "",
+    show: false,
+  });
+  const messageValue = useMemo(
+    () => ({ message, setMessage }),
+    [message, setMessage]
+  );
+  //const [posts, setPosts] = useState([]);
   useEffect(() => {
     async function reloadUser() {
+      console.log("TEST12");
       if (user === null && GetCurrentUser() !== null) {
         const response = await LoginAfterReload(setUser);
         if (response.status !== 200) {
@@ -39,6 +50,7 @@ function App() {
             age: age,
             description: response.data.description,
           });
+          console.log(user);
         }
       }
     }
@@ -58,41 +70,41 @@ function App() {
 
     return () => clearInterval(interval);
   }, [user]);
-  async function fetchPosts() {
-    try {
-      //to delete
-      const reqParameters = JSON.stringify({ gameId: 1 });
-      const { data } = await http.get(config.apiUrl + "posts", {
-        params: { gameId: 1 },
-      });
-      setPosts(data);
-    } catch (error) {
-      console.log("error: " + error);
-    }
-  }
+  // async function fetchPosts() {
+  //   try {
+  //     //to delete
+  //     const reqParameters = JSON.stringify({ gameId: 1 });
+  //     const { data } = await http.get(config.apiUrl + "posts", {
+  //       params: { gameId: 1 },
+  //     });
+  //     setPosts(data);
+  //   } catch (error) {
+  //     console.log("error: " + error);
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  // useEffect(() => {
+  //   fetchPosts();
+  // }, []);
   return (
     <>
       <UserContext.Provider value={value}>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/posts" element={<PostsPage posts={posts} />} />
-            <Route
-              path="/posts/:postId"
-              element={<PostWithComments posts={posts} />}
-            />
+        <MessageContext.Provider value={messageValue}>
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/posts" element={<PostsPage />} />
+              <Route path="/posts/:postId" element={<PostWithComments />} />
 
-            <Route path="/" element={<Main />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/ProfileMain" element={<ProfileMain />} />
-          </Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/ProfileMain" element={<ProfileMain />} />
+              <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+            </Routes>
 
-          <Footer />
-        </Router>
+            <Footer />
+          </Router>
+        </MessageContext.Provider>
       </UserContext.Provider>
     </>
   );

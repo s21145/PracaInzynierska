@@ -5,6 +5,7 @@ import React from "react";
 import { Login } from "../../Services/UserService";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
+import { useEffect } from "react";
 
 function LogInModal({ closeLogInModal }) {
   const { user, setUser } = useContext(UserContext);
@@ -29,6 +30,7 @@ function LogInModal({ closeLogInModal }) {
         age: age,
         description: response.data.description,
       });
+      console.log(user);
       closeLogInModal(false);
     }
   };
