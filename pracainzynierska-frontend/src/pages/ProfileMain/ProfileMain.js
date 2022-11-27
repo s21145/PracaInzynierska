@@ -10,12 +10,14 @@ import { MessageContext } from "../../Services/MessageContext";
 import MessageModal from "../../components/MessageModal";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import GameModal from "./ProfileMainSubPages/GameStatistics/GameModal";
 
 function ProfileMain() {
   const { user } = useContext(UserContext);
   const [profile, setProfile] = useState(0);
   const { message } = useContext(MessageContext);
   const [searchParams, setSearchParamas] = useSearchParams();
+  const [openGameModal, setOpenGameModal] = useState(false);
 
   useEffect(() => {
     const w = searchParams.get("tab");
@@ -26,6 +28,8 @@ function ProfileMain() {
   return (
     <div className="profile-wrapper">
       {message && message.show && <MessageModal />}
+      {openGameModal && <GameModal closeGameModa={setOpenGameModal} />}
+
       <div className="profile-main-sidebar">
         <div className="profile-sidebar-picture-name">
           <div className="profile-sidebar-picture-wrapper">
