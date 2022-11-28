@@ -12,6 +12,10 @@
     padding-top: 20px;
 }
 
+.profile-games-return-button:hover{
+    cursor: pointer;
+}
+
 .profile-games-container{
     align-self: stretch;
     display: grid;
@@ -36,7 +40,7 @@
     color: white;
 }
 
-.game-button{
+.game-icon-button{
     width: 350px;
     height: 200px;
     display: flex;
@@ -51,7 +55,7 @@
     background-position: right, left;
 }
 
-.game-button:hover{
+.game-icon-button:hover{
     cursor: pointer;
 }
 

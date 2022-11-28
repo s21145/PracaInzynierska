@@ -5,6 +5,11 @@ export const ProfileDropdownItems = [
     className: "profile-dropdown-link",
   },
   {
+    title: "Games",
+    path: "/ProfileMain?tab=settings",
+    className: "profile-dropdown-link",
+  },
+  {
     title: "Settings",
     path: "/ProfileMain?tab=settings",
     className: "profile-dropdown-link",

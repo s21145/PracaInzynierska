@@ -18,7 +18,7 @@ function ProfileMain() {
   const [profile, setProfile] = useState(0);
   const { message } = useContext(MessageContext);
   const [searchParams, setSearchParamas] = useSearchParams();
-  const [openGameModal, setOpenGameModal] = useState(true);
+  const [openGameModal, setOpenGameModal] = useState(false);
 
   useEffect(() => {
     const w = searchParams.get("tab");
@@ -75,7 +75,7 @@ function ProfileMain() {
       </div>
       <div className="profile-main-content-area">
         {profile === 2 && <ProfileMainSettings />}
-        {profile === 1 && <ProfileMainGamesStarter />}
+        {profile === 1 && <ProfileMainGames />}
         {profile === 0 && <ProfileMainStarter />}
       </div>
     </div>

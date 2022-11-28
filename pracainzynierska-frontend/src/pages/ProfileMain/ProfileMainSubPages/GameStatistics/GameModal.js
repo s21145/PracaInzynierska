@@ -17,27 +17,6 @@ function GameModal({ closeGameModal }) {
                                 </div>
                         </div>
                         <div className="game-modal-content-wrapper">
-                            {/*<div className="game-stats">
-                                <div className="stats-icon">
-                                    K/D
-                                </div>
-                                <div className="stats-text">X.Y</div>
-                            </div>
-                            <div className="game-stats">
-                                <div className="stats-icon">
-                                    <i class="fa-regular fa-clock"></i>
-                                </div>
-                                <div className="stats-text">X hours</div>
-                            </div>
-                            <div className="game-stats">
-                                <div className="stats-icon">
-                                <i class="fa-solid fa-trophy"></i>
-                                </div>
-                                <div className="stats-text">
-                                    100%
-                                </div>
-                            </div>
-                            */}
                             <div className="game-modal-content-stats">
                                 <div className="game-stat">
                                     <div className="stats-text">

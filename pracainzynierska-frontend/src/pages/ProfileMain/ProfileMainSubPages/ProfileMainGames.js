@@ -9,11 +9,11 @@ function ProfileMainGames() {
             <i class="fa-sharp fa-solid fa-arrow-left" />
         </div>
         <div className="profile-games-container">
-            <button className="game-button" id="leagueoflegends">
+            <button className="game-icon-button" id="leagueoflegends">
             </button>
-            <button className="game-button" id="countestrikeglobaloffensive">
+            <button className="game-icon-button" id="countestrikeglobaloffensive">
             </button>
-            <button className="game-button" id="rust">
+            <button className="game-icon-button" id="rust">
             </button>       
         </div>
     </div>
