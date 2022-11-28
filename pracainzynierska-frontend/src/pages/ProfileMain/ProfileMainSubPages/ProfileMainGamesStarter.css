@@ -23,19 +23,6 @@
     padding: 30px;
 }
 
-
-
-.add-game-button{
-    background-color: transparent;
-    font-size: 20px;
-    font-weight: bold;
-    width: 150px;
-    height: 40px;
-    border-color: var(--color-orange);
-    border-radius: 25px;
-    color: white;
-}
-
 .game-button{
     width: 350px;
     height: 200px;
@@ -49,6 +36,20 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: right, left;
+}
+
+.game-add-button{
+    width: 350px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: #141a23;
+    flex-direction: column;
+    font-size: 50px;
 }
 
 .game-button:hover{

@@ -3,6 +3,7 @@ import "./ProfileMain.css";
 import ProfileMainSettings from "./ProfileMainSubPages/ProfileMainSettings";
 import ProfileMainGames from "./ProfileMainSubPages/ProfileMainGames";
 import ProfileMainStarter from "./ProfileMainSubPages/ProfileMainStarter";
+import ProfileMainGamesStarter from "./ProfileMainSubPages/ProfileMainGamesStarter";
 import { useContext } from "react";
 import { UserContext } from "../../Services/UserContext";
 import { useState } from "react";
@@ -17,7 +18,7 @@ function ProfileMain() {
   const [profile, setProfile] = useState(0);
   const { message } = useContext(MessageContext);
   const [searchParams, setSearchParamas] = useSearchParams();
-  const [openGameModal, setOpenGameModal] = useState(false);
+  const [openGameModal, setOpenGameModal] = useState(true);
 
   useEffect(() => {
     const w = searchParams.get("tab");
@@ -74,7 +75,7 @@ function ProfileMain() {
       </div>
       <div className="profile-main-content-area">
         {profile === 2 && <ProfileMainSettings />}
-        {profile === 1 && <ProfileMainGames />}
+        {profile === 1 && <ProfileMainGamesStarter />}
         {profile === 0 && <ProfileMainStarter />}
       </div>
     </div>
