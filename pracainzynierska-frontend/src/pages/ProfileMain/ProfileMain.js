@@ -25,6 +25,9 @@ function ProfileMain() {
     if (w === "settings") {
       setProfile(2);
     }
+    if (w === "games") {
+      setProfile(1);
+    }
   }, []);
   return (
     <div className="profile-wrapper">

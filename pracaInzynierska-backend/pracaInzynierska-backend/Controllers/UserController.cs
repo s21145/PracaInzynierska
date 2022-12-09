@@ -26,12 +26,12 @@ namespace pracaInzynierska_backend.Controllers
             _httpClientFactory = httpClientFactory;
         }
         [HttpGet("userData")]
-        public async Task<IActionResult> GetUserData()
+        public async Task<IActionResult> GetUserDataAsync()
         {
             return null;
         }
         [HttpPost("password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO request)
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDTO request)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             // hash ?????
@@ -61,7 +61,7 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200, "Hasło zostało zmienione");
         }
         [HttpPost("description")]
-        public async Task<IActionResult> ChangeDescription([FromBody] string Description)
+        public async Task<IActionResult> ChangeDescriptionAsync([FromBody] string Description)
         {
             if (Description == String.Empty)
                 return StatusCode(400, "Opis nie może być pusty");
@@ -76,7 +76,7 @@ namespace pracaInzynierska_backend.Controllers
 
         }
         [HttpPost("email")]
-        public async Task<IActionResult> ChangeEmail([FromBody]string email)
+        public async Task<IActionResult> ChangeEmailAsync([FromBody]string email)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             //validation for email?
@@ -94,7 +94,7 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200, "Email został zmieniony");
         }
         [HttpPost("steamId")]
-        public async Task<IActionResult> AddSteamId([FromBody]string steamId)
+        public async Task<IActionResult> AddSteamIdAsync([FromBody]string steamId)
         {   
             //sprawdzicz czy steamId jest juz w systemie
             var unique = await _unitOfWork.User.GetAsync(x => x.SteamId == steamId);
@@ -118,7 +118,7 @@ namespace pracaInzynierska_backend.Controllers
 
         }
         [HttpPost("addGame")]
-        public async Task<IActionResult> AddSteamGame([FromBody]string gameId)
+        public async Task<IActionResult> AddSteamGameAsync([FromBody]string gameId)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
@@ -180,7 +180,7 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200,statsToAdd);
         }
         [HttpGet("Stats")]
-        public async Task<IActionResult> GetStats(GetStatsDTO body)
+        public async Task<IActionResult> GetStatsAsync(GetStatsDTO body)
         {
             var game = await _unitOfWork.Game.GetByIDAsync(body.IdGame);
             if (game is null)
@@ -208,7 +208,7 @@ namespace pracaInzynierska_backend.Controllers
             }
         }
         [HttpPost("refreshStats")]
-        public async Task<IActionResult> RefreshStats([FromBody] string gameId)
+        public async Task<IActionResult> RefreshStatsAsync([FromBody] string gameId)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name); // kopia addGame Wrzucić to jakoś do funkcji
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
