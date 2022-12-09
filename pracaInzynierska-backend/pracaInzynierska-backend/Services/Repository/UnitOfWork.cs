@@ -12,11 +12,17 @@ namespace pracaInzynierska_backend.Services.Repository
             Game = new GameRepository(_db);
             Post = new PostRepository(_db);
             User = new UserRepository(_db);
+            Ranking = new UserGameRankingRepository(_db);
+            Stats = new UserGameStatsRepository(_db);
+            StatsName = new StatsNameRepository(_db);
 
         }
         public IGameRepository Game { get; private set; }
         public IPostRepository Post { get; private set; }
         public IUserRepository User { get; private set; }
+        public IUserGameRankingRepository Ranking { get; private set; }
+        public IUserGameStatsRepository Stats { get; private set; }
+        public IStatsNameRepository StatsName { get; private set; }
         public void Save()
         {
             _db.SaveChanges();
