@@ -1,14 +1,14 @@
-import React from 'react';
-import './ProfileMainGames.css';
+import React from 'react'
+import './ProfileMainGamesStarter.css'
 
-function ProfileMainGames() {
-
+function ProfileMainGamesStarter() {
   return (
     <div className="profile-games-wrapper">
-        <div className="profile-games-return-button">
-            <i class="fa-sharp fa-solid fa-arrow-left" />
-        </div>
         <div className="profile-games-container">
+            <button className="game-add-button">
+                <i class="fa-solid fa-plus" />
+                Add game
+            </button>
             <button className="game-icon-button" id="leagueoflegends">
             </button>
             <button className="game-icon-button" id="countestrikeglobaloffensive">
@@ -20,4 +20,4 @@ function ProfileMainGames() {
   )
 }
 
-export default ProfileMainGames
+export default ProfileMainGamesStarter

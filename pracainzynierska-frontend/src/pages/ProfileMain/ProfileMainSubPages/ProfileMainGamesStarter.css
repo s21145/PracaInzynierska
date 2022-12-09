@@ -12,10 +12,6 @@
     padding-top: 20px;
 }
 
-.profile-games-return-button:hover{
-    cursor: pointer;
-}
-
 .profile-games-container{
     align-self: stretch;
     display: grid;
@@ -25,19 +21,6 @@
     grid-column-start: 3;
     gap: 20px;
     padding: 30px;
-}
-
-
-
-.add-game-button{
-    background-color: transparent;
-    font-size: 20px;
-    font-weight: bold;
-    width: 150px;
-    height: 40px;
-    border-color: var(--color-orange);
-    border-radius: 25px;
-    color: white;
 }
 
 .game-icon-button{
@@ -53,6 +36,25 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: right, left;
+}
+
+.game-add-button{
+    width: 350px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: var(--color-orange);
+    background-color: #141a23;
+    flex-direction: column;
+    font-size: 50px;
+}
+
+.game-add-button:hover{
+    cursor: pointer;
 }
 
 .game-icon-button:hover{
