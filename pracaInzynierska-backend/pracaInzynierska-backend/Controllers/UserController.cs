@@ -120,17 +120,29 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("addGame")]
         public async Task<IActionResult> AddSteamGameAsync([FromBody]int gameId)
         {
+            //dodac walidacje w przypadku dodania tej samej gry
             var userName = User.FindFirstValue(ClaimTypes.Name);
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
             var user = userQuery.First();
             if (user.SteamId is null)
                 return StatusCode(400, "Użytkownik nie posiada przypisanego konta steam");
+           
 
             var game = await _unitOfWork.Game.GetByIDAsync(gameId);
             if (game is null)
                 return StatusCode(400, "Gra o takim ID nie istnieję");
+
+            var findRanking = await _unitOfWork.Ranking.GetAsync(x => x.IdGame == gameId && x.IdUser == user.UserId);
+            if(findRanking.Count() != 0  )
+            {
+                return StatusCode(400, "Uzytkownik ma już dodana podaną gre");
+            }
+                
+
             var httpClient = _httpClientFactory.CreateClient();
 
+            if(game.SteamId is null)
+                return StatusCode(500, "Gra nie ma przypisanego steamId");
 
             var query = new Dictionary<string, string>()
             {
@@ -138,19 +150,20 @@ namespace pracaInzynierska_backend.Controllers
                 ["steamid"]=user.SteamId,
                 ["appid"]=game.SteamId
             };
+
             var uri = QueryHelpers.AddQueryString(GetStatsSteam, query);
             var httpResponse = await httpClient.GetAsync(uri);
             if (!httpResponse.IsSuccessStatusCode)
                 return StatusCode(500, "Błąd przy pobieraniu danych ze steam");
-
-            var dto = JsonConvert.DeserializeObject<GameStatsSteamDTO>(await httpResponse.Content.ReadAsStringAsync());
-
+            var test = await httpResponse.Content.ReadAsStringAsync();
+            var dtoPlayerstats = JsonConvert.DeserializeObject<GameStatsSteamDTO>(await httpResponse.Content.ReadAsStringAsync());
+            var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
             var importantStats = findImportantStats.Select(x => x.Name).ToList();
             if (importantStats.Count == 0)
                 return StatusCode(500, "Brak nazw statystyk");
 
-            List<UserGameStats> statsToAdd = new List<UserGameStats>();
+            List<GetStatForGameDTO> statsToAdd = new List<GetStatForGameDTO>();
             foreach(var stat in dto.Stats)
             {
                 if (importantStats.Contains(stat.Name))
@@ -164,11 +177,17 @@ namespace pracaInzynierska_backend.Controllers
                         Value = stat.Value
                     };
                     
-                    statsToAdd.Add(tmp);
+                    statsToAdd.Add(new GetStatForGameDTO
+                    {
+                        GameName = game.Name,
+                        UserLogin = user.Login,
+                        Name = stat.Name,
+                        Value = stat.Value
+                    });
                     await  _unitOfWork.Stats.InsertAsync(tmp);
                 }
             }
-            await _unitOfWork.SaveAsync();
+      
             var rating = new UserGameRanking()
             {
                 IdUser = user.UserId,
@@ -176,6 +195,8 @@ namespace pracaInzynierska_backend.Controllers
                 score = 1000, // do zmiany
             };
             await _unitOfWork.Ranking.InsertAsync(rating);
+
+            await _unitOfWork.SaveAsync();
 
             return StatusCode(200,statsToAdd);
         }
@@ -233,8 +254,8 @@ namespace pracaInzynierska_backend.Controllers
             if (!httpResponse.IsSuccessStatusCode)
                 return StatusCode(500, "Błąd przy pobieraniu danych ze steam");
 
-            var dto = JsonConvert.DeserializeObject<GameStatsSteamDTO>(await httpResponse.Content.ReadAsStringAsync());
-
+            var dtoPlayerstats = JsonConvert.DeserializeObject<GameStatsSteamDTO>(await httpResponse.Content.ReadAsStringAsync());
+            var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
             var importantStats = findImportantStats.Select(x => x.Name).ToList();
             if (importantStats.Count == 0)

@@ -1,6 +1,10 @@
 ﻿namespace pracaInzynierska_backend.Models.Dto
 {
-    public class GameStatsSteamDTO
+    public partial class GameStatsSteamDTO
+    {
+        public Playerstats Playerstats { get; set; }
+    }
+    public class Playerstats
     {
         public string SteamId { get; set; }
         public string GameName { get; set; }
