@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import http from "../../Services/HttpService";
 import config from "../../config.json";
 
-function GamesDropdown({ selected, setSelected }) {
+function GamesDropdown({/* selected, setSelected */}) {
   const [isActive, setIsActive] = useState(false);
   const [gameOptions, setGameOptions] = useState([]);
   const temporaryOptions = [
@@ -34,12 +34,12 @@ function GamesDropdown({ selected, setSelected }) {
         <div className="dropdown">
           <div
             className="dropdown-button"
-            onClick={(e) => setIsActive(!isActive)}
+            //onClick={(e) => setIsActive(!isActive)}
           >
-            {selected.name}
+            {/*selected.name*/}
             <i className="fa-solid fa-angle-down" id="arrow-down" />
           </div>
-          {isActive && (
+          {/*isActive && (
             <div className="dropdown-content">
               {gameOptions.map((temporaryOption) => (
                 <div
@@ -54,7 +54,7 @@ function GamesDropdown({ selected, setSelected }) {
                 </div>
               ))}
             </div>
-          )}
+          )*/}
         </div>
       </div>
     </div>

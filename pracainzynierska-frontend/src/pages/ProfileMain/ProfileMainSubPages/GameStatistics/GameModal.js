@@ -1,7 +1,6 @@
 import React from 'react';
 import "./GameModal.css";
 import { useContext } from "react";
-import { GameContext } from '../../../../Services/GameContext';
 
 
 const GameModal = () => {
@@ -64,7 +63,7 @@ const GameModal = () => {
                     <div className="game-modal-close-button">
                         <button
                             className="modal-close-mark"
-                            onClick={handleCloseModal}
+                            
                         >
                             <i className="fa-solid fa-xmark" />
                         </button>
