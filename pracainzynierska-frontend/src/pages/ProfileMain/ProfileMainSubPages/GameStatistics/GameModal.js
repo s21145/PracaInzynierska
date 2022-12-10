@@ -1,9 +1,9 @@
 import React from 'react';
 import "./GameModal.css";
-import { useState } from "react";
+import { useContext } from "react";
 
 
-function GameModal({ closeGameModal }) {
+const GameModal = () => {
     
     
     return (
@@ -63,7 +63,7 @@ function GameModal({ closeGameModal }) {
                     <div className="game-modal-close-button">
                         <button
                             className="modal-close-mark"
-                            onClick={() => closeGameModal(false)}
+                            
                         >
                             <i className="fa-solid fa-xmark" />
                         </button>
@@ -71,7 +71,7 @@ function GameModal({ closeGameModal }) {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default GameModal

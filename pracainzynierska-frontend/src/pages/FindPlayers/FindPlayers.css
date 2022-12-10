@@ -1,0 +1,58 @@
+.find-players{
+    padding: 1rem;
+    background: #141a23;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 76vh;
+}
+.find-players-wrapper{
+    padding-top: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.find-players-form{
+    height: 20vh;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+}
+
+.form-container{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: black;
+}
+
+.find-players-select{
+    width: 180px;
+    height: 30px;
+    border-radius: 10px;
+    color: black;
+    border-color: transparent;
+}
+
+.find-players-input{
+    width: 180px;
+    height: 30px;
+    border-radius: 10px;
+    border-color: transparent;
+}
+
+option{
+    background-color: rgb(42, 151, 151);
+    border-radius: 4px;
+}
+
+.small-container-form-input:focus{
+    outline: none!important;
+}
+
+.game-specific-options{
+    display: flex;
+    gap: 10px;
+}

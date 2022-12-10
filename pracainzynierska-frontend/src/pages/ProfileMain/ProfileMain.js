@@ -78,7 +78,8 @@ function ProfileMain() {
       </div>
       <div className="profile-main-content-area">
         {profile === 2 && <ProfileMainSettings />}
-        {profile === 1 && <ProfileMainGames />}
+        {profile === 1 && <ProfileMainGamesStarter profileChanger={setProfile} />}
+        {profile === 3 && <ProfileMainGames profileChanger={setProfile} />}
         {profile === 0 && <ProfileMainStarter />}
       </div>
     </div>

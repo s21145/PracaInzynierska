@@ -6,6 +6,7 @@ import Footer from "./pages/Footer/Footer";
 import PostWithComments from "./pages/Posts/PostWithComments";
 import Main from "./pages/Main/Main";
 import ProfileMain from "./pages/ProfileMain/ProfileMain";
+import FindPlayers from "./pages/FindPlayers/FindPlayers";
 import { useState, useEffect } from "react";
 import http from "./Services/HttpService";
 import Contact from "./pages/Contact/Contact";
@@ -79,7 +80,7 @@ function App() {
             <Routes>
               <Route path="/posts" element={<PostsPage />} />
               <Route path="/posts/:postId" element={<PostWithComments />} />
-
+              <Route path="/FindPlayers" element={<FindPlayers />} />
               <Route path="/" element={<Main />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/ProfileMain" element={<ProfileMain />} />
