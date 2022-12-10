@@ -21,13 +21,13 @@ namespace pracaInzynierska_backend.Controllers
 
         [HttpGet]
         [Route("posts")]
-        public async Task<IActionResult> GetPostsAsync(int gameId)
+        public async Task<IActionResult> GetPostsAsync([FromQuery] GetPostsDTO body)
         {
-            var findGame = await _unitOfWork.Game.GetByIDAsync(gameId);
-            if (findGame is null)
+            var findGame = await _unitOfWork.Game.GetAsync(x => x.Name == body.GameName);
+            if (findGame.Count() == 0 )
                 return StatusCode(400, "Nie ma takiej gry");
 
-            var posts = await _unitOfWork.Post.GetPostsWithCommentsAsync(gameId);
+            var posts = await _unitOfWork.Post.GetPostsAsync(body.GameName,body.Page);
             return Ok(posts);
         }
         [HttpPost("posts")]
@@ -53,6 +53,16 @@ namespace pracaInzynierska_backend.Controllers
             await _unitOfWork.Post.InsertAsync(post);
 
             return StatusCode(200);
+        }
+        [HttpGet("post")]
+        public async Task<IActionResult> GetPostWithComment(int id)
+        {
+            var findGame = await _unitOfWork.Post.GetByIDAsync(id);
+            if (findGame is null)
+                return StatusCode(400, "Nie ma takiego posta");
+
+            var posts = await _unitOfWork.Post.GetPostWithCommentsAsync(id);
+            return StatusCode(200,posts);
         }
     }
    

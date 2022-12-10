@@ -1,31 +1,10 @@
 import React from "react";
 import "./GamesDropdown.css";
 import { useState, useEffect } from "react";
-import http from "../../Services/HttpService";
-import config from "../../config.json";
+import { getGames } from "../../Services/PostService";
 
-function GamesDropdown({/* selected, setSelected */}) {
+function GamesDropdown({ selected, setSelected, gameOptions }) {
   const [isActive, setIsActive] = useState(false);
-  const [gameOptions, setGameOptions] = useState([]);
-  const temporaryOptions = [
-    "Counter Strike: Global Offensive",
-    "Rust",
-    "Destiny 2",
-    "Rocket League",
-    "Random game",
-    "rnd game 2",
-  ];
-  async function fetchGames() {
-    try {
-      const { data } = await http.get(config.apiUrl + "games");
-      setGameOptions(data);
-    } catch (error) {
-      console.log("error: " + error);
-    }
-  }
-  useEffect(() => {
-    fetchGames();
-  }, []);
 
   return (
     <div className="dropdown-container">
@@ -34,27 +13,27 @@ function GamesDropdown({/* selected, setSelected */}) {
         <div className="dropdown">
           <div
             className="dropdown-button"
-            //onClick={(e) => setIsActive(!isActive)}
+            onClick={(e) => setIsActive(!isActive)}
           >
-            {/*selected.name*/}
+            {selected.name}
             <i className="fa-solid fa-angle-down" id="arrow-down" />
           </div>
-          {/*isActive && (
+          {isActive && (
             <div className="dropdown-content">
-              {gameOptions.map((temporaryOption) => (
+              {gameOptions.map((game) => (
                 <div
-                  key={temporaryOption.gameId}
+                  key={game.gameId}
                   className="dropdown-item"
                   onClick={(e) => {
-                    setSelected(temporaryOption);
+                    setSelected(game);
                     setIsActive(false);
                   }}
                 >
-                  {temporaryOption.name}
+                  {game.name}
                 </div>
               ))}
             </div>
-          )*/}
+          )}
         </div>
       </div>
     </div>
