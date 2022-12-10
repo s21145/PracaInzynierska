@@ -1,0 +1,84 @@
+.found-player{
+    background-color: #1f2f47;
+    height: 280px;
+    min-width: 200px;
+    max-width: 380px;
+    border-radius: 20px;
+    margin: 3px;
+    padding: 10px;
+}
+
+.found-player-container{
+    height: 100%;
+    width: 100%;
+}
+
+.found-player-title{
+    height: 30%;
+    display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.found-player-picture{
+    width: 40%;
+    background-image: url(../../assets/resources/csgo-background.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right, left;
+    border-radius: 5px;
+}
+
+.found-player-name{
+    min-width: 60%;
+    padding-left: 10px;
+}
+
+.found-player-nickname{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.found-player-age{
+    font-size: 17px;
+}
+
+.found-player-country{
+    font-size: 17px;
+}
+
+.found-player-bio{
+    height: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    background-color: #1b283b;
+    overflow: hidden;
+
+}
+
+.found-player-buttons{
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.found-player-button{
+    font-size: 17px;
+    width: 100px;
+    color: white;
+    background-color: var(--color-orange);
+    border-radius: 14px;
+    border-color: transparent;
+    font-weight: bold;
+}
+
+.found-player-button:hover{
+    background-color: #d88a03;
+    cursor: pointer;
+}
