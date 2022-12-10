@@ -1,4 +1,5 @@
-﻿using pracaInzynierska_backend.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services.IRepository;
 
@@ -9,7 +10,29 @@ namespace pracaInzynierska_backend.Services.Repository
         public PostRepository(DatabaseContext context) : base(context)
         {
         }
-        public async Task<List<GetPostDto>> GetPostsWithCommentsAsync(int gameId)
+
+        public async Task<List<GetPostDto>> GetPostsAsync(string gameName, int page)
+        {
+            var posts = await _context.Posts
+                .Where(x => x.Game.Name == gameName)
+                .Skip(page * 10)
+                .Take(10)
+                .Select( e => new GetPostDto
+                {
+                    PostId = e.PostId,
+                    Title = e.Title,
+                    Content = e.Content,
+                    IdUserOwner = e.IdUser,
+                    User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
+                    IdGame = e.IdGame,
+                    Comments = null
+                })
+                .ToListAsync();
+            return posts;
+
+        }
+
+        public async Task<GetPostDto> GetPostWithCommentsAsync(int postId)
         {
             //errorMessage = "";
             //var checkGameId = await _data.Games
@@ -21,8 +44,8 @@ namespace pracaInzynierska_backend.Services.Repository
             //    return new Tuple<List<GetPostDto>, string>(null, errorMessage);
             //}
 
-            var posts =   _context.Posts
-                .Where(e => e.IdGame == gameId)
+            var posts = _context.Posts
+                .Where(e => e.PostId == postId)
                 .Select(e => new GetPostDto
                 {
                     PostId = e.PostId,
@@ -45,7 +68,8 @@ namespace pracaInzynierska_backend.Services.Repository
                     .ToList()
 
                 })
-                .ToList();
+                .FirstOrDefault();
+
             return posts;
         }
     }

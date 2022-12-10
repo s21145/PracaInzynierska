@@ -33,7 +33,7 @@ function App() {
     () => ({ message, setMessage }),
     [message, setMessage]
   );
-  //const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     async function reloadUser() {
       console.log("TEST12");
@@ -70,22 +70,6 @@ function App() {
 
     return () => clearInterval(interval);
   }, [user]);
-  // async function fetchPosts() {
-  //   try {
-  //     //to delete
-  //     const reqParameters = JSON.stringify({ gameId: 1 });
-  //     const { data } = await http.get(config.apiUrl + "posts", {
-  //       params: { gameId: 1 },
-  //     });
-  //     setPosts(data);
-  //   } catch (error) {
-  //     console.log("error: " + error);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchPosts();
-  // }, []);
   return (
     <>
       <UserContext.Provider value={value}>

@@ -1,11 +1,24 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { getPostWithComments } from "../../Services/PostService";
 
-const PostWithComments = ({ posts }) => {
+const PostWithComments = () => {
   const { postId } = useParams();
-  const post = posts.find((e) => e.postId === parseInt(postId));
-  console.log(post);
+  const [post, setPost] = useState({});
+  const fetchPost = async () => {
+    const response = await getPostWithComments(postId);
+    if (response.status !== 200) {
+      // blad
+    } else {
+      setPost(response.data);
+      console.log(post);
+    }
+  };
+  useEffect(() => {
+    fetchPost();
+  }, []);
   return (
     <div className="post-wrapper">
       <div className="back-to-post-wrapper">
@@ -22,16 +35,17 @@ const PostWithComments = ({ posts }) => {
         </div>
 
         <div className="box-comments-wrapper">
-          {post.comments.map((item) => (
-            <div key={item.commentId} className="comment-wrapper">
-              <div className="comment-top">
-                <span>ikonka</span>
-                <span>{item.user}</span>
-                <span>{item.date}</span>
+          {Object.keys(post).length !== 0 &&
+            post.comments.map((item) => (
+              <div key={item.commentId} className="comment-wrapper">
+                <div className="comment-top">
+                  <span>ikonka</span>
+                  <span>{item.user}</span>
+                  <span>{item.date}</span>
+                </div>
+                {item.context}
               </div>
-              {item.context}
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

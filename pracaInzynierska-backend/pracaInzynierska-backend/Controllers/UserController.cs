@@ -118,7 +118,7 @@ namespace pracaInzynierska_backend.Controllers
 
         }
         [HttpPost("addGame")]
-        public async Task<IActionResult> AddSteamGameAsync([FromBody]string gameId)
+        public async Task<IActionResult> AddSteamGameAsync([FromBody]int gameId)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
@@ -208,7 +208,7 @@ namespace pracaInzynierska_backend.Controllers
             }
         }
         [HttpPost("refreshStats")]
-        public async Task<IActionResult> RefreshStatsAsync([FromBody] string gameId)
+        public async Task<IActionResult> RefreshStatsAsync([FromBody] int gameId)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name); // kopia addGame Wrzucić to jakoś do funkcji
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
@@ -270,6 +270,33 @@ namespace pracaInzynierska_backend.Controllers
 
 
             return StatusCode(200,statsToAdd);
+        }
+        [HttpGet("users")]
+        public async Task<IActionResult> GetSimilarUsers(GetSimilarUsersDTO body)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name); 
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            var game = await _unitOfWork.Game.GetByIDAsync(body.Idgame);
+            if (game is null)
+                return StatusCode(400, "Gra o takim ID nie istnieję");
+
+            var findRating = await _unitOfWork.Ranking
+                .GetAsync(x => x.IdUser == user.UserId && x.IdGame == body.Idgame);
+            
+                
+            if (findRating is null)
+                return StatusCode(400, "Użytkownik nie ma pobranych statystyk dla podanej gry");
+            var rating = findRating.FirstOrDefault().score;
+
+            var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page);
+
+
+
+
+
+            return StatusCode(200,users);
         }
     }
 }
