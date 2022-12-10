@@ -6,7 +6,7 @@ export const ProfileDropdownItems = [
   },
   {
     title: "Games",
-    path: "/ProfileMain?tab=settings",
+    path: "/ProfileMain?tab=games",
     className: "profile-dropdown-link",
   },
   {

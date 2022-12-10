@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pracaInzynierska_backend.Models;
 
@@ -11,9 +12,10 @@ using pracaInzynierska_backend.Models;
 namespace pracaInzynierska_backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20221207044935_changeSteamId")]
+    partial class changeSteamId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 1,
                             Content = "Komentarz 1",
-                            Date = new DateTime(2022, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(4298),
+                            Date = new DateTime(2022, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(9120),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -64,7 +66,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 2,
                             Content = "Komentarz 2",
-                            Date = new DateTime(2022, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(4310),
+                            Date = new DateTime(2022, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(9134),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -72,7 +74,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 3,
                             Content = "Komentarz 3",
-                            Date = new DateTime(2022, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(4312),
+                            Date = new DateTime(2022, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(9136),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -80,7 +82,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 4,
                             Content = "Komentarz 4",
-                            Date = new DateTime(2022, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(4314),
+                            Date = new DateTime(2022, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(9138),
                             IdPost = 1,
                             IdUser = 1
                         });
@@ -113,7 +115,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             GameId = 1,
-                            Name = "CounterStrike",
+                            Name = "CunterStrike",
                             Publisher = "Valve"
                         },
                         new
@@ -209,84 +211,6 @@ namespace pracaInzynierska_backend.Migrations
                         });
                 });
 
-            modelBuilder.Entity("pracaInzynierska_backend.Models.StatsName", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdGame")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdGame");
-
-                    b.ToTable("StatsNames");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IdGame = 1,
-                            Name = "total_kills"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IdGame = 1,
-                            Name = "total_deaths"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IdGame = 1,
-                            Name = "total_kills_headshot"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IdGame = 1,
-                            Name = "total_wins"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IdGame = 1,
-                            Name = "total_matches_played"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IdGame = 1,
-                            Name = "total_shots_hit"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IdGame = 1,
-                            Name = "total_shots_fired"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IdGame = 1,
-                            Name = "total_time_played"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IdGame = 1,
-                            Name = "total_mvps"
-                        });
-                });
-
             modelBuilder.Entity("pracaInzynierska_backend.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -334,7 +258,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2002, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(46),
+                            BirthDate = new DateTime(2002, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(4350),
                             Description = "Lubie CS GO",
                             Email = "adres@o2.pl",
                             IconPath = "../../images/default.png",
@@ -344,7 +268,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 2,
-                            BirthDate = new DateTime(1997, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(84),
+                            BirthDate = new DateTime(1997, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(4380),
                             Description = "Lubie CS GO",
                             Email = "tendrugiUser@gmail.com",
                             IconPath = "../../images/default.png",
@@ -354,39 +278,13 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 3,
-                            BirthDate = new DateTime(1992, 12, 9, 9, 48, 41, 767, DateTimeKind.Local).AddTicks(88),
+                            BirthDate = new DateTime(1992, 12, 7, 5, 49, 34, 828, DateTimeKind.Local).AddTicks(4383),
                             Description = "Lubie CS GO",
                             Email = "Zielony@o2.pl",
                             IconPath = "../../images/default.png",
                             Login = "Garo",
                             Password = "bedzieHash"
                         });
-                });
-
-            modelBuilder.Entity("pracaInzynierska_backend.Models.UserGameRanking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdGame")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
-
-                    b.Property<int>("score")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdGame");
-
-                    b.HasIndex("IdUser");
-
-                    b.ToTable("UserGameRakings");
                 });
 
             modelBuilder.Entity("pracaInzynierska_backend.Models.UserGameStats", b =>
@@ -403,12 +301,16 @@ namespace pracaInzynierska_backend.Migrations
                     b.Property<int>("IdUser")
                         .HasColumnType("int");
 
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Value")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -457,36 +359,6 @@ namespace pracaInzynierska_backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("pracaInzynierska_backend.Models.StatsName", b =>
-                {
-                    b.HasOne("pracaInzynierska_backend.Models.Game", "Game")
-                        .WithMany("StatsNames")
-                        .HasForeignKey("IdGame")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("pracaInzynierska_backend.Models.UserGameRanking", b =>
-                {
-                    b.HasOne("pracaInzynierska_backend.Models.Game", "Game")
-                        .WithMany("Ranking")
-                        .HasForeignKey("IdGame")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("pracaInzynierska_backend.Models.User", "User")
-                        .WithMany("Ranking")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("pracaInzynierska_backend.Models.UserGameStats", b =>
                 {
                     b.HasOne("pracaInzynierska_backend.Models.Game", "Game")
@@ -510,11 +382,7 @@ namespace pracaInzynierska_backend.Migrations
                 {
                     b.Navigation("Posts");
 
-                    b.Navigation("Ranking");
-
                     b.Navigation("Stats");
-
-                    b.Navigation("StatsNames");
                 });
 
             modelBuilder.Entity("pracaInzynierska_backend.Models.Post", b =>
@@ -527,8 +395,6 @@ namespace pracaInzynierska_backend.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Posts");
-
-                    b.Navigation("Ranking");
 
                     b.Navigation("Stats");
                 });

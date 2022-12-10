@@ -66,6 +66,7 @@ builder.Services.AddAuthentication(opt =>
 
 });
 
+builder.Services.AddHttpClient();
 
 
 
