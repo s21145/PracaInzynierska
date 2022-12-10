@@ -151,7 +151,10 @@ function Navbar() {
               onMouseLeave={onMouseLeave}
             >
               <div className="profile-link">
-                <h2 className="profile-wrap">Your profile</h2>
+                
+                <div className="testtest" > </div>
+                <h2 className="profile-wrap">Profile</h2>
+                
               </div>
 
               {profile && <ProfileDropdown />}
