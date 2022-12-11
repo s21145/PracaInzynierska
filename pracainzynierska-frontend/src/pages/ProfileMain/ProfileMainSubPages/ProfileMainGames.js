@@ -1,11 +1,13 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./ProfileMainGames.css";
 import { GetMissingGamesUser, AddGame } from "../../../Services/GamesService";
+import { statModalContext } from "../../../Services/StatsModalContext";
 
 function ProfileMainGames({ profileChanger, ...rest }) {
   const [games, setGames] = useState([]);
-  const [gameId, setGameId] = useState(null);
+  const [selected, setSelected] = useState({});
+  const { statModal, setStatModal } = useContext(statModalContext);
   const fetchUserGames = async () => {
     const response = await GetMissingGamesUser();
     if (response.status !== 200) {
@@ -19,18 +21,22 @@ function ProfileMainGames({ profileChanger, ...rest }) {
     fetchUserGames();
   }, []);
   const handleGameAdd = async () => {
-    if (gameId === null) return;
-    const response = await AddGame(gameId);
+    if (Object.keys(selected).length === 0) return;
+    const response = await AddGame(selected.gameId);
     if (response.status !== 200) {
       //blad
     } else {
       //wyswietlic modala
-      setGames((current) => current.filter((c) => c.gameId !== gameId));
+      setStatModal({ stats: response.data, show: true });
+      setGames((current) =>
+        current.filter((c) => c.gameId !== selected.gameId)
+      );
     }
   };
+
   useEffect(() => {
     handleGameAdd();
-  }, gameId);
+  }, [selected]);
   return (
     <div className="profile-games-wrapper">
       <div className="profile-games-return-button">
@@ -46,7 +52,7 @@ function ProfileMainGames({ profileChanger, ...rest }) {
               key={game.gameId}
               className="game-icon-button"
               id={game.gameId}
-              onClick={(e) => setGameId(game.gameId)}
+              onClick={(e) => setSelected(game)}
               style={{
                 backgroundImage: `url(data:image/png;base64,${game.image})`,
               }}

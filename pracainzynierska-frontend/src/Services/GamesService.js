@@ -52,3 +52,23 @@ export async function AddGame(gameId) {
     return response;
   }
 }
+export async function getStats(gameId, userName) {
+  try {
+    const response = await http.get(
+      config.apiUrl + "/User/Stats",
+      { params: { idGame: gameId, userName: userName } },
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}

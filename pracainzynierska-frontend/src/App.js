@@ -13,6 +13,7 @@ import Contact from "./pages/Contact/Contact";
 import config from "./config.json";
 import { UserContext } from "./Services/UserContext";
 import { MessageContext } from "./Services/MessageContext";
+import { statModalContext } from "./Services/StatsModalContext";
 import { useMemo } from "react";
 import {
   GetCurrentUser,
@@ -33,6 +34,16 @@ function App() {
   const messageValue = useMemo(
     () => ({ message, setMessage }),
     [message, setMessage]
+  );
+
+  const [statModal, setStatModal] = useState({
+    stats: {},
+    userName: null,
+    show: false,
+  });
+  const statModalValue = useMemo(
+    () => ({ statModal, setStatModal }),
+    [statModal, setStatModal]
   );
 
   useEffect(() => {
@@ -75,20 +86,22 @@ function App() {
     <>
       <UserContext.Provider value={value}>
         <MessageContext.Provider value={messageValue}>
-          <Router>
-            <Navbar />
-            <Routes>
-              <Route path="/posts" element={<PostsPage />} />
-              <Route path="/posts/:postId" element={<PostWithComments />} />
-              <Route path="/FindPlayers" element={<FindPlayers />} />
-              <Route path="/" element={<Main />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/ProfileMain" element={<ProfileMain />} />
-              <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
-            </Routes>
+          <statModalContext.Provider value={statModalValue}>
+            <Router>
+              <Navbar />
+              <Routes>
+                <Route path="/posts" element={<PostsPage />} />
+                <Route path="/posts/:postId" element={<PostWithComments />} />
+                <Route path="/FindPlayers" element={<FindPlayers />} />
+                <Route path="/" element={<Main />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/ProfileMain" element={<ProfileMain />} />
+                <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+              </Routes>
 
-            <Footer />
-          </Router>
+              <Footer />
+            </Router>
+          </statModalContext.Provider>
         </MessageContext.Provider>
       </UserContext.Provider>
     </>

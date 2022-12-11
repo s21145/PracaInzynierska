@@ -8,6 +8,7 @@ namespace pracaInzynierska_backend.Models
         public int Id { get; set; }
         public int IdGame { get; set; }
         public string Name { get; set; }
+        public string PublicName { get; set; }
         public Game Game { get; set; }
     }
 }

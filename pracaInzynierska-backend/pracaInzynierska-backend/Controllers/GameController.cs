@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using pracaInzynierska_backend.Services;
 using pracaInzynierska_backend.Services.IRepository;
 using pracaInzynierska_backend.Services.Repository;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 namespace pracaInzynierska_backend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class GameController : ControllerBase
     {
        

@@ -12,6 +12,7 @@ import MessageModal from "../../components/MessageModal";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import GameModal from "./ProfileMainSubPages/GameStatistics/GameModal";
+import { statModalContext } from "../../Services/StatsModalContext";
 
 function ProfileMain() {
   const { user } = useContext(UserContext);
@@ -19,6 +20,7 @@ function ProfileMain() {
   const { message } = useContext(MessageContext);
   const [searchParams, setSearchParamas] = useSearchParams();
   const [openGameModal, setOpenGameModal] = useState(false);
+  const { statModal } = useContext(statModalContext);
 
   useEffect(() => {
     const w = searchParams.get("tab");
@@ -32,6 +34,7 @@ function ProfileMain() {
   return (
     <div className="profile-wrapper">
       {message && message.show && <MessageModal />}
+      {statModal && statModal.show && <GameModal />}
       {openGameModal && <GameModal closeGameModa={setOpenGameModal} />}
 
       <div className="profile-main-sidebar">
@@ -78,7 +81,9 @@ function ProfileMain() {
       </div>
       <div className="profile-main-content-area">
         {profile === 2 && <ProfileMainSettings />}
-        {profile === 1 && <ProfileMainGamesStarter profileChanger={setProfile} />}
+        {profile === 1 && (
+          <ProfileMainGamesStarter profileChanger={setProfile} />
+        )}
         {profile === 3 && <ProfileMainGames profileChanger={setProfile} />}
         {profile === 0 && <ProfileMainStarter />}
       </div>

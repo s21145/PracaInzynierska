@@ -4,8 +4,8 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import "./Navbar.css";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
-import LogInModal from '../LogInModal/LogInModal';
-import SignUpModal from '../SignUpModal/SignUpModal';
+import LogInModal from "../LogInModal/LogInModal";
+import SignUpModal from "../SignUpModal/SignUpModal";
 
 function Navbar() {
   const { user } = useContext(UserContext);
@@ -20,7 +20,6 @@ function Navbar() {
 
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openSignupModal, setOpenSignupModal] = useState(false);
-
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -67,15 +66,15 @@ function Navbar() {
                 </Link>
               </li>
             ) : null}
-            {user  && (
+            {user && (
               <li className="nav-item">
-              <Link
-                to="/e-mates"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                E-MATES
-              </Link>
+                <Link
+                  to="/e-mates"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  E-MATES
+                </Link>
               </li>
             )}
             {user && (
@@ -89,9 +88,13 @@ function Navbar() {
                 </Link>
               </li>
             )}
-            {user &&(
+            {user && (
               <li className="nav-item">
-                <Link to="/posts" className="nav-links" onClick={closeMobileMenu}>
+                <Link
+                  to="/posts"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
                   POSTS
                 </Link>
               </li>
@@ -114,7 +117,7 @@ function Navbar() {
                   className="nav-links"
                   onClick={closeMobileMenu}
                 >
-                  Settings 
+                  Settings
                 </Link>
               </li>
             ) : null}
@@ -125,7 +128,7 @@ function Navbar() {
                   className="nav-links"
                   onClick={closeMobileMenu}
                 >
-                  Sign out 
+                  Sign out
                 </Link>
               </li>
             ) : null}
@@ -133,12 +136,22 @@ function Navbar() {
           {!user && window.innerWidth > 960 ? (
             <div className="navbar-login-signup-buttons">
               <div className="tmp">
-                <button className="log-in-button" onClick={() => {setOpenLoginModal(true);}}>
+                <button
+                  className="log-in-button"
+                  onClick={() => {
+                    setOpenLoginModal(true);
+                  }}
+                >
                   Log In
                 </button>
               </div>
               <div className="tmp">
-                <button className="sign-in-button" onClick={() => {setOpenSignupModal(true);}}>
+                <button
+                  className="sign-in-button"
+                  onClick={() => {
+                    setOpenSignupModal(true);
+                  }}
+                >
                   Sign In
                 </button>
               </div>
@@ -151,10 +164,8 @@ function Navbar() {
               onMouseLeave={onMouseLeave}
             >
               <div className="profile-link">
-                
-                <div className="testtest" > </div>
-                <h2 className="profile-wrap">Profile</h2>
-                
+                <div className="testtest"> </div>
+                <h2 className="profile-wrap">{user && user.login}</h2>
               </div>
 
               {profile && <ProfileDropdown />}

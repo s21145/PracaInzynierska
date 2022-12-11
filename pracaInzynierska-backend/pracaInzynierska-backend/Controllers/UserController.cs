@@ -159,36 +159,41 @@ namespace pracaInzynierska_backend.Controllers
             var dtoPlayerstats = JsonConvert.DeserializeObject<GameStatsSteamDTO>(await httpResponse.Content.ReadAsStringAsync());
             var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
-            var importantStats = findImportantStats.Select(x => x.Name).ToList();
+            var importantStats = findImportantStats.ToList();
             if (importantStats.Count == 0)
                 return StatusCode(500, "Brak nazw statystyk");
 
             List<GetStatForGameDTO> statsToAdd = new List<GetStatForGameDTO>();
-            foreach(var stat in dto.Stats)
+            foreach (var stat in dto.Stats)
             {
-                if (importantStats.Contains(stat.Name))
-                {
-                    var tmp = new UserGameStats()
-                    {
+                var important = importantStats.Find(x => x.Name == stat.Name);
+                if (important is null)
+                    continue;
 
-                        IdGame = game.GameId,
-                        IdUser = user.UserId,
-                        Name = stat.Name,
-                        Value = stat.Value
-                    };
-                    
-                    statsToAdd.Add(new GetStatForGameDTO
-                    {
-                        GameName = game.Name,
-                        UserLogin = user.Login,
-                        Name = stat.Name,
-                        Value = stat.Value
-                    });
-                    await  _unitOfWork.Stats.InsertAsync(tmp);
-                }
+                var tmp = new UserGameStats()
+                {
+
+                    IdGame = game.GameId,
+                    IdUser = user.UserId,
+                    Name = important.PublicName,
+                    Value = stat.Value
+                };
+
+                statsToAdd.Add(new GetStatForGameDTO
+                {
+                    GameName = game.Name,
+                    UserLogin = user.Login,
+                    Name = important.PublicName,
+                    Value = stat.Value
+                });
+                await _unitOfWork.Stats.InsertAsync(tmp);
+
+
             }
-      
-            var rating = new UserGameRanking()
+
+
+
+                var rating = new UserGameRanking()
             {
                 IdUser = user.UserId,
                 IdGame = game.GameId,
@@ -198,10 +203,26 @@ namespace pracaInzynierska_backend.Controllers
 
             await _unitOfWork.SaveAsync();
 
-            return StatusCode(200,statsToAdd);
+            var response = new ReturnStatsDTO()
+            {
+                UserName = userName,
+                GameName = game.Name,
+                Stats = new List<StatForSteamGames>(),
+                GameImage = Convert.ToBase64String(System.IO.File
+               .ReadAllBytes(
+                   Path.Combine(Environment.CurrentDirectory, game.ImagePath)))
+            };
+            //dodac tabele z tlumaczeniem i zwracac przetlumaczone nazwy statystyk
+            statsToAdd.ForEach(x => response.Stats.Add(new StatForSteamGames()
+            {
+                Name = x.Name,
+                Value = x.Value
+            }));
+
+            return StatusCode(200,response);
         }
         [HttpGet("Stats")]
-        public async Task<IActionResult> GetStatsAsync(GetStatsDTO body)
+        public async Task<IActionResult> GetStatsAsync([FromQuery]GetStatsDTO body)
         {
             var game = await _unitOfWork.Game.GetByIDAsync(body.IdGame);
             if (game is null)
@@ -214,7 +235,24 @@ namespace pracaInzynierska_backend.Controllers
 
                 var userStats = await _unitOfWork.Stats.GetAsync(x => x.IdGame == body.IdGame);
                 var stats = userStats.ToList();
-                return StatusCode(200,stats);
+
+                var response = new ReturnStatsDTO()
+                {
+                    UserName = userName,
+                    GameName = game.Name,
+                    Stats = new List<StatForSteamGames>(),
+                    GameImage = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory, game.ImagePath)))
+                };
+                //dodac tabele z tlumaczeniem i zwracac przetlumaczone nazwy statystyk
+                stats.ForEach(x => response.Stats.Add(new StatForSteamGames()
+                {
+                    Name = x.Name,
+                    Value = x.Value
+                }));
+
+                return StatusCode(200,response);
             }
             else
             {
@@ -224,7 +262,25 @@ namespace pracaInzynierska_backend.Controllers
                     return StatusCode(400, "Nie ma takiego użytkownika");
                 var findUserStats = await _unitOfWork.Stats.GetAsync(x => x.IdGame == body.IdGame && x.User.Login == body.UserName);
                 var userStats = findUserStats.ToList();
-                return StatusCode(200, userStats);
+
+                var response = new ReturnStatsDTO()
+                {
+                    UserName = body.UserName,
+                    GameName = game.Name,
+                    Stats = new List<StatForSteamGames>(),
+                    GameImage = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory, game.ImagePath)))
+                };
+                //dodac tabele z tlumaczeniem i zwracac przetlumaczone nazwy statystyk
+                userStats.ForEach(x => response.Stats.Add(new StatForSteamGames()
+                {
+                    Name = x.Name,
+                    Value = x.Value
+                }));
+
+
+                return StatusCode(200, response);
 
             }
         }
