@@ -4,6 +4,7 @@ import jwtDecode from "jwt-decode";
 import { setAuthorization } from "../Services/HttpService";
 
 export async function GetUserGames() {
+  setAuthorization();
   try {
     const response = await http.get(config.apiUrl + "/Game/myGames", {
       headers: {
@@ -57,6 +58,26 @@ export async function getStats(gameId, userName) {
     const response = await http.get(
       config.apiUrl + "/User/Stats",
       { params: { idGame: gameId, userName: userName } },
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}
+export async function getSimilarUsers(gameId, page) {
+  try {
+    const response = await http.get(
+      config.apiUrl + "/User/users",
+      { params: { Idgame: gameId, page: page } },
       {
         headers: {
           "Content-type": "application/json",

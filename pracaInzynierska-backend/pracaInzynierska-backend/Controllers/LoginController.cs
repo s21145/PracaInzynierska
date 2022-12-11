@@ -11,8 +11,10 @@ using System.Text;
 namespace pracaInzynierska_backend.Controllers
 {
     [Route("api/[controller]")]
+    
     public class LoginController : ControllerBase
     {
+        private readonly string defaultPath = "..\\..\\images\\users\\default.png";
         IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
         public LoginController(IUnitOfWork unitOfWork, IConfiguration configuration)
@@ -64,7 +66,8 @@ namespace pracaInzynierska_backend.Controllers
                 Login = register.Login,
                 Password = register.Password,
                 Email = register.Email,
-                BirthDate = register.Birthday
+                BirthDate = register.Birthday,
+                IconPath = defaultPath
             };
             await _unitOfWork.User.InsertAsync(newUser);
             await _unitOfWork.SaveAsync();

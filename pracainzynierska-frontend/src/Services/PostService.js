@@ -25,6 +25,7 @@ export async function getPosts(gameName) {
 }
 
 export async function getGames() {
+  setAuthorization();
   try {
     const response = await http.get(config.apiUrl + "/Game/games", {
       headers: {

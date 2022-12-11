@@ -349,14 +349,14 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200,statsToAdd);
         }
         [HttpGet("users")]
-        public async Task<IActionResult> GetSimilarUsers(GetSimilarUsersDTO body)
+        public async Task<IActionResult> GetSimilarUsers([FromQuery]GetSimilarUsersDTO body)
         {
             var userName = User.FindFirstValue(ClaimTypes.Name); 
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
             var user = userQuery.First();
 
-            var game = await _unitOfWork.Game.GetByIDAsync(body.Idgame);
-            if (game is null)
+            var game = await _unitOfWork.Game.GetAsync(x => x.GameId == body.Idgame);
+            if (game.Count() == 0)
                 return StatusCode(400, "Gra o takim ID nie istnieję");
 
             var findRating = await _unitOfWork.Ranking
@@ -369,11 +369,22 @@ namespace pracaInzynierska_backend.Controllers
 
             var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page);
 
+            var response = new List<ReturnSimilarUsersDTO>();
+            users.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
+            {
+                UserLogin = x.User.Login,
+                Description = x.User.Description,
+                Birthday = x.User.BirthDate,
+                Image = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory, x.User.IconPath))),
+            }));
 
 
 
 
-            return StatusCode(200,users);
+
+            return StatusCode(200,response);
         }
     }
 }

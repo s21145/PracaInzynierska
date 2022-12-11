@@ -99,8 +99,6 @@ function ProfileMainSettings() {
     try {
       removeAuthorization();
       const test = await http.get(config.openIdUrl + "auth/steam");
-      console.log("USUWAM");
-      console.log(test);
       window.location.replace(test.request.responseURL);
     } catch (error) {
       console.log("error: " + error);
@@ -111,7 +109,6 @@ function ProfileMainSettings() {
   }, []);
   console.log(user);
   async function handleSteamId() {
-    console.log("HANDLE STEAMID");
     const steamId = searchParams.get("steamId");
     searchParams.delete("steamId");
     setSearchParamas(searchParams);

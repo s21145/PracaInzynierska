@@ -74,7 +74,9 @@ export async function RegisterUser(user) {
   console.log(req);
   try {
     const response = await http.post(config.apiUrl + "/Login/register", req, {
-      headers: {},
+      headers: {
+        "Content-type": "application/json",
+      },
     });
     return response;
   } catch (error) {

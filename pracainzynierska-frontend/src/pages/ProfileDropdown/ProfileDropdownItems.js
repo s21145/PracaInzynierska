@@ -16,7 +16,7 @@ export const ProfileDropdownItems = [
   },
   {
     title: "Sign Out",
-    path: "/",
+    path: "/?logout=true",
     className: "profile-dropdown-log-out",
   },
 ];

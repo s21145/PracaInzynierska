@@ -51,6 +51,7 @@ function App() {
       console.log("TEST12");
       if (user === null && GetCurrentUser() !== null) {
         const response = await LoginAfterReload(setUser);
+        console.log("PO AUTH");
         if (response.status !== 200) {
           Logout();
         } else {
@@ -94,6 +95,7 @@ function App() {
                 <Route path="/posts/:postId" element={<PostWithComments />} />
                 <Route path="/FindPlayers" element={<FindPlayers />} />
                 <Route path="/" element={<Main />} />
+                <Route path="/?logout" element={<Main />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/ProfileMain" element={<ProfileMain />} />
                 <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
