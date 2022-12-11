@@ -15,6 +15,7 @@ namespace pracaInzynierska_backend.Services.Repository
             Ranking = new UserGameRankingRepository(_db);
             Stats = new UserGameStatsRepository(_db);
             StatsName = new StatsNameRepository(_db);
+            FriendLists = new FriendListRepository(_db);
 
         }
         public IGameRepository Game { get; private set; }
@@ -23,6 +24,7 @@ namespace pracaInzynierska_backend.Services.Repository
         public IUserGameRankingRepository Ranking { get; private set; }
         public IUserGameStatsRepository Stats { get; private set; }
         public IStatsNameRepository StatsName { get; private set; }
+        public IFriendListRepository FriendLists { get; private set; }
         public void Save()
         {
             _db.SaveChanges();

@@ -120,7 +120,7 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("addGame")]
         public async Task<IActionResult> AddSteamGameAsync([FromBody]int gameId)
         {
-            //dodac walidacje w przypadku dodania tej samej gry
+           
             var userName = User.FindFirstValue(ClaimTypes.Name);
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
             var user = userQuery.First();

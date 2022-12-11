@@ -20,6 +20,8 @@ namespace pracaInzynierska_backend.Models
         public ICollection<Comment> Comments { get; set; }
         public ICollection<UserGameStats> Stats { get; set; }
         public ICollection<UserGameRanking> Ranking { get; set; }
+        public ICollection<FriendList> Friends { get; set; }
+        public ICollection<FriendList> OnFriendList { get; set; }
 
     }
 }
