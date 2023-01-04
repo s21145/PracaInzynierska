@@ -47,11 +47,15 @@
 }
 
 .find-players-input{
-    width: 180px;
-    height: 30px;
-    border-radius: 10px;
-    color: black;
-    border-color: transparent;
+    width: 230px;
+    height: 45px;
+    padding: 10px 15px;
+    font-size: 24px;
+    border-style: none;
+    background-color: #10161f;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 option{
@@ -61,7 +65,6 @@ option{
 
 
 .find-players-input:focus{
-    color: black;
     outline: none!important;
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./FindPlayers.css";
 import FoundPlayer from "../../components/FoundPlayer/FoundPlayer";
-import GamesDropdown from "../GamesDropdown/GamesDropdown";
+import GamesDropdownFindPlayers from "../GamesDropdown/GamesDropdownFindPlayers";
 import { getGames } from "../../Services/PostService";
 import { getSimilarUsers } from "../../Services/GamesService";
 
@@ -49,7 +49,7 @@ function FindPlayers() {
                 />
               </div>
               <div>
-                <GamesDropdown
+                <GamesDropdownFindPlayers
                   selected={selected}
                   setSelected={setSelected}
                   gameOptions={gameOptions}

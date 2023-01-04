@@ -15,6 +15,7 @@
 /* --- entire sidebar --- */
 .profile-main-sidebar{
     grid-area: sidebar;
+    height: 75vh;
 }
 
 /* --- sidebar picture --- */
