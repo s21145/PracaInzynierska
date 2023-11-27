@@ -56,7 +56,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 1,
                             Content = "Komentarz 1",
-                            Date = new DateTime(2022, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(5877),
+                            Date = new DateTime(2023, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(7631),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -64,7 +64,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 2,
                             Content = "Komentarz 2",
-                            Date = new DateTime(2022, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(5887),
+                            Date = new DateTime(2023, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(7642),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -72,7 +72,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 3,
                             Content = "Komentarz 3",
-                            Date = new DateTime(2022, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(5888),
+                            Date = new DateTime(2023, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(7644),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -80,7 +80,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 4,
                             Content = "Komentarz 4",
-                            Date = new DateTime(2022, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(5890),
+                            Date = new DateTime(2023, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(7645),
                             IdPost = 1,
                             IdUser = 1
                         });
@@ -143,14 +143,14 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             GameId = 1,
-                            ImagePath = "../../images/games/csgo.png",
+                            ImagePath = "../../images/games/csgo.jpg",
                             Name = "CounterStrike",
                             Publisher = "Valve"
                         },
                         new
                         {
                             GameId = 2,
-                            ImagePath = "../../images/games/valorant.png",
+                            ImagePath = "../../images/games/valorant.jpg",
                             Name = "Fortnite",
                             Publisher = "Epic Games"
                         },
@@ -164,7 +164,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             GameId = 4,
-                            ImagePath = "../../images/games/rust.png",
+                            ImagePath = "../../images/games/rust.jpg",
                             Name = "Rust",
                             Publisher = "ktos?"
                         });
@@ -381,7 +381,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2002, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(2362),
+                            BirthDate = new DateTime(2003, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(5490),
                             Description = "Lubie CS GO",
                             Email = "adres@o2.pl",
                             IconPath = "../../images/users/default.png",
@@ -391,7 +391,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 2,
-                            BirthDate = new DateTime(1997, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(2388),
+                            BirthDate = new DateTime(1998, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(5505),
                             Description = "Lubie CS GO",
                             Email = "tendrugiUser@gmail.com",
                             IconPath = "../../images/users/default.png",
@@ -401,7 +401,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 3,
-                            BirthDate = new DateTime(1992, 12, 11, 14, 22, 3, 43, DateTimeKind.Local).AddTicks(2391),
+                            BirthDate = new DateTime(1993, 8, 20, 23, 8, 19, 421, DateTimeKind.Local).AddTicks(5508),
                             Description = "Lubie CS GO",
                             Email = "Zielony@o2.pl",
                             IconPath = "../../images/users/default.png",

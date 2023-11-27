@@ -75,6 +75,7 @@ export async function getStats(gameId, userName) {
 }
 export async function getSimilarUsers(gameId, page) {
   try {
+    console.log(gameId);
     const response = await http.get(
       config.apiUrl + "/User/users",
       { params: { Idgame: gameId, page: page } },

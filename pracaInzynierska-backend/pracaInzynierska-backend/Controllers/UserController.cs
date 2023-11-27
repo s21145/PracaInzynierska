@@ -361,11 +361,11 @@ namespace pracaInzynierska_backend.Controllers
 
             var findRating = await _unitOfWork.Ranking
                 .GetAsync(x => x.IdUser == user.UserId && x.IdGame == body.Idgame);
-            
-                
-            if (findRating is null)
-                return StatusCode(400, "Użytkownik nie ma pobranych statystyk dla podanej gry");
-            var rating = findRating.FirstOrDefault().score;
+
+            int rating = 0;
+            if (!(findRating is null || findRating.Count() == 0))
+                rating = findRating.FirstOrDefault().score;
+
 
             var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page);
 

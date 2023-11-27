@@ -15,6 +15,7 @@ namespace pracaInzynierska_backend.Services.Repository
         {
             var findBetter = await _context.UserGameRakings
                 .Include(x => x.User)
+                .Where(x => x.IdGame == IdGame)
                 .Where(x => x.score > userScore)
                 .OrderBy(x => x.score)
                 .Skip(page*5)
@@ -22,6 +23,7 @@ namespace pracaInzynierska_backend.Services.Repository
                 .ToListAsync();
             var findWorse = await _context.UserGameRakings
                 .Include(x => x.User)
+                .Where(x => x.IdGame == IdGame)
                 .Where(x => x.score <= userScore)
                 .OrderByDescending(x => x.score)
                 .Skip(page * 5)
@@ -41,6 +43,7 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 findWorse = await _context.UserGameRakings
                .Include(x => x.User)
+               .Where(x => x.IdGame == IdGame)
                .Where(x => x.score <= userScore)
                .OrderByDescending(x => x.score)
                .Skip(page * 5)
@@ -52,6 +55,7 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 findBetter = await _context.UserGameRakings
                                 .Include(x => x.User)
+                                .Where(x => x.IdGame == IdGame)
                                 .Where(x => x.score > userScore)
                                 .OrderBy(x => x.score)
                                 .Skip(page * 5)

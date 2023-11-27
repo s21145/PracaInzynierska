@@ -20,15 +20,13 @@ function FindPlayers() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      console.log("testAAA");
-      console.log(selected);
       if (Object.keys(selected).length === 0) return;
       const query = await getSimilarUsers(selected.gameId, 0);
       if (query.status !== 200) {
         setUsers([]);
       } else {
         setUsers(query.data);
-        console.log(users);
+        console.log(query.data);
       }
     };
     fetchUsers();
@@ -62,8 +60,17 @@ function FindPlayers() {
           </form>
         </div>
         <div className="found-players">
-          <FoundPlayer />
-        </div>
+        {users.map(u => (
+          
+          <FoundPlayer userLogin={u.userLogin}
+          key={u.userLogin}
+          description={u.description}
+          birthday={u.birthday}
+          image={u.image}/>
+  
+        ))}
+              </div>
+        
       </div>
     </div>
   );
