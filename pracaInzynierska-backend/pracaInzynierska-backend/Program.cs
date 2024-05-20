@@ -8,6 +8,9 @@ using pracaInzynierska_backend.Services.Repository;
 using System.Text;
 using System.Text.Json.Serialization;
 
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -20,6 +23,7 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 });
 */
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -30,6 +34,9 @@ builder.Services.AddCors(options =>
                           AllowAnyMethod();
                       });
 });
+
+
+var configuration = builder.Configuration;
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -72,7 +79,7 @@ builder.Services.AddHttpClient();
 
 
 builder.Services.AddDbContext<DatabaseContext>(opt => opt
-                .UseSqlServer("Server=(localdb)\\Local;Database=inzynierka;Trusted_Connection=True;"));
+                .UseSqlServer(configuration["ConnectionString"]));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

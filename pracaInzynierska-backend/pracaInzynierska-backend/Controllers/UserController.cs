@@ -19,7 +19,7 @@ namespace pracaInzynierska_backend.Controllers
         IUnitOfWork _unitOfWork;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string GetStatsSteam = "https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/";
-        private readonly string key = "28A4A65572FB7696356B3B5B5D1D3801";
+        private readonly string key = "D65CABD4B8E9A882FC8D5651E8787645";
         public UserController(IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory)
         {
             _unitOfWork = unitOfWork;
