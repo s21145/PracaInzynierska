@@ -22,6 +22,8 @@ import {
   RefreshToken,
 } from "./Services/UserService";
 
+import FriendsList from "./pages/FriendsList/FriendsList";
+
 function App() {
   const MINUTE_MS = 60000;
   const [user, setUser] = useState(null);
@@ -88,21 +90,27 @@ function App() {
       <UserContext.Provider value={value}>
         <MessageContext.Provider value={messageValue}>
           <statModalContext.Provider value={statModalValue}>
-            <Router>
+          <Router>
+            <div className="main-layout">
               <Navbar />
-              <Routes>
-                <Route path="/posts" element={<PostsPage />} />
-                <Route path="/posts/:postId" element={<PostWithComments />} />
-                <Route path="/FindPlayers" element={<FindPlayers />} />
-                <Route path="/" element={<Main />} />
-                <Route path="/?logout" element={<Main />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/ProfileMain" element={<ProfileMain />} />
-                <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
-              </Routes>
-
+              <div className="content-with-friends">
+                <div className="content">
+                  <Routes>
+                    <Route path="/posts" element={<PostsPage />} />
+                    <Route path="/posts/:postId" element={<PostWithComments />} />
+                    <Route path="/FindPlayers" element={<FindPlayers />} />
+                    <Route path="/" element={<Main />} />
+                    <Route path="/?logout" element={<Main />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/ProfileMain" element={<ProfileMain />} />
+                    <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+                  </Routes>
+                </div>
+                <FriendsList />
+              </div>
               <Footer />
-            </Router>
+            </div>
+          </Router>
           </statModalContext.Provider>
         </MessageContext.Provider>
       </UserContext.Provider>

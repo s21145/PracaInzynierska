@@ -104,9 +104,11 @@ function ProfileMainSettings() {
       console.log("error: " + error);
     }
   }
+
   useEffect(() => {
     handleSteamId();
   }, []);
+  
   console.log(user);
   async function handleSteamId() {
     const steamId = searchParams.get("steamId");

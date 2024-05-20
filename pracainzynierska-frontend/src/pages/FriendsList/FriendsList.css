@@ -1,0 +1,88 @@
+.friends-list {
+    width: 250px;
+    height: 76vh;
+    position: fixed;
+    right: 0;
+    background-color: #333;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    transition: width 1s ease;
+}
+
+.friends-list hr{
+    border: 0;
+    height: 2px;
+    background-color: #f39800;
+}
+
+.friends-list.shrunk {
+    width: 60px;
+    padding: 10px;
+    padding-top: 20px;
+}
+
+.friends-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 50px; /* Set a fixed height for the header */
+}
+
+.friends-list-header span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.friends-list.shrunk span,
+.friends-list.shrunk .toggle-button {
+    visibility: hidden; /* Hide the header text and button but retain space */
+}
+
+.friends-list-friend-requests {
+    margin-bottom: 20px;
+}
+
+.friends-list.shrunk .friend-requests span {
+    display: none;
+}
+
+.friends-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex: 1;
+}
+
+.friends-list.shrunk .main-content {
+    margin-left: 60px;
+}
+
+.toggle-button {
+    background-color: #333;
+    border: none;
+    font-size: 1.5em;
+    padding: 5px 10px;
+    padding-right: 0px;
+    cursor: pointer;
+    visibility: visible;
+}
+
+.expand-button {
+    position: absolute;
+    left: 50%;
+    font-size: 1.5em;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: block;
+}

@@ -13,6 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import GameModal from "./ProfileMainSubPages/GameStatistics/GameModal";
 import { statModalContext } from "../../Services/StatsModalContext";
+import FriendsList from "../FriendsList/FriendsList";
 
 function ProfileMain() {
   const { user } = useContext(UserContext);

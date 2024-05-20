@@ -72,7 +72,7 @@ builder.Services.AddHttpClient();
 
 
 builder.Services.AddDbContext<DatabaseContext>(opt => opt
-                .UseSqlServer("Server=(localdb)\\Local;Database=inzynierka;Trusted_Connection=True;"));
+                .UseSqlServer("Server=DESKTOP-C7DDV4U;Database=inzynierka;Trusted_Connection=True;"));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
