@@ -19,6 +19,7 @@ namespace pracaInzynierska_backend.Controllers
         IUnitOfWork _unitOfWork;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string GetStatsSteam = "https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/";
+        private readonly string GetPlayTime = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v1/";
         private readonly string key = "D65CABD4B8E9A882FC8D5651E8787645";
         public UserController(IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory)
         {
@@ -160,7 +161,7 @@ namespace pracaInzynierska_backend.Controllers
             var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
             var importantStats = findImportantStats.ToList();
-            if (importantStats.Count == 0)
+            if (importantStats.Count() == 0)
                 return StatusCode(500, "Brak nazw statystyk");
 
             List<GetStatForGameDTO> statsToAdd = new List<GetStatForGameDTO>();
@@ -190,10 +191,43 @@ namespace pracaInzynierska_backend.Controllers
 
 
             }
+            //pobranie playtime
+            var queryForPlayTime = new Dictionary<string, string>()
+            {
+                ["key"] = key,
+                ["steamid"] = user.SteamId,
+                ["include_appinfo"] = "false",
+                ["include_played_free_games"] = "true",
+                ["ppids_filter"] = game.SteamId
+            };
+            var uriForPlayTime = QueryHelpers.AddQueryString(GetPlayTime, queryForPlayTime);
+            var responeForPlayTime = await httpClient.GetAsync(uriForPlayTime);
+            var playTimeResponse = await responeForPlayTime.Content.ReadAsStringAsync();
+            var dtoPlayTime = JsonConvert.DeserializeObject<PlayTimeSteamDTO>(await responeForPlayTime.Content.ReadAsStringAsync());
+            var playTimeDTO = dtoPlayTime.Response.Games
+                .Where(stats => (stats.Appid).ToString()==game.SteamId)
+                .Select(stat => Math.Round((decimal)(stat.PlaytimeForever/60),1))
+                .First();
+
+            var statPlayTime = new UserGameStats()
+            {
+                IdGame = game.GameId,
+                IdUser = user.UserId,
+                Name = "Play Time",
+                Value = (long)playTimeDTO
+            };
+            statsToAdd.Add(new GetStatForGameDTO
+            {
+                GameName = game.Name,
+                UserLogin = user.Login,
+                Name = "Play Time",
+                Value = (long)playTimeDTO
+            });
+            await _unitOfWork.Stats.InsertAsync(statPlayTime);
+            //
 
 
-
-                var rating = new UserGameRanking()
+            var rating = new UserGameRanking()
             {
                 IdUser = user.UserId,
                 IdGame = game.GameId,
@@ -314,7 +348,7 @@ namespace pracaInzynierska_backend.Controllers
             var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
             var importantStats = findImportantStats.Select(x => x.Name).ToList();
-            if (importantStats.Count == 0)
+            if (importantStats.Count() == 0)
                 return StatusCode(500, "Brak nazw statystyk");
             List<UserGameStats> statsToAdd = new List<UserGameStats>();
             var findOldStats = await _unitOfWork.Stats.GetAsync(x => game.GameId == x.IdGame && x.IdUser == user.UserId);
