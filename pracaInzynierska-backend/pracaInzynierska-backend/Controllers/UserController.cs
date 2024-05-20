@@ -406,6 +406,7 @@ namespace pracaInzynierska_backend.Controllers
             var response = new List<ReturnSimilarUsersDTO>();
             users.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
             {
+                UserId = x.User.UserId,
                 UserLogin = x.User.Login,
                 Description = x.User.Description,
                 Birthday = x.User.BirthDate,
@@ -420,10 +421,29 @@ namespace pracaInzynierska_backend.Controllers
 
             return StatusCode(200,response);
         }
-        [HttpPost("sendFriendRequest")]
-        public async Task<IActionResult> SendFriendRequest()
+        [HttpPost("sentFriendRequest")]
+        public async Task<IActionResult> SentFriendRequest([FromQuery] int userId)
         {
-            return null;
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            var userToAddQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var userToAdd = userQuery.FirstOrDefault();
+            if(userToAdd == null)
+            {
+                return StatusCode(400, "Nie istnieje użytkownik o takim ID");
+            }
+            var friendListRequest = new FriendListRequest()
+            {
+                FromUserId = user.UserId,
+                ToUserId = userId,
+                FromDate = DateTime.Now,
+                Status = "Sent"
+            };
+            await _unitOfWork.FriendListRequests.InsertAsync(friendListRequest);
+            await _unitOfWork.SaveAsync();
+            return StatusCode(200);
         }
     }
 }

@@ -227,3 +227,23 @@ export async function AddSteamId(steamId) {
     return response;
   }
 }
+export async function AddFriendRequest(userId){
+  try {
+    const response = await http.post(
+      config.apiUrl + `/User/sentFriendRequest?userId=${userId}`,
+       null,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}

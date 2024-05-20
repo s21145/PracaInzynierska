@@ -1,8 +1,9 @@
 import React from 'react';
 import './FoundPlayer.css';
+import {AddFriendRequest} from "../../Services/UserService";
 
 
-const FoundPlayer = ({userLogin,description,birthday,image}) => {
+const FoundPlayer = ({userLogin,description,birthday,image,userId}) => {
     const age = calculate_age(birthday)
     function calculate_age(dob) { 
         var date= new Date(dob);
@@ -10,6 +11,17 @@ const FoundPlayer = ({userLogin,description,birthday,image}) => {
         var age_dt = new Date(diff_ms); 
       
         return Math.abs(age_dt.getUTCFullYear() - 1970);
+    }
+
+    const handleAddFriendClick = async () => {
+        console.log(userId);
+       var response =  await AddFriendRequest(userId);
+       if(response.status==200){
+        console.log("Udało się wysłać zaproszenie do znajomych");
+       }else{
+        console.log("nie udalo wyslać sie zaproszenia",response)
+       }
+       
     }
   return (
     <div className="found-player">
@@ -30,7 +42,7 @@ const FoundPlayer = ({userLogin,description,birthday,image}) => {
             </div>
             <div className="found-player-buttons">
                 <button className="found-player-button">PROFILE</button>
-                <button className="found-player-button">ADD</button>
+                <button className="found-player-button" onClick={handleAddFriendClick}>ADD</button>
             </div>
         </div>
     </div>
