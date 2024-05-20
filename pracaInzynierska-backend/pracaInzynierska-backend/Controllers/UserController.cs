@@ -401,7 +401,7 @@ namespace pracaInzynierska_backend.Controllers
                 rating = findRating.FirstOrDefault().score;
 
 
-            var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page);
+            var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page,user.UserId);
 
             var response = new List<ReturnSimilarUsersDTO>();
             users.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
@@ -419,6 +419,11 @@ namespace pracaInzynierska_backend.Controllers
 
 
             return StatusCode(200,response);
+        }
+        [HttpPost("sendFriendRequest")]
+        public async Task<IActionResult> SendFriendRequest()
+        {
+            return null;
         }
     }
 }

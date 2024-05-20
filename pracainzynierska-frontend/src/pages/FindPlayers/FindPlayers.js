@@ -6,7 +6,7 @@ import { getGames } from "../../Services/PostService";
 import { getSimilarUsers } from "../../Services/GamesService";
 
 function FindPlayers() {
-  const [selected, setSelected] = useState({});
+  // const [selected, setSelected] = useState({});
   const [users, setUsers] = useState([]);
   const [gameOptions, setGameOptions] = useState([]);
 
@@ -18,19 +18,30 @@ function FindPlayers() {
     fetchGames();
   }, []);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (Object.keys(selected).length === 0) return;
-      const query = await getSimilarUsers(selected.gameId, 0);
-      if (query.status !== 200) {
-        setUsers([]);
-      } else {
-        setUsers(query.data);
-        console.log(query.data);
-      }
-    };
-    fetchUsers();
-  }, [selected]);
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     if (Object.keys(selected).length === 0) return;
+  //     const query = await getSimilarUsers(selected.gameId, 0);
+  //     if (query.status !== 200) {
+  //       setUsers([]);
+  //     } else {
+  //       setUsers(query.data);
+  //       console.log(query.data);
+  //     }
+  //   };
+  //   fetchUsers();
+  // }, [selected]);
+
+  const fetchUsers = async (selected) => {
+    if (Object.keys(selected).length === 0) return;
+    const query = await getSimilarUsers(selected.gameId, 0);
+    if (query.status !== 200) {
+      setUsers([]);
+    } else {
+      setUsers(query.data);
+      console.log(query.data);
+    }
+  };
 
   return (
     <div className="find-players">
@@ -49,7 +60,7 @@ function FindPlayers() {
               <div>
                 <GamesDropdownFindPlayers
                   selected={selected}
-                  setSelected={setSelected}
+                  setSelected={async (e) => fetchUsers(selected)}
                   gameOptions={gameOptions}
                 />
               </div>

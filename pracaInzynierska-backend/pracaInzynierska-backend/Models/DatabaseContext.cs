@@ -14,6 +14,8 @@ namespace pracaInzynierska_backend.Models
         public DbSet<StatsName> StatsNames { get; set; }
         public DbSet<FriendList> FriendLists { get; set; }
 
+        public  DbSet<FriendListRequest> FriendListRequests { get; set; }
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
 
@@ -31,6 +33,7 @@ namespace pracaInzynierska_backend.Models
             modelBuilder.ApplyConfiguration(new UserGameStatsEFConfiguration());
             modelBuilder.ApplyConfiguration(new StatsNameEFConfiguration());
             modelBuilder.ApplyConfiguration(new FriendListEFConfiguration());
+            modelBuilder.ApplyConfiguration(new FriendListRequestEFConfiguration());
             
 
 

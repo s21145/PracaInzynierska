@@ -22,6 +22,8 @@ namespace pracaInzynierska_backend.Models
         public ICollection<UserGameRanking> Ranking { get; set; }
         public ICollection<FriendList> Friends { get; set; }
         public ICollection<FriendList> OnFriendList { get; set; }
+        public ICollection<FriendListRequest> RequestsSent { get; set;}
+        public ICollection<FriendListRequest> RequestsReceived { get; set; }
 
     }
 }
