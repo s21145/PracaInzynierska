@@ -1,27 +1,27 @@
 import { useContext } from "react";
 import { MessageContext } from "../Services/MessageContext";
+import styles from './MessageModal/MessageModal.module.css';
 
 const MessageModal = () => {
   const { message, setMessage } = useContext(MessageContext);
   const handleCloseModal = () => {
-    console.log("zamykam");
     setMessage({ ...message, show: false });
   };
+
   return (
-    <div className="modal-background">
-      <div className="modal-container">
-        <div className="modal-close-button">
-          <div className="modal-title">E-MATES</div>
-          <button className="modal-close-mark" onClick={handleCloseModal}>
+    <div className={styles.modalBackground}>
+      <div className={styles.modalContainer}>
+        <div className={styles.modalHeader}>
+          <div className={styles.modalTitle}>Komunikat</div>
+          <button className={styles.modalCloseMark} onClick={handleCloseModal}>
             <i className="fa-solid fa-xmark" />
           </button>
         </div>
-
-        <div className="modal-select-login-signup"></div>
-        <hr></hr>
-        {message.content}
-        <button onClick={handleCloseModal}>CLOSE</button>
-        <div className="modal-login-body"></div>
+        <hr />
+        <div className={styles.modalContent}>{message.content}</div>
+        <button className={styles.modalCloseButton} onClick={handleCloseModal}>
+          CLOSE
+        </button>
       </div>
     </div>
   );

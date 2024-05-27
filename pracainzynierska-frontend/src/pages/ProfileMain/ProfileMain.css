@@ -5,12 +5,10 @@
     display: grid;
     grid:
         "sidebar body" 1fr
-        / 25% 1fr;
+        / 25% 1fr 25%;
         gap: 3px;
 
     background-color: #141a23;
-    
-
 }
 /* --- entire sidebar --- */
 .profile-main-sidebar{
