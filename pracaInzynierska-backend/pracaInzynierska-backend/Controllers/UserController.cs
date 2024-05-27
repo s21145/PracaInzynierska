@@ -445,5 +445,45 @@ namespace pracaInzynierska_backend.Controllers
             await _unitOfWork.SaveAsync();
             return StatusCode(200);
         }
+        [HttpPost("responseFriendRequest")]
+        public async Task<IActionResult> reponseFriendRequest([FromQuery] int fromUserId, [FromQuery] string status)
+        {
+            var user = await GetUserAsync();
+            if(user == null)
+            {
+                return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
+            }
+            var fromUser = await _unitOfWork.User.GetByIDAsync(fromUserId);
+            if(fromUser == null)
+            {
+                return StatusCode(400, $"Nie istnieje użytkownik o  podanym id ");
+            }
+            var changeStatus = await _unitOfWork.FriendListRequests.SetResponseForFriendRequestAsync(fromUserId,user.UserId, status);
+            if (!changeStatus.Item1)
+            {
+                return StatusCode(400, $"Błąd podczas zmiany statusu - {changeStatus.Item2} ");
+            }
+
+            var FriendList = new FriendList()
+            {
+                OwnerId = user.UserId,
+                FriendId = fromUserId,
+                From = DateTime.Now
+            };
+            await _unitOfWork.FriendLists.InsertAsync(FriendList);
+
+            await _unitOfWork.SaveAsync();
+
+
+            return StatusCode(200);
+        }
+        private async  Task<User> GetUserAsync()
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            return user;
+        }
     }
 }
