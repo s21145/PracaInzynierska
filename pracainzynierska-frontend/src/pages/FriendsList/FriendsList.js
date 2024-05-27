@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import Friend from './Friend/Friend';
 import './FriendsList.css';
 import FriendRequests from './FriendRequest/FriendRequest'; // Update the import path
-
+import {GetFriendsList} from '../../Services/UserService'
 import dragon from '../../assets/resources/rust.jpg';
+import { UserContext } from "../../Services/UserContext";
 
 const friends = [
     {
@@ -24,11 +26,25 @@ const pendingFriendRequests = 999;
 
 const FriendsList = () => {
     const [isExpanded, setIsExpanded] = useState(true);
-
+    const { user } = useContext(UserContext);
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
-
+    const [friends, setFriends] = useState([]);
+    useEffect(() => {
+        const fetchFriendsList = async () => {
+          const list = await GetFriendsList();
+          console.log(list);
+          if(list.status === 200){
+            setFriends(list.data);
+          }else{
+            //error
+          }
+         
+        };
+        fetchFriendsList();
+      }, [user]);
+    
     return (
         <div className={`friends-list ${isExpanded ? 'expanded' : 'shrunk'}`}>
             <div className="friends-list-header">
@@ -49,11 +65,11 @@ const FriendsList = () => {
                 )}
             </div>
             <div className="friends-container">
-                {friends.map((friend, index) => (
+                {friends.map((friend) => (
                     <Friend
-                        key={index}
-                        name={friend.name}
-                        imageUrl={friend.imageUrl}
+                        key={friend.userId}
+                        name={friend.userLogin}
+                        imageUrl={friend.iconPath}
                         isExpanded={isExpanded}
                     />
                 ))}

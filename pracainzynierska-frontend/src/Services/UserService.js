@@ -247,3 +247,24 @@ export async function AddFriendRequest(userId){
     return response;
   }
 }
+export async function GetFriendsList(){
+  try {
+    const response = await http.get(
+      config.apiUrl + `/User/friendsList`,
+       null,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}
+

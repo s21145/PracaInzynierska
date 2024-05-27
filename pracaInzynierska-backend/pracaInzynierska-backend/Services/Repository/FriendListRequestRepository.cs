@@ -33,7 +33,7 @@ namespace pracaInzynierska_backend.Services.Repository
                 return new Tuple<bool, string>(false, $"Zaproszenie do znajomych ma już status - {request.Status}");
             }
             request.Status = newStatus;
-            return new Tuple<bool, string>(false,string.Empty);
+            return new Tuple<bool, string>(true,string.Empty);
         }
     }
 }

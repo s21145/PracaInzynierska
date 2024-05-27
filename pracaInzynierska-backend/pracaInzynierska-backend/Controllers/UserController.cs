@@ -446,7 +446,7 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200);
         }
         [HttpPost("responseFriendRequest")]
-        public async Task<IActionResult> reponseFriendRequest([FromQuery] int fromUserId, [FromQuery] string status)
+        public async Task<IActionResult> ReponseFriendRequestAsync([FromQuery] int fromUserId, [FromQuery] string status)
         {
             var user = await GetUserAsync();
             if(user == null)
@@ -476,6 +476,19 @@ namespace pracaInzynierska_backend.Controllers
 
 
             return StatusCode(200);
+        }
+
+        [HttpGet("friendsList")]
+        public async Task<IActionResult> GetFriendListAsync()
+        {
+            var user = await GetUserAsync();
+            if (user == null)
+            {
+                return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
+            }
+            var users = await _unitOfWork.FriendLists.GetFriendListAsync(user.UserId);
+
+            return StatusCode(200,users);
         }
         private async  Task<User> GetUserAsync()
         {
