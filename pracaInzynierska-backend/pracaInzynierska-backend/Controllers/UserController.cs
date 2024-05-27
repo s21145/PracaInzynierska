@@ -490,6 +490,19 @@ namespace pracaInzynierska_backend.Controllers
 
             return StatusCode(200,users);
         }
+        [HttpGet("FriendsListRequests")]
+        public async Task<IActionResult> GetFriendsListRequestsAsync()
+        {
+            var user = await GetUserAsync();
+            if (user == null)
+            {
+                return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
+            }
+            var requests = await _unitOfWork.FriendListRequests.GetFriendsListRequestsAsync(user.UserId);
+
+            return StatusCode(200, requests);
+        }
+
         private async  Task<User> GetUserAsync()
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);

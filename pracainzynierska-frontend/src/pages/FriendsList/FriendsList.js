@@ -3,7 +3,7 @@ import { useContext } from "react";
 import Friend from './Friend/Friend';
 import './FriendsList.css';
 import FriendRequests from './FriendRequest/FriendRequest'; // Update the import path
-import {GetFriendsList} from '../../Services/UserService'
+import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
 import dragon from '../../assets/resources/rust.jpg';
 import { UserContext } from "../../Services/UserContext";
 
@@ -31,16 +31,24 @@ const FriendsList = () => {
         setIsExpanded(!isExpanded);
     };
     const [friends, setFriends] = useState([]);
+    const [friendRequests, setFriendRequests] = useState([]);
     useEffect(() => {
         const fetchFriendsList = async () => {
           const list = await GetFriendsList();
+          const requests = await GetFriendsListRequests();
           console.log(list);
+          console.log(requests);
           if(list.status === 200){
             setFriends(list.data);
           }else{
             //error
           }
-         
+          if(requests.status === 200){
+            setFriendRequests(requests.data);
+          }{
+            //error
+          }
+         console.log(friendRequests);
         };
         fetchFriendsList();
       }, [user]);
@@ -60,8 +68,8 @@ const FriendsList = () => {
             </div>
             <hr />
             <div className="friends-list-friend-requests">
-                {pendingFriendRequests > 0 && (
-                    <FriendRequests count={pendingFriendRequests} isExpanded={isExpanded} />
+                {friendRequests.length > 0 && (
+                    <FriendRequests count={friendRequests.length} isExpanded={isExpanded} />
                 )}
             </div>
             <div className="friends-container">
