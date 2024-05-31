@@ -99,7 +99,8 @@ function ProfileMainSettings() {
     try {
       removeAuthorization();
       const test = await http.get(config.openIdUrl + "auth/steam");
-      window.location.replace(test.request.responseURL);
+      console.log(test);
+      window.location.replace(test.data.url);
     } catch (error) {
       console.log("error: " + error);
     }

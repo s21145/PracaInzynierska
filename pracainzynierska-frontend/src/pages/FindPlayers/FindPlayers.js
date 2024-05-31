@@ -32,6 +32,17 @@ function FindPlayers() {
     fetchUsers();
   }, [selected]);
 
+  const fetchUsers = async (selected) => {
+    if (Object.keys(selected).length === 0) return;
+    const query = await getSimilarUsers(selected.gameId, 0);
+    if (query.status !== 200) {
+      setUsers([]);
+    } else {
+      setUsers(query.data);
+      console.log(query.data);
+    }
+  };
+
   return (
     <div className="find-players">
       <h1>Who are you looking for?</h1>
@@ -64,6 +75,7 @@ function FindPlayers() {
           
           <FoundPlayer userLogin={u.userLogin}
           key={u.userLogin}
+          userId={u.userId}
           description={u.description}
           birthday={u.birthday}
           image={u.image}/>

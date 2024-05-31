@@ -19,7 +19,8 @@ namespace pracaInzynierska_backend.Controllers
         IUnitOfWork _unitOfWork;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string GetStatsSteam = "https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/";
-        private readonly string key = "28A4A65572FB7696356B3B5B5D1D3801";
+        private readonly string GetPlayTime = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v1/";
+        private readonly string key = "D65CABD4B8E9A882FC8D5651E8787645";
         public UserController(IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory)
         {
             _unitOfWork = unitOfWork;
@@ -160,7 +161,7 @@ namespace pracaInzynierska_backend.Controllers
             var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
             var importantStats = findImportantStats.ToList();
-            if (importantStats.Count == 0)
+            if (importantStats.Count() == 0)
                 return StatusCode(500, "Brak nazw statystyk");
 
             List<GetStatForGameDTO> statsToAdd = new List<GetStatForGameDTO>();
@@ -190,10 +191,43 @@ namespace pracaInzynierska_backend.Controllers
 
 
             }
+            //pobranie playtime
+            var queryForPlayTime = new Dictionary<string, string>()
+            {
+                ["key"] = key,
+                ["steamid"] = user.SteamId,
+                ["include_appinfo"] = "false",
+                ["include_played_free_games"] = "true",
+                ["ppids_filter"] = game.SteamId
+            };
+            var uriForPlayTime = QueryHelpers.AddQueryString(GetPlayTime, queryForPlayTime);
+            var responeForPlayTime = await httpClient.GetAsync(uriForPlayTime);
+            var playTimeResponse = await responeForPlayTime.Content.ReadAsStringAsync();
+            var dtoPlayTime = JsonConvert.DeserializeObject<PlayTimeSteamDTO>(await responeForPlayTime.Content.ReadAsStringAsync());
+            var playTimeDTO = dtoPlayTime.Response.Games
+                .Where(stats => (stats.Appid).ToString()==game.SteamId)
+                .Select(stat => Math.Round((decimal)(stat.PlaytimeForever/60),1))
+                .First();
+
+            var statPlayTime = new UserGameStats()
+            {
+                IdGame = game.GameId,
+                IdUser = user.UserId,
+                Name = "Play Time",
+                Value = (long)playTimeDTO
+            };
+            statsToAdd.Add(new GetStatForGameDTO
+            {
+                GameName = game.Name,
+                UserLogin = user.Login,
+                Name = "Play Time",
+                Value = (long)playTimeDTO
+            });
+            await _unitOfWork.Stats.InsertAsync(statPlayTime);
+            //
 
 
-
-                var rating = new UserGameRanking()
+            var rating = new UserGameRanking()
             {
                 IdUser = user.UserId,
                 IdGame = game.GameId,
@@ -314,7 +348,7 @@ namespace pracaInzynierska_backend.Controllers
             var dto = dtoPlayerstats.Playerstats;
             var findImportantStats = await _unitOfWork.StatsName.GetAsync(x => x.IdGame == game.GameId);
             var importantStats = findImportantStats.Select(x => x.Name).ToList();
-            if (importantStats.Count == 0)
+            if (importantStats.Count() == 0)
                 return StatusCode(500, "Brak nazw statystyk");
             List<UserGameStats> statsToAdd = new List<UserGameStats>();
             var findOldStats = await _unitOfWork.Stats.GetAsync(x => game.GameId == x.IdGame && x.IdUser == user.UserId);
@@ -367,11 +401,12 @@ namespace pracaInzynierska_backend.Controllers
                 rating = findRating.FirstOrDefault().score;
 
 
-            var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page);
+            var users = await _unitOfWork.Ranking.GetSimilarUsersAsync(rating, body.Idgame, body.Page,user.UserId);
 
             var response = new List<ReturnSimilarUsersDTO>();
             users.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
             {
+                UserId = x.User.UserId,
                 UserLogin = x.User.Login,
                 Description = x.User.Description,
                 Birthday = x.User.BirthDate,
@@ -385,6 +420,96 @@ namespace pracaInzynierska_backend.Controllers
 
 
             return StatusCode(200,response);
+        }
+        [HttpPost("sentFriendRequest")]
+        public async Task<IActionResult> SentFriendRequest([FromQuery] int userId)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            var userToAddQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var userToAdd = userQuery.FirstOrDefault();
+            if(userToAdd == null)
+            {
+                return StatusCode(400, "Nie istnieje użytkownik o takim ID");
+            }
+            var friendListRequest = new FriendListRequest()
+            {
+                FromUserId = user.UserId,
+                ToUserId = userId,
+                FromDate = DateTime.Now,
+                Status = "Sent"
+            };
+            await _unitOfWork.FriendListRequests.InsertAsync(friendListRequest);
+            await _unitOfWork.SaveAsync();
+            return StatusCode(200);
+        }
+        [HttpPost("responseFriendRequest")]
+        public async Task<IActionResult> ReponseFriendRequestAsync([FromQuery] int fromUserId, [FromQuery] string status)
+        {
+            var user = await GetUserAsync();
+            if(user == null)
+            {
+                return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
+            }
+            var fromUser = await _unitOfWork.User.GetByIDAsync(fromUserId);
+            if(fromUser == null)
+            {
+                return StatusCode(400, $"Nie istnieje użytkownik o  podanym id ");
+            }
+            var changeStatus = await _unitOfWork.FriendListRequests.SetResponseForFriendRequestAsync(fromUserId,user.UserId, status);
+            if (!changeStatus.Item1)
+            {
+                return StatusCode(400, $"Błąd podczas zmiany statusu - {changeStatus.Item2} ");
+            }
+
+            var FriendList = new FriendList()
+            {
+                OwnerId = user.UserId,
+                FriendId = fromUserId,
+                From = DateTime.Now
+            };
+            await _unitOfWork.FriendLists.InsertAsync(FriendList);
+
+            await _unitOfWork.SaveAsync();
+
+
+            return StatusCode(200);
+        }
+
+        [HttpGet("friendsList")]
+        public async Task<IActionResult> GetFriendListAsync()
+        {
+            var user = await GetUserAsync();
+            if (user == null)
+            {
+                return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
+            }
+            var users = await _unitOfWork.FriendLists.GetFriendListAsync(user.UserId);
+
+            return StatusCode(200,users);
+        }
+        [HttpGet("FriendsListRequests")]
+        public async Task<IActionResult> GetFriendsListRequestsAsync()
+        {
+            var user = await GetUserAsync();
+            if (user == null)
+            {
+                return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
+            }
+            var requests = await _unitOfWork.FriendListRequests.GetFriendsListRequestsAsync(user.UserId);
+
+            return StatusCode(200, requests);
+        }
+
+        private async  Task<User> GetUserAsync()
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            return user;
         }
     }
 }

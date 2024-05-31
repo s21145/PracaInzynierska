@@ -9,6 +9,7 @@
         public IUserGameRankingRepository Ranking { get;  }
         public IStatsNameRepository StatsName { get; }
         public IFriendListRepository FriendLists { get; }
+        public IFriendListRequestRepository FriendListRequests { get; }
         public void Save();
         public Task SaveAsync();
     }

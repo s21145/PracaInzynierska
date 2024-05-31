@@ -11,10 +11,11 @@ namespace pracaInzynierska_backend.Services.Repository
 
         }
 
-        public async Task<List<UserGameRanking>> GetSimilarUsersAsync(int userScore,int IdGame, int page)
+        public async Task<List<UserGameRanking>> GetSimilarUsersAsync(int userScore,int IdGame, int page, int forUser)
         {
             var findBetter = await _context.UserGameRakings
                 .Include(x => x.User)
+                .Where(x => x.IdUser != forUser)
                 .Where(x => x.IdGame == IdGame)
                 .Where(x => x.score > userScore)
                 .OrderBy(x => x.score)
@@ -23,6 +24,7 @@ namespace pracaInzynierska_backend.Services.Repository
                 .ToListAsync();
             var findWorse = await _context.UserGameRakings
                 .Include(x => x.User)
+                .Where(x => x.IdUser != forUser)
                 .Where(x => x.IdGame == IdGame)
                 .Where(x => x.score <= userScore)
                 .OrderByDescending(x => x.score)
@@ -43,6 +45,7 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 findWorse = await _context.UserGameRakings
                .Include(x => x.User)
+               .Where(x => x.IdUser != forUser)
                .Where(x => x.IdGame == IdGame)
                .Where(x => x.score <= userScore)
                .OrderByDescending(x => x.score)
@@ -55,6 +58,7 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 findBetter = await _context.UserGameRakings
                                 .Include(x => x.User)
+                                .Where(x => x.IdUser != forUser)
                                 .Where(x => x.IdGame == IdGame)
                                 .Where(x => x.score > userScore)
                                 .OrderBy(x => x.score)

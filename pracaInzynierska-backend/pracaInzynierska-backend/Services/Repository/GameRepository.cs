@@ -5,7 +5,7 @@ using pracaInzynierska_backend.Services.IRepository;
 
 namespace pracaInzynierska_backend.Services.Repository
 {
-    public class GameRepository : GenericRepository<Game>, IGameRepository
+    public class GameRepository : GenericRepository<pracaInzynierska_backend.Models.Game>, IGameRepository
     {
         public GameRepository(DatabaseContext context) : base(context)
         {
@@ -47,7 +47,7 @@ namespace pracaInzynierska_backend.Services.Repository
 
             var allGames = _context.Games.ToList();
             List<GetGamesDTO> missing = new List<GetGamesDTO>();
-            foreach(Game game in allGames)
+            foreach(pracaInzynierska_backend.Models.Game game in allGames)
             {
                 if (games.Contains(game))
                     continue;

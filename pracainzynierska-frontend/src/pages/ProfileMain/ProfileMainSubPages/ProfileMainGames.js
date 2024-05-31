@@ -3,11 +3,12 @@ import { useState, useEffect, useContext } from "react";
 import "./ProfileMainGames.css";
 import { GetMissingGamesUser, AddGame } from "../../../Services/GamesService";
 import { statModalContext } from "../../../Services/StatsModalContext";
+import { MessageContext } from "../../../Services/MessageContext";
 
 function ProfileMainGames({ profileChanger, ...rest }) {
   const [games, setGames] = useState([]);
-  const [selected, setSelected] = useState({});
   const { statModal, setStatModal } = useContext(statModalContext);
+  const { message, setMessage } = useContext(MessageContext);
   const fetchUserGames = async () => {
     const response = await GetMissingGamesUser();
     if (response.status !== 200) {
@@ -20,11 +21,11 @@ function ProfileMainGames({ profileChanger, ...rest }) {
   useEffect(() => {
     fetchUserGames();
   }, []);
-  const handleGameAdd = async () => {
+  const handleGameAdd = async (selected) => {
     if (Object.keys(selected).length === 0) return;
     const response = await AddGame(selected.gameId);
     if (response.status !== 200) {
-      //blad
+      setMessage({ content: "Wystąpił błąd podczas próby przypisania gry", show: true });
     } else {
       //wyswietlic modala
       setStatModal({ stats: response.data, show: true });
@@ -34,9 +35,7 @@ function ProfileMainGames({ profileChanger, ...rest }) {
     }
   };
 
-  useEffect(() => {
-    handleGameAdd();
-  }, [selected]);
+
   return (
     <div className="profile-games-wrapper">
       <div className="profile-games-return-button">
@@ -52,7 +51,7 @@ function ProfileMainGames({ profileChanger, ...rest }) {
               key={game.gameId}
               className="game-icon-button"
               id={game.gameId}
-              onClick={(e) => setSelected(game)}
+              onClick={async (e) => handleGameAdd(game)}
               style={{
                 backgroundImage: `url(data:image/png;base64,${game.image})`,
               }}
