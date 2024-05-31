@@ -1,6 +1,6 @@
 .friends-list {
     width: 250px;
-    height: 76vh;
+    height: 100vh;
     position: fixed;
     right: 0;
     background-color: #333;
@@ -8,6 +8,7 @@
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     transition: width 1s ease;
+    
 }
 
 .friends-list hr{
@@ -28,7 +29,7 @@
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
-    height: 50px; /* Set a fixed height for the header */
+    height: 50px;
 }
 
 .friends-list-header span {
@@ -38,7 +39,7 @@
 
 .friends-list.shrunk span,
 .friends-list.shrunk .toggle-button {
-    visibility: hidden; /* Hide the header text and button but retain space */
+    visibility: hidden;
 }
 
 .friends-list-friend-requests {
@@ -80,7 +81,6 @@
     font-size: 1.5em;
     transform: translateX(-50%);
     background-color: #333;
-    color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;

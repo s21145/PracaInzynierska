@@ -8,12 +8,11 @@ import Main from "./pages/Main/Main";
 import ProfileMain from "./pages/ProfileMain/ProfileMain";
 import FindPlayers from "./pages/FindPlayers/FindPlayers";
 import { useState, useEffect } from "react";
-import http from "./Services/HttpService";
 import Contact from "./pages/Contact/Contact";
-import config from "./config.json";
 import { UserContext } from "./Services/UserContext";
 import { MessageContext } from "./Services/MessageContext";
 import { statModalContext } from "./Services/StatsModalContext";
+import ChatWindow from "./components/ChatWindow/ChatWindow";
 import { useMemo } from "react";
 import {
   GetCurrentUser,
@@ -23,6 +22,7 @@ import {
 } from "./Services/UserService";
 
 import FriendsList from "./pages/FriendsList/FriendsList";
+import FriendRequestWindow from "./pages/FriendsList/FriendRequest/FriendRequestWindow";
 
 function App() {
   const MINUTE_MS = 60000;
@@ -48,12 +48,45 @@ function App() {
     [statModal, setStatModal]
   );
 
+
+  //#region Chat window
+  const [messages, setMessages] = useState([
+    { sender: 'me', text: 'Czy bidi jest dobrym kolegą?' },
+    { sender: 'friend', text: 'Jak najbardziej, czemu pytasz?' },
+  ]);
+
+  const handleSend = (text) => {
+    setMessages([...messages, { sender: 'me', text }]);
+  };
+
+  const [isChatWindowVisible, setChatWindowVisible] = useState(false);
+  const [currentFriend, setCurrentFriend] = useState('');
+
+  const handleClose = () => {
+    setChatWindowVisible(false);
+  };
+
+  const handleFriendClick = (friendName) => {
+    setCurrentFriend(friendName);
+    setChatWindowVisible(true);
+  };
+  //#endregion
+
+  //#region Friends request window
+  const [showFriendRequestWindow, setShowFriendRequestWindow] = useState(false);
+  const handleFriendRequestClick = () => {
+    setShowFriendRequestWindow(true);
+  }
+
+  const closeFriendRequestWindow = () => {
+      setShowFriendRequestWindow(false);
+  }
+  //#endregion
+
   useEffect(() => {
     async function reloadUser() {
-      console.log("TEST12");
       if (user === null && GetCurrentUser() !== null) {
         const response = await LoginAfterReload(setUser);
-        console.log("PO AUTH");
         if (response.status !== 200) {
           Logout();
         } else {
@@ -65,18 +98,17 @@ function App() {
             age: age,
             description: response.data.description,
           });
-          console.log(user);
         }
       }
     }
     reloadUser();
-  });
+  }, [user]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (user === null) {
         return;
       }
-      console.log("Logs every minute");
       const response = RefreshToken();
       if (response.status !== 200) {
         Logout();
@@ -85,32 +117,41 @@ function App() {
 
     return () => clearInterval(interval);
   }, [user]);
+
   return (
     <>
       <UserContext.Provider value={value}>
         <MessageContext.Provider value={messageValue}>
           <statModalContext.Provider value={statModalValue}>
-          <Router>
-            <div className="main-layout">
-              <Navbar />
-              <div className="content-with-friends">
-                <div className="content">
-                  <Routes>
-                    <Route path="/posts" element={<PostsPage />} />
-                    <Route path="/posts/:postId" element={<PostWithComments />} />
-                    <Route path="/FindPlayers" element={<FindPlayers />} />
-                    <Route path="/" element={<Main />} />
-                    <Route path="/?logout" element={<Main />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/ProfileMain" element={<ProfileMain />} />
-                    <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
-                  </Routes>
+            <Router>
+              <div className="main-layout">
+                <Navbar />
+                <div className="content-with-friends">
+                  <div className="content">
+                    <Routes>
+                      <Route path="/posts" element={<PostsPage />} />
+                      <Route path="/posts/:postId" element={<PostWithComments />} />
+                      <Route path="/FindPlayers" element={<FindPlayers />} />
+                      <Route path="/" element={<Main />} />
+                      <Route path="/?logout" element={<Main />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/ProfileMain" element={<ProfileMain />} />
+                      <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+                    </Routes>
+                  </div>
+                  <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
+                  {isChatWindowVisible && (
+                    <ChatWindow
+                      messages={messages}
+                      onClose={handleClose}
+                      onSend={handleSend}
+                      friendName={currentFriend}
+                    />
+                  )}
                 </div>
-                <FriendsList />
+                {showFriendRequestWindow && <FriendRequestWindow onClose={closeFriendRequestWindow} />}
               </div>
-              <Footer />
-            </div>
-          </Router>
+            </Router>
           </statModalContext.Provider>
         </MessageContext.Provider>
       </UserContext.Provider>

@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import Friend from './Friend/Friend';
 import './FriendsList.css';
-import FriendRequests from './FriendRequest/FriendRequest'; // Update the import path
+import FriendRequests from './FriendRequest/FriendRequest';
+import FriendRequestWindow from './FriendRequest/FriendRequestWindow';
 
 import dragon from '../../assets/resources/rust.jpg';
 
 const friends = [
     {
-        name: 'Bartek Konarski',
+        name: 'Kejnar',
         imageUrl: dragon,
     },
     {
-        name: 'Robert Puszczynski',
+        name: 'Bidi',
         imageUrl: dragon,
     },
     {
-        name: 'Mateusz Grudkowski',
+        name: 'Drecki',
+        imageUrl: dragon,
+    },
+    {
+        name: 'Sempu',
         imageUrl: dragon,
     },
 ];
 
 const pendingFriendRequests = 999;
 
-const FriendsList = () => {
+const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
     const [isExpanded, setIsExpanded] = useState(true);
 
     const toggleExpand = () => {
@@ -43,7 +48,7 @@ const FriendsList = () => {
                 )}
             </div>
             <hr />
-            <div className="friends-list-friend-requests">
+            <div className="friends-list-friend-requests" onClick={onFriendRequestClick}>
                 {pendingFriendRequests > 0 && (
                     <FriendRequests count={pendingFriendRequests} isExpanded={isExpanded} />
                 )}
@@ -55,6 +60,7 @@ const FriendsList = () => {
                         name={friend.name}
                         imageUrl={friend.imageUrl}
                         isExpanded={isExpanded}
+                        onClick={onFriendClick}
                     />
                 ))}
             </div>
