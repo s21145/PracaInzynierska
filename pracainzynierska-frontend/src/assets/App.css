@@ -2,6 +2,7 @@
 :root{
   --color-orange: #f39800;
 }
+
 *{
   box-sizing: border-box;
   margin: 0;
@@ -26,6 +27,8 @@
 .content-with-friends {
   display: flex;
   flex: 1;
+  position: relative;
+  height: 100vh;
 }
 
 .content {

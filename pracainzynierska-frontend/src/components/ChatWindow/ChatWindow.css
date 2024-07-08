@@ -1,0 +1,94 @@
+.chat-window {
+    width: 300px;
+    height: 350px;
+    border: 1px solid var(--color-orange);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 252px;
+    bottom: 0; 
+    z-index: 1000;
+    background-color: #303336;
+    transition: right 1s ease; 
+}
+
+.friends-list.shrunk ~ .chat-window {
+    right: 62px; 
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid var(--color-orange);
+}
+
+.chat-header span {
+    font-weight: bold;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    font-weight: bold;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    color: black;
+}
+
+.chat-bubble.me {
+    background-color: #cbfacb;
+    align-self: flex-end;
+    margin-right: 10px;
+}
+
+.chat-bubble.friend {
+    background-color: #fdf4e3;
+    align-self: flex-start;
+    margin-left: 10px;
+}
+
+.chat-input-container {
+    display: flex;
+    border-top: 1px solid var(--color-orange);
+    padding: 10px;
+}
+
+.chat-input-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    color: black;
+}
+
+.chat-input-container button {
+    padding: 5px 8px;
+    margin: 5px 0px;
+    border: none;
+    background-color: var(--color-orange);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
