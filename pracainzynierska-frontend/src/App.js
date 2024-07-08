@@ -67,6 +67,7 @@ function App() {
   };
 
   const handleFriendClick = (friendName) => {
+    console.log(friendName);
     setCurrentFriend(friendName);
     setChatWindowVisible(true);
   };

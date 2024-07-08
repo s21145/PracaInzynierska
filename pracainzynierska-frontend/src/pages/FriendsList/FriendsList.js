@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import Friend from './Friend/Friend';
 import './FriendsList.css';
-import FriendRequests from './FriendRequest/FriendRequest'; // Update the import path
 import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
 import FriendRequests from './FriendRequest/FriendRequest';
 import FriendRequestWindow from './FriendRequest/FriendRequestWindow';
-
 import dragon from '../../assets/resources/rust.jpg';
 import { UserContext } from "../../Services/UserContext";
 
@@ -28,8 +26,6 @@ const friends = [
         imageUrl: dragon,
     },
 ];
-
-const pendingFriendRequests = 999;
 
 const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -74,9 +70,9 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
                 )}
             </div>
             <hr />
-            <div className="friends-list-friend-requests">
-                {pendingFriendRequests > 0 && (
-                    <FriendRequests count={pendingFriendRequests} isExpanded={isExpanded} />
+            <div className="friends-list-friend-requests" onClick={onFriendRequestClick}>
+            {friendRequests.length > 0 && (
+                    <FriendRequests count={friendRequests.length} isExpanded={isExpanded} />
                 )}
             </div>
             <div className="friends-container">
