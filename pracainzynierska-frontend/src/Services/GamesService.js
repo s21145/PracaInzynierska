@@ -75,7 +75,6 @@ export async function getStats(gameId, userName) {
 }
 export async function getSimilarUsers(gameId, page) {
   try {
-    console.log(gameId);
     const response = await http.get(
       config.apiUrl + "/User/users",
       { params: { Idgame: gameId, page: page } },
@@ -94,3 +93,24 @@ export async function getSimilarUsers(gameId, page) {
     return response;
   }
 }
+  export async function getUsersByNickname(nickname) {
+    try {
+      const response = await http.get(
+        config.apiUrl + "/User/searchForFindPlayers",
+        { params: { nickname: nickname } },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      const response = {
+        status: error.response.status,
+        data: error.response.data,
+      };
+      return response;
+    }
+  }
+

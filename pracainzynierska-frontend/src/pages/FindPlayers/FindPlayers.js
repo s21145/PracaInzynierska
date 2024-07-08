@@ -3,13 +3,13 @@ import "./FindPlayers.css";
 import FoundPlayer from "../../components/FoundPlayer/FoundPlayer";
 import GamesDropdownFindPlayers from "../GamesDropdown/GamesDropdownFindPlayers";
 import { getGames } from "../../Services/PostService";
-import { getSimilarUsers } from "../../Services/GamesService";
+import { getSimilarUsers,getUsersByNickname } from "../../Services/GamesService";
 
 function FindPlayers() {
   const [selected, setSelected] = useState({});
   const [users, setUsers] = useState([]);
   const [gameOptions, setGameOptions] = useState([]);
-
+  const [userNickname,setUserNickname]=useState("");
   useEffect(() => {
     const fetchGames = async () => {
       const games = await getGames();
@@ -42,19 +42,37 @@ function FindPlayers() {
       console.log(query.data);
     }
   };
+  const handleSumbit = async (event) => {
+    event.preventDefault();
+    if(userNickname == ""){
+      return;
+    }
+    const query = await getUsersByNickname(userNickname);
+    if (query.status !== 200) {
+      setUsers([]);
+    } else {
+      setUsers(query.data);
+      console.log(query.data);
+    }
+  }
+  const handleInputChange = (event) => {
+    setUserNickname(event.target.value); 
+  };
 
   return (
     <div className="find-players">
       <h1>Who are you looking for?</h1>
       <div className="find-players-wrapper">
         <div className="find-players-form">
-          <form>
+          <form onSubmit={handleSumbit}>
             <div className="form-container">
               <div>
                 <input
                   type="text"
                   className="find-players-input"
                   placeholder="Nickname of player"
+                  value={userNickname}
+                  onChange={handleInputChange}
                 />
               </div>
               <div>
@@ -65,7 +83,7 @@ function FindPlayers() {
                 />
               </div>
               <div>
-                <button className="find-players-search-button">Search</button>
+                <button type="submit" className="find-players-search-button">Search</button>
               </div>
             </div>
           </form>
