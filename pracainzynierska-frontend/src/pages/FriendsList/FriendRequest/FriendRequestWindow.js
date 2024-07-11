@@ -5,27 +5,28 @@ import rust from '../../../assets/resources/rust.jpg';
 import dragon from '../../../assets/resources/dragon.png';
 
 
-const pendingFriendRequests = [
-    {
-        name: 'Kejnar',
-        imageUrl: dragon,
-    },
-    {
-        name: 'BidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidi',
-        imageUrl: dragon,
-    },
-    {
-        name: 'Drecki',
-        imageUrl: dragon,
-    },
-    {
-        name: 'Sempu',
-        imageUrl: dragon,
-    },
-];
+// const pendingFriendRequests = [
+//     {
+//         name: 'Kejnar',
+//         imageUrl: dragon,
+//     },
+//     {
+//         name: 'BidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidi',
+//         imageUrl: dragon,
+//     },
+//     {
+//         name: 'Drecki',
+//         imageUrl: dragon,
+//     },
+//     {
+//         name: 'Sempu',
+//         imageUrl: dragon,
+//     },
+// ];
 
-const FriendRequestWindow = ({onClose}) => {
-    
+const FriendRequestWindow = ({onClose,pendingFriendRequests,onResponse}) => {
+
+  
     return (
         <div className="friend-request-overlay">
             <div className="friend-request-window">
@@ -37,11 +38,11 @@ const FriendRequestWindow = ({onClose}) => {
                 <div className="friend-request-body">
                     {pendingFriendRequests.map((request, index) => (
                         <div key={index} className="friend-request-item">
-                            <img src={request.imageUrl} className="friend-request-image" alt={request.name} />
-                            <span className="friend-request-name" title={request.name}>{request.name}</span>
+                            <img src={`data:image/png;base64, ${request.userIcon}`}  className="friend-request-image" alt={request.userLogin} />
+                            <span className="friend-request-name" title={request.userLogin}>{request.userLogin}</span>
                             <div className="friend-request-actions">
-                                <button className="accept-button">Accept</button>
-                                <button className="decline-button">Decline</button>
+                                <button className="accept-button" onClick={() => onResponse(request,"Accepted")}>Accept</button>
+                                <button className="decline-button" onClick={() => onResponse(request,"Declined")}>Decline</button>
                             </div>
                         </div>
                     ))}

@@ -23,6 +23,8 @@ import {
 
 import FriendsList from "./pages/FriendsList/FriendsList";
 import FriendRequestWindow from "./pages/FriendsList/FriendRequest/FriendRequestWindow";
+import {SentFriendRequestResponse} from './Services/UserService'
+import {GetFriendsList,GetFriendsListRequests} from './Services/UserService'
 
 function App() {
   const MINUTE_MS = 60000;
@@ -82,12 +84,33 @@ function App() {
   const closeFriendRequestWindow = () => {
       setShowFriendRequestWindow(false);
   }
+  const handleResponse = async (request,status) => {
+    try {
+        var response = await SentFriendRequestResponse(request.userId,status);
+        if(response.status === 200){
+          const friends = await GetFriendsList();
+          const updatedRequests = user.requests.filter(req => req.userId !== request.userId);
+            setUser(prevUser => ({
+          ...prevUser,
+            friends:friends.data,
+          requests: updatedRequests
+         }));
+        }else{
+          //error
+        }
+    }catch(ex){
+
+    }
+}
+
   //#endregion
 
   useEffect(() => {
     async function reloadUser() {
       if (user === null && GetCurrentUser() !== null) {
         const response = await LoginAfterReload(setUser);
+        const friends = await GetFriendsList();
+        const requests = await GetFriendsListRequests();
         if (response.status !== 200) {
           Logout();
         } else {
@@ -98,10 +121,13 @@ function App() {
             steamId: response.data.steamId,
             age: age,
             description: response.data.description,
+            friends:friends.data,
+            requests:requests.data
           });
         }
       }
     }
+    console.log(user);
     reloadUser();
   }, [user]);
 
@@ -150,7 +176,7 @@ function App() {
                     />
                   )}
                 </div>
-                {showFriendRequestWindow && <FriendRequestWindow onClose={closeFriendRequestWindow} />}
+                {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
               </div>
             </Router>
           </statModalContext.Provider>

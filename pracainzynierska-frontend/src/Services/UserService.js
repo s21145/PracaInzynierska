@@ -287,4 +287,24 @@ export async function GetFriendsListRequests(){
     return response;
   }
 }
+export async function SentFriendRequestResponse(userId,status){
+  try {
+    const response = await http.post(
+      config.apiUrl + `/User/responseFriendRequest?fromUserId=${userId}&status=${status}`,
+      null,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}
 

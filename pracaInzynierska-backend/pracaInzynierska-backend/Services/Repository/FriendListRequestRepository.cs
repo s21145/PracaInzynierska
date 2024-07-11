@@ -45,7 +45,8 @@ namespace pracaInzynierska_backend.Services.Repository
                     UserLogin = req.Sender.Login,
                     UserIcon = Convert.ToBase64String(System.IO.File
                 .ReadAllBytes(
-                    Path.Combine(Environment.CurrentDirectory, req.Sender.IconPath)))
+                    Path.Combine(Environment.CurrentDirectory, req.Sender.IconPath))),
+                    Status = req.Status
                 })
                 .ToListAsync();
             return requests;

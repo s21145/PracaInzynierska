@@ -6,7 +6,7 @@ import { Login } from "../../Services/UserService";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
 import { useEffect } from "react";
-
+import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
 function LogInModal({ closeLogInModal }) {
   const { user, setUser } = useContext(UserContext);
   const [login, setLogin] = useState({
@@ -16,6 +16,8 @@ function LogInModal({ closeLogInModal }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     const response = await Login(login);
+    const friends = await GetFriendsList();
+    const requests = await GetFriendsListRequests();
     if (response.status !== 200) {
       // bad register
       console.log("bad");
@@ -29,6 +31,8 @@ function LogInModal({ closeLogInModal }) {
         steamId: response.data.steamId,
         age: age,
         description: response.data.description,
+        friends:friends.data,
+        requests:requests.data
       });
       console.log(user);
       closeLogInModal(false);
