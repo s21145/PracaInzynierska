@@ -7,6 +7,7 @@ using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services.IRepository;
 using System.Security.Claims;
+using static pracaInzynierska_backend.Services.Repository.FriendListRequestRepository;
 
 namespace pracaInzynierska_backend.Controllers
 {
@@ -428,12 +429,20 @@ namespace pracaInzynierska_backend.Controllers
             var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
             var user = userQuery.First();
 
-            var userToAddQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
-            var userToAdd = userQuery.FirstOrDefault();
+            var userToAddQuery = await _unitOfWork.User.GetAsync(x => x.UserId == userId);
+            var userToAdd = userToAddQuery.FirstOrDefault();
             if(userToAdd == null)
             {
                 return StatusCode(400, "Nie istnieje użytkownik o takim ID");
             }
+            var checkIfUserCanAdd = await _unitOfWork.FriendListRequests.GetAsync(request => request.FromUserId == user.UserId
+            && request.ToUserId == userToAdd.UserId
+            && request.Status == FriendRequestStatus.Sent.ToString());
+            if(checkIfUserCanAdd.Any())
+            {
+                return StatusCode(403, "Użytkownik wysłał już zaproszenie do znajomych");
+            }
+
             var friendListRequest = new FriendListRequest()
             {
                 FromUserId = user.UserId,

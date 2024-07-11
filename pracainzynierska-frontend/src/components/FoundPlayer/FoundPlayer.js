@@ -4,6 +4,7 @@ import {AddFriendRequest} from "../../Services/UserService";
 
 
 const FoundPlayer = ({userLogin,description,birthday,image,userId}) => {
+    
     const age = calculate_age(birthday)
     function calculate_age(dob) { 
         var date= new Date(dob);
@@ -12,9 +13,7 @@ const FoundPlayer = ({userLogin,description,birthday,image,userId}) => {
       
         return Math.abs(age_dt.getUTCFullYear() - 1970);
     }
-
     const handleAddFriendClick = async () => {
-        console.log(userId);
        var response =  await AddFriendRequest(userId);
        if(response.status==200){
         console.log("Udało się wysłać zaproszenie do znajomych");
