@@ -1,0 +1,146 @@
+.game-modal{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.game-modal-wrapper{
+    width: 50vw;
+    height: 500px;
+    border-radius: 20px;
+    background-color: #1b1818;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-left: 30px;
+    justify-content: center;
+    text-align: center;
+}
+
+.game-modal-container{
+    display: flex;
+}
+
+.game-modal-content{
+    width: 100vw;
+    height: 480px;
+}
+
+.game-modal-content-title{
+    display: flex;
+    justify-content: center;;
+    align-items: center;
+    font-size: 40px;
+    height: 20%;
+}
+
+.game-modal-content-wrapper{
+    height: 77%;
+    display: flex;
+    background-color: #221e1e;
+    border-radius: 15px;
+    gap: 10px;
+}
+.game-modal-content-stats{
+    width: 55%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 25px;
+    padding-top: 20px;
+}
+
+.game-modal-content-right-side{
+    width: 45%;
+    height: 100%;
+}
+
+.game-modal-content-picture{
+    width: 100%;
+    height: 70%;
+
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+
+}
+
+.game-picture{
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: right, left;
+}
+
+.game-modal-content-buttons{
+    width: 100%;
+    height: 30%;
+    padding-right: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: end;
+    padding-bottom: 20px;
+}
+.game-button{
+    
+    background-color: transparent;
+    font-size: 20px;
+    width: 120px;
+    height: 40px;
+    border-color: var(--color-orange);
+    border-radius: 25px;
+    color: white;
+}
+
+.game-stat{
+    width: 400px;
+    height: 50px;
+    background-color: #1b1818;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    border-radius: 25px;
+}
+
+.game-stats{
+    min-width: 150px;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stats-text{
+    font-size: 30px;
+}
+
+.game-modal-close-button{
+    width: 10px;
+    padding-top: 10px;
+}
+
+.modal-close-mark{
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#leagueoflegends{
+    background-image:url('../../../../assets/resources/leaguelogo.png');
+}

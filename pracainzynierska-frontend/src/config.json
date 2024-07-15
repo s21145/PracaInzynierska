@@ -1,4 +1,4 @@
 {
-    "apiUrl": "https://localhost:7194/",
+    "apiUrl": "https://localhost:7194/api",
     "openIdUrl":"http://localhost:7195/"
 }

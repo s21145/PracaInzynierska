@@ -9,6 +9,12 @@ namespace pracaInzynierska_backend.Models
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<UserGameStats> UserGameStats { get; set; }
+        public DbSet<UserGameRanking> UserGameRakings { get; set; }
+        public DbSet<StatsName> StatsNames { get; set; }
+        public DbSet<FriendList> FriendLists { get; set; }
+
+        public  DbSet<FriendListRequest> FriendListRequests { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
@@ -22,6 +28,12 @@ namespace pracaInzynierska_backend.Models
             modelBuilder.ApplyConfiguration(new UserEFConfiguration());
             modelBuilder.ApplyConfiguration(new PostEfConfiguration());
             modelBuilder.ApplyConfiguration(new CommentEFConfiguration());
+            modelBuilder.ApplyConfiguration(new UserGameStatsEFConfiguration());
+            modelBuilder.ApplyConfiguration(new UserGameRankingEFConfiguration());
+            modelBuilder.ApplyConfiguration(new UserGameStatsEFConfiguration());
+            modelBuilder.ApplyConfiguration(new StatsNameEFConfiguration());
+            modelBuilder.ApplyConfiguration(new FriendListEFConfiguration());
+            modelBuilder.ApplyConfiguration(new FriendListRequestEFConfiguration());
             
 
 

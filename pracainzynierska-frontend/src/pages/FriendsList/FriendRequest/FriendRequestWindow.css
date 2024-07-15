@@ -1,0 +1,120 @@
+.friend-request-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.friend-request-window {
+    background: #333;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    max-height: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.friend-request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--color-orange);
+}
+
+.friend-request-header span {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.fake-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color:#333
+}
+
+.friend-request-body {
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.friend-request-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.friend-request-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    padding: 0px;
+    flex-shrink: 0;
+}
+
+.friend-request-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.friend-request-actions {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.accept-button, .decline-button {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.accept-button {
+    background-color: #11912f;
+    color: #fff;
+}
+
+.decline-button {
+    background-color: #c9192a;
+    color: #fff;
+}
+
+.friend-request-button-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-top: 1px solid var(--color-orange);
+}
+
+.friend-request-button-container button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--color-orange);
+    color: #fafafa;
+    font-weight: bold;
+}

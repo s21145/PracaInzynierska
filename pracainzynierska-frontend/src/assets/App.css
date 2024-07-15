@@ -2,6 +2,7 @@
 :root{
   --color-orange: #f39800;
 }
+
 *{
   box-sizing: border-box;
   margin: 0;
@@ -16,4 +17,20 @@
   align-items: center;
   justify-content: center;
   font-size: 3rem;
+}
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-with-friends {
+  display: flex;
+  flex: 1;
+  position: relative;
+  height: 100vh;
+}
+
+.content {
+  flex: 1;
 }

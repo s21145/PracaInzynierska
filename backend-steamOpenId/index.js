@@ -1,32 +1,57 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
 const SteamAuth = require("node-steam-openid");
 
 const steam = new SteamAuth({
-  realm: "http://localhost:7195", // Site name displayed to users on logon
-  returnUrl: "http://localhost:7195/auth/steam/authenticate", // Your return route
-  apiKey: "28A4A65572FB7696356B3B5B5D1D3801", // Steam API key
+  realm: "http://localhost:7195",
+  returnUrl: "http://localhost:7195/auth/steam/authenticate",
+  apiKey: "D65CABD4B8E9A882FC8D5651E8787645",
 });
 
-app.use(cors());
+const corsOpts = {
+  origin: '*',
+
+  methods: [
+    'GET',
+    'POST',
+  ],
+
+  allowedHeaders: [
+    'Content-Type',
+  ],
+};
+app.use(cors(corsOpts));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 app.get("/auth/steam", async (req, res) => {
-  const redirectUrl = await steam.getRedirectUrl();
-  return res.redirect(redirectUrl);
+  try {
+    const redirectUrl = await steam.getRedirectUrl();
+    return res.json({ url: redirectUrl });
+  } catch (error) {
+    console.error("Error getting Steam redirect URL:", error);
+    res.status(500).send("Error getting Steam redirect URL");
+  }
 });
 
 app.get("/auth/steam/authenticate", async (req, res) => {
   try {
     const user = await steam.authenticate(req);
-
     console.log(user);
-    res.redirect("http://localhost:3000");
+    res.redirect(
+      `http://localhost:3000/ProfileMain?tab=settings&steamId=${user.steamid}`
+    );
   } catch (error) {
-    console.error("tutaj " + error);
+    console.error("Error during Steam authentication:", error);
+    res.status(500).send("Error during Steam authentication");
   }
 });
 
 app.listen(7195, () => {
-  console.log("SteamAPI openId");
+  console.log("SteamAPI openId server is running on port 7195");
 });

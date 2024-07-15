@@ -1,0 +1,46 @@
+.friend-requests-container hr {
+    border: 0;
+    height: 2px;
+    background-color: #f39800;
+}
+
+.friend-requests {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    justify-content: space-between;
+    
+    white-space: nowrap; 
+    overflow: hidden; 
+}
+
+.friend-requests-container:hover{
+    background-color: #3f3e3e;
+    cursor: pointer;
+}
+
+.friend-requests.shrunk {
+    justify-content: center; 
+}
+
+.friend-requests span {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.friend-requests-counter {
+    background-color: #f39800;
+    color: #333;
+    padding: 0 5px; 
+    min-width: 20px; 
+    border-radius: 15%;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block; 
+}
+
+.friend-requests.shrunk .friend-requests-counter {
+    margin: 0 auto; 
+}

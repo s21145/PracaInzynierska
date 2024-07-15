@@ -10,8 +10,11 @@ using System.Text;
 
 namespace pracaInzynierska_backend.Controllers
 {
+    [Route("api/[controller]")]
+    
     public class LoginController : ControllerBase
     {
+        private readonly string defaultPath = "..\\..\\images\\users\\default.png";
         IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
         public LoginController(IUnitOfWork unitOfWork, IConfiguration configuration)
@@ -36,11 +39,18 @@ namespace pracaInzynierska_backend.Controllers
             return Ok(new
             {
                 accessToken = CreateJwtTokenAsync(user),
-                refreshToken = user.CurrentRefreshToken
+                refreshToken = user.CurrentRefreshToken,
+                image = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory,user.IconPath))),
+                login = user.Login,
+                steamId = user.SteamId,
+                age = user.BirthDate,
+                description = user.Description
+
             });
         }
-        [HttpPost]
-        [Route("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO register)
         {
 
@@ -56,7 +66,8 @@ namespace pracaInzynierska_backend.Controllers
                 Login = register.Login,
                 Password = register.Password,
                 Email = register.Email,
-                BirthDate = register.Birthday
+                BirthDate = register.Birthday,
+                IconPath = defaultPath
             };
             await _unitOfWork.User.InsertAsync(newUser);
             await _unitOfWork.SaveAsync();
@@ -67,7 +78,7 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(string token)
         {
-            var query = await _unitOfWork.User
+             var query = await _unitOfWork.User
                 .GetAsync(user => user.CurrentRefreshToken == token && user.RefreshTokenExp > DateTime.Now);
             var user = query.FirstOrDefault();
             // seperately condtion for expired token?
@@ -81,6 +92,35 @@ namespace pracaInzynierska_backend.Controllers
             {
                 accessToken = CreateJwtTokenAsync(user)
             });
+
+        }
+        [HttpGet("reload")]
+        public async Task<IActionResult> Reload(string refreshToken)
+        {
+            var query = await _unitOfWork.User
+                .GetAsync(user => user.CurrentRefreshToken == refreshToken && user.RefreshTokenExp > DateTime.Now);
+            var user = query.FirstOrDefault();
+            if(user == default)
+            {
+                return StatusCode(400, "Niepoprawny Token");
+            }
+
+            user.CurrentRefreshToken = SecurityHelpers.GenerateRefreshToken();
+            user.RefreshTokenExp = DateTime.Now.AddDays(1);
+            await _unitOfWork.SaveAsync();
+            return Ok(new
+            {
+                accessToken = CreateJwtTokenAsync(user),
+                refreshToken = user.CurrentRefreshToken,
+                image = Convert.ToBase64String(System.IO.File
+                .ReadAllBytes(
+                    Path.Combine(Environment.CurrentDirectory, user.IconPath))),
+                login = user.Login,
+                steamId = user.SteamId,
+                age = user.BirthDate,
+                description = user.Description
+            });
+
 
         }
         private string CreateJwtTokenAsync(User user)

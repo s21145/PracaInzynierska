@@ -1,0 +1,52 @@
+.gdfp-dropdown{
+    min-width: 300px;
+    position: relative;
+    user-select: none;
+    font-size: 24px;
+}
+
+#gdfp-arrow-down{
+    padding-left: 10px;
+}
+
+.gdfp-dropdown .gdfp-dropdown-button{
+    padding: 10px 15px;
+    background-color: #10161f;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+ 
+.gdfp-dropdown .gdfp-dropdown-content{
+    position: absolute;
+    z-index: 999 !important;
+    padding: 10px;    
+    width: 100%;
+    background-color: #10161f;
+}
+
+.gdfp-dropdown .gdfp-dropdown-content .gdfp-dropdown-item{
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gdfp-dropdown .gdfp-dropdown-content .gdfp-dropdown-item:hover{
+    background: white;
+}
+
+.gdfp-dropdown-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.gdfp-dropdown-wrapper{
+    display: flex;
+    align-items: center;
+    max-width: 1120px;
+    width: 100%;
+    gap: 8px;
+}

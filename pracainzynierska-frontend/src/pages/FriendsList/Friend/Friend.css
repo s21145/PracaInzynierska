@@ -1,0 +1,30 @@
+.friend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    white-space: nowrap; 
+    overflow: hidden; 
+}
+
+.friend-item:hover{
+    background-color: #3f3e3e;
+    cursor: pointer;
+}
+
+.friend-item.shrunk {
+    justify-content: center;
+}
+
+.friend-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    padding: 0px;
+}
+
+.friend-item.shrunk .friend-image {
+    margin-right: 0;
+}
+

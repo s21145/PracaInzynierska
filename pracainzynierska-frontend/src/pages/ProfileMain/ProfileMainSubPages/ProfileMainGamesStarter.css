@@ -1,0 +1,74 @@
+.profile-games-wrapper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.profile-games-return-button{
+    font-size: 60px;
+    padding-left: 30px;
+    padding-top: 20px;
+}
+
+.profile-games-container{
+    align-self: stretch;
+    display: grid;
+    height: 80%;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-start: 3;
+    gap: 20px;
+    padding: 30px;
+}
+
+.game-icon-button{
+    width: 350px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 10px;
+    
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: right, left;
+}
+
+.game-add-button{
+    width: 350px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: var(--color-orange);
+    background-color: #141a23;
+    flex-direction: column;
+    font-size: 50px;
+}
+
+.game-add-button:hover{
+    cursor: pointer;
+}
+
+.game-icon-button:hover{
+    cursor: pointer;
+}
+
+#leagueoflegends{
+    background-image:url('../../../assets/resources/leaguelogo.png');
+}
+
+#countestrikeglobaloffensive{
+    background-image:url('../../../assets/resources/csgo-icon.jpg');
+}
+
+#rust{
+    background-image:url('../../../assets/resources/rust.jpg');
+}

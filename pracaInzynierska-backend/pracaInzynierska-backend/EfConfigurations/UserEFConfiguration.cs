@@ -28,9 +28,9 @@ namespace pracaInzynierska_backend.EfConfigurations
         {
             builder
                 .HasData(
-                new User {UserId = 1,Email = "adres@o2.pl",Login="Czarek12",BirthDate=DateTime.Now.AddYears(-20),Password="bedzieHash",Description="Lubie CS GO" },
-                new User { UserId = 2, Email = "tendrugiUser@gmail.com", Login = "kozak5222", BirthDate = DateTime.Now.AddYears(-25), Password = "bedzieHash", Description = "Lubie CS GO" },
-                new User { UserId = 3, Email = "Zielony@o2.pl", Login = "Garo", BirthDate = DateTime.Now.AddYears(-30), Password = "bedzieHash", Description = "Lubie CS GO" }
+                new User {UserId = 1,Email = "adres@o2.pl",Login="Czarek12",BirthDate=DateTime.Now.AddYears(-20),Password="bedzieHash",Description="Lubie CS GO",IconPath= "../../images/users/default.png" },
+                new User { UserId = 2, Email = "tendrugiUser@gmail.com", Login = "kozak5222", BirthDate = DateTime.Now.AddYears(-25), Password = "bedzieHash", Description = "Lubie CS GO", IconPath = "../../images/users/default.png" },
+                new User { UserId = 3, Email = "Zielony@o2.pl", Login = "Garo", BirthDate = DateTime.Now.AddYears(-30), Password = "bedzieHash", Description = "Lubie CS GO", IconPath = "../../images/users/default.png" }
                 );
         }
     }
