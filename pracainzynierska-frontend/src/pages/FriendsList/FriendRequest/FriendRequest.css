@@ -32,13 +32,13 @@
 .friend-requests-counter {
     background-color: #f39800;
     color: #333;
-    padding: 0 5px; /* Add padding to ensure space around text */
-    min-width: 20px; /* Set initial width */
+    padding: 0 5px; 
+    min-width: 20px; 
     border-radius: 15%;
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    display: inline-block; /* Ensure the width adjusts to content */
+    display: inline-block; 
 }
 
 .friend-requests.shrunk .friend-requests-counter {

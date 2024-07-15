@@ -37,16 +37,3 @@ function PostItem({ idUserOwner, title, content, userLogin, postId }) {
 }
 
 export default PostItem;
-
-/*
-
-
-<Link to='/' className="posts__item__link">
-                <div className="posts__item__info">
-                    <h5 className="posts__item__text">
-                        tmp
-                    </h5>
-                </div>
-            </Link>
-
-*/

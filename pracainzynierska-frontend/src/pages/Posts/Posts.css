@@ -119,17 +119,8 @@ h1{
 }
 .post-wrapper{
     background-color:#141a23 ;
-    min-height: 80vh;
+    min-height: 100vh;
     
-}
-.post-with-comments-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 6%;
-    box-sizing: border-box;
-    cursor:default;
 }
 .post-div {
     border-radius: 1rem;
@@ -138,11 +129,4 @@ h1{
 .post-title{
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
-}
-.back-to-post-wrapper{
-    padding: 0.5rem 0.5rem;
-    cursor: default;
-    left: 40%;
-    position: fixed;
-    background-color: #0a0d12;
 }

@@ -2,21 +2,56 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import Friend from './Friend/Friend';
 import './FriendsList.css';
-import FriendRequests from './FriendRequest/FriendRequest';
-import FriendRequestWindow from './FriendRequest/FriendRequestWindow';
+import FriendRequests from './FriendRequest/FriendRequest'; 
+import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
 import dragon from '../../assets/resources/rust.jpg';
 import { UserContext } from "../../Services/UserContext";
 
+const friends = [
+    {
+        name: 'Bartek Konarski',
+        imageUrl: dragon,
+    },
+    {
+        name: 'Robert Puszczynski',
+        imageUrl: dragon,
+    },
+    {
+        name: 'Mateusz Grudkowski',
+        imageUrl: dragon,
+    },
+];
 
-const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
+const pendingFriendRequests = 999;
+
+const FriendsList = () => {
     const [isExpanded, setIsExpanded] = useState(true);
     const { user } = useContext(UserContext);
-    console.log(user);
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
     const [friends, setFriends] = useState([]);
-
+    const [friendRequests, setFriendRequests] = useState([]);
+    useEffect(() => {
+        const fetchFriendsList = async () => {
+          const list = await GetFriendsList();
+          const requests = await GetFriendsListRequests();
+          console.log(list);
+          console.log(requests);
+          if(list.status === 200){
+            setFriends(list.data);
+          }else{
+            //error
+          }
+          if(requests.status === 200){
+            setFriendRequests(requests.data);
+          }{
+            //error
+          }
+         console.log(friendRequests);
+        };
+        fetchFriendsList();
+      }, [user]);
     
     return (
         <div className={`friends-list ${isExpanded ? 'expanded' : 'shrunk'}`}>
@@ -32,19 +67,18 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
                 )}
             </div>
             <hr />
-            <div className="friends-list-friend-requests" onClick={ onFriendRequestClick}>
-            {user && user.requests && user.requests.length > 0 && (
-                    <FriendRequests count={user.requests.length} isExpanded={isExpanded} />
+            <div className="friends-list-friend-requests">
+                {friendRequests.length > 0 && (
+                    <FriendRequests count={friendRequests.length} isExpanded={isExpanded} />
                 )}
             </div>
             <div className="friends-container">
-                { user && user.friends && user.friends.map((friend) => (
+                {friends.map((friend) => (
                     <Friend
                         key={friend.userId}
                         name={friend.userLogin}
                         imageUrl={friend.iconPath}
                         isExpanded={isExpanded}
-                        onClick={onFriendClick}
                     />
                 ))}
             </div>
