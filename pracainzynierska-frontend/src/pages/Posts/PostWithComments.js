@@ -78,7 +78,7 @@ const PostWithComments = () => {
           <div className="post-header">
             <div><img src={`data:image/png;base64, ${post.image}`}></img></div>
             <span className="post-header-username">{post.user}</span>
-            <span className="post-header-username">data</span>
+            <span className="post-header-username">{post.date}</span>
           </div>
           <div className="post-header-title">{post.title}</div>
           <div className="post-body">
