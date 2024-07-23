@@ -99,6 +99,9 @@ const PostWithComments = () => {
           <div className="post-body">
             {post.content}
           </div>
+          <div className="post-footer">
+            <span className="post-footer-likes">3 <i class="fa-solid fa-heart"></i></span>
+          </div>
         </div>
         <div className="post-comment-new-comment">
           {isAddingComment ? (

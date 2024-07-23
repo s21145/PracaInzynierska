@@ -7,7 +7,6 @@ const MAX_LENGTH = 230;
 function PostItem({ idUserOwner, title, content, userLogin, postId }) {
   return (
     <div className="posts__item__wrapper">
-      <Link to={`/posts/${postId}`} className="link-wrapper">
         <li className="posts__item">
           <div className="posts__item__container">
             <div className="posts__item__postedby">
@@ -24,14 +23,21 @@ function PostItem({ idUserOwner, title, content, userLogin, postId }) {
             ) : (
               <div className="posts__item__content">{content}</div>
             )}
-            <div className="posts__item__comments">
-              <h2>
-                <i className="fa-solid fa-comments"></i> Comments
-              </h2>
+            <div className="posts__item__footer">
+              <div className="posts__item__comments">
+                <Link to={`/posts/${postId}`} className="link-wrapper">
+                  <h2>
+                    <i className="fa-solid fa-comments"></i> Comments
+                  </h2>
+                </Link>
+              </div>
+              <div className="posts__item__likes">
+                <h2>3 <i class="fa-solid fa-heart"></i></h2>
+              </div>
             </div>
+            
           </div>
         </li>
-      </Link>
     </div>
   );
 }

@@ -73,7 +73,8 @@ h1{
     font-size: larger;
 }
 
-.posts__item__comments{
+.posts__item__comments,
+.posts__item__likes{
     padding-top: 6px;
 }
 .posts__item__comments__link{
@@ -155,4 +156,9 @@ h1{
 .post-title{
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
+}
+
+.posts__item__footer{
+    display: flex;
+    justify-content: space-between;
 }

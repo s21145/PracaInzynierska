@@ -145,4 +145,14 @@
     margin-right: 10px;
     padding: 0px;
   }
+  .post-footer{
+    margin-top: 1.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .post-footer-likes:hover{
+    cursor: pointer;
+  }
   
