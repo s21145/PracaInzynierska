@@ -4,6 +4,19 @@ import { getPostWithComments,sendComment } from "../../Services/PostService";
 import PostComment from "./PostComment";
 import './PostWithComments.css';
 
+const formatDate = (dateString) => {
+  const options = {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false 
+  };
+  const date = new Date(dateString);
+  return date.toLocaleString('pl-PL', options).replace(',', '');
+}
+
 const PostWithComments = () => {
   const { postId } = useParams();
   const [post, setPost] = useState({});
@@ -66,6 +79,8 @@ const PostWithComments = () => {
     console.log("Post updated:", post);
   }, [post]);
 
+  
+
   return (
     <div className="post-with-comments-wrapper">
       <div className="content-wrapper">
@@ -76,9 +91,9 @@ const PostWithComments = () => {
         </div>
         <div className="post-comment-content">
           <div className="post-header">
-            <div><img src={`data:image/png;base64, ${post.image}`}></img></div>
+            <div><img className="post-header-image" src={`data:image/png;base64, ${post.image}`}></img></div>
             <span className="post-header-username">{post.user}</span>
-            <span className="post-header-username">{post.date}</span>
+            <span className="post-header-username">{formatDate(post.date)}</span>
           </div>
           <div className="post-header-title">{post.title}</div>
           <div className="post-body">

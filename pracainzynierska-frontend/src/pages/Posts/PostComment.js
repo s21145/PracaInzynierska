@@ -14,19 +14,19 @@ const formatDate = (dateString) => {
     return date.toLocaleString('pl-PL', options).replace(',', '');
 }
 
-const PostComment = ({username, date, text,image}) => {
+const PostComment = ({ username, date, text, image }) => {
     return (
         <div className="comment-container">
             <div className="comment-header">
-                <div> <img src={`data:image/png;base64, ${image}`}></img></div>
+                <div> 
+                    <img className="comment-header-image" src={`data:image/png;base64, ${image}`} alt="Comment header"></img>
+                </div>
                 <span className="comment-username">{username}</span>
                 <span className="comment-date">{formatDate(date)}</span>
-
             </div>
             <div className="comment-body">
                 {text}
             </div>
-            <div></div>
         </div>
     );
 }

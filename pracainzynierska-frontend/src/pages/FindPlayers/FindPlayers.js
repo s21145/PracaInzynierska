@@ -83,7 +83,7 @@ function FindPlayers() {
                 />
               </div>
               <div>
-                <button type="submit" className="find-players-search-button">Search</button>
+                <button type="submit" className="find-players-search-button">Search</button>  
               </div>
             </div>
           </form>
