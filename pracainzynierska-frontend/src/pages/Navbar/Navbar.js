@@ -4,7 +4,7 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import "./Navbar.css";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
-import LogInModal from "../LogInModal/LogInModal";
+import LogInModal from "../AuthModal/AuthModal";
 import SignUpModal from "../SignUpModal/SignUpModal";
 
 function Navbar() {

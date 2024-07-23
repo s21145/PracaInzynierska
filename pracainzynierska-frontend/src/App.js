@@ -166,7 +166,8 @@ function App() {
                       <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
                     </Routes>
                   </div>
-                  <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
+                  {(user != null || GetCurrentUser() != null) && <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />}
+                  
                   {isChatWindowVisible && (
                     <ChatWindow
                       messages={messages}

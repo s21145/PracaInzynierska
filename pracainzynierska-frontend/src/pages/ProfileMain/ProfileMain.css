@@ -1,6 +1,6 @@
 .profile-wrapper{
     width: 100%;
-    min-height: 76vh;
+    min-height: 100vh;
 
     display: grid;
     grid:
@@ -37,7 +37,6 @@
     height: 190px;
     width: 190px;
     border-radius: 50%;
-    /* background-image:url('../../assets/resources/dragon.png'); */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: right, left;
