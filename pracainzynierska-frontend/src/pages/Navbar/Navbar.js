@@ -4,8 +4,7 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import "./Navbar.css";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
-import LogInModal from "../AuthModal/AuthModal";
-import SignUpModal from "../SignUpModal/SignUpModal";
+import AuthModal from "../AuthModal/AuthModal";
 
 function Navbar() {
   const { user } = useContext(UserContext);
@@ -44,8 +43,8 @@ function Navbar() {
 
   return (
     <>
-      {openLoginModal && <LogInModal closeLogInModal={setOpenLoginModal} />}
-      {openSignupModal && <SignUpModal closeSignUpModal={setOpenSignupModal} />}
+      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} initialMode="login" />}
+      {openSignupModal && <AuthModal closeModal={setOpenLoginModal} initialMode="signup" />}
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>

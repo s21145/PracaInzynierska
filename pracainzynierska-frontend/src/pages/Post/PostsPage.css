@@ -2,3 +2,8 @@
     min-height: 100vh;
     background-color: #141a23;
 }
+.page-container-search-bar{
+    padding-top: 2rem;
+    padding-left: 3rem;
+    padding-right: 2rem;
+}

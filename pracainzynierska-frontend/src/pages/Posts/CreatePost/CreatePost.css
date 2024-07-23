@@ -1,0 +1,95 @@
+.create-post-background {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding-top: 50px;
+}
+
+.create-post-container {
+    width: 70%;
+    max-width: 700px;
+    background-color: #1b1818;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: white;
+    transform: translateY(-100px);
+    min-width: 400px;
+}
+
+.create-post-header {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.create-post-game-selector {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+}
+
+.create-post-title-container, 
+.create-post-body-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.create-post-input,
+.create-post-textarea {
+    width: 100%;
+    min-height: 3rem;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background-color: #121212;
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.create-post-input::placeholder,
+.create-post-textarea::placeholder {
+    color: #777;
+}
+
+.create-post-textarea {
+    resize: vertical;
+}
+
+.create-post-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.create-post-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.create-post-button.save-draft {
+    background-color: #555;
+    color: white;
+}
+
+.create-post-button.post {
+    background-color: var(--color-orange);
+    color: white;
+}
+
+.create-post-button.post:hover {
+    background-color: var(--color-orange-hover);
+}

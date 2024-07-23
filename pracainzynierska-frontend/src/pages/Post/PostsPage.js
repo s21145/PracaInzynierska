@@ -5,6 +5,8 @@ import "./PostsPage.css";
 import GamesDropdown from "../GamesDropdown/GamesDropdown";
 import { getGames, getPosts } from "../../Services/PostService";
 
+import CreatePost from "../Posts/CreatePost/CreatePost";
+
 const mockPosts = [
   {
     postId: 1,
@@ -34,6 +36,8 @@ function PostsPage() {
   const [gameOptions, setGameOptions] = useState([]);
   const [posts, setPosts] = useState(mockPosts);
 
+  const [createPost, setCreatePost] = useState(false);
+
   useEffect(() => {
     const fetchGames = async () => {
       const games = await getGames();
@@ -54,14 +58,22 @@ function PostsPage() {
     };
     fetachPosts();
   }, [selected]);
+
+  const openCreatePostModal = () =>{
+    setCreatePost(true);
+  }
+
   return (
     <div className="page-container">
-      <GamesDropdown
-        selected={selected}
-        setSelected={setSelected}
-        gameOptions={gameOptions}
-      />
-      <Posts posts={posts} />
+      {createPost && <CreatePost closeModal={setCreatePost} />} 
+      <div className="page-container-search-bar">
+        <GamesDropdown
+          selected={selected}
+          setSelected={setSelected}
+          gameOptions={gameOptions}
+        />
+      </div>
+      <Posts posts={posts} openCreatePostModal={openCreatePostModal}/>
     </div>
   );
 }

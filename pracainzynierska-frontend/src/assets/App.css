@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 :root{
   --color-orange: #f39800;
+  --color-orange-hover: #d88a03;
+  --color-background: #141a23;
 }
 
 *{

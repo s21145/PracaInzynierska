@@ -40,7 +40,7 @@
     font-size: 30px;
 }
 
-.modal-container .modal-login-body{
+.modal-container .modal-auth-body{
     flex: 50%;
     display: flex;
     font-size: 1.5rem;
@@ -73,16 +73,8 @@
     font-weight: bold;
     cursor: pointer;
 }
-.modal-signup-button2{
-    background: transparent;
-    border-width: 3px;
-    border-color: transparent;
-    font-size: 1.8rem;
-    font-weight: bold;
-    cursor: pointer;
-}
 
-.modal-login-button2{
+.modal-auth-button2{
     background: transparent;
     border-width: 3px;
     border-color: transparent;
@@ -92,13 +84,9 @@
     cursor: pointer;
 }
 
-.modal-signup-button2:hover{
-    border-bottom-color: aliceblue;
-    transition: all 0.15s ease-out;
-}
 
 /*--------------------------------------------*/
-.modal-select-login-signup{
+.modal-select-auth-signup{
     padding-top: 30px;
     display: flex;
     padding-left: 20px;
@@ -116,29 +104,29 @@
     border-bottom: 4px solid var(--color-orange);
     transition: all 0.2s ease-out;
 }
-.modal-selected-login{
+.modal-selected-auth{
     background-color: #434343;
     border-color: var(--color-orange);
 }
 
 /*--------------------------------------------*/
 
-.modal-login-form{
+.modal-auth-form{
     box-sizing: border-box;
 }
 
-.modal-login-body{
+.modal-auth-body{
     display: flex;
     flex-direction: column;
 }
-.modal-login-form-wrapper{
+.modal-auth-form-wrapper{
     display: grid;
     grid-template-columns: auto;
     text-align: center;
     width: auto;
 }
 
-.modal-login-form-fields{
+.modal-auth-form-fields{
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -151,7 +139,7 @@
     
 }
 
-.login-form-input{
+.auth-form-input{
     color: gray;
     width: 55%;
     height: 30px;
@@ -160,12 +148,12 @@
     
 }
 
-.login-form-label{
+.auth-form-label{
     font-size: 17px;
     color: rgba(255,255,255,0.7);
 }
 
-.login-form-button{
+.auth-form-button{
     background-color: var(--color-orange);
     margin-top: 10px;
     font-size: 20px;
@@ -177,7 +165,7 @@
     
 }
 
-.login-form-title-label{
+.auth-form-title-label{
     font-size: 35px;
 }
 

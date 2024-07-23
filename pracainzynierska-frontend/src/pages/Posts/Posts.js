@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import PostItem from "./PostItem";
-import "./Posts.css";
-import { getPosts } from "../../Services/PostService";
+import React from 'react';
+import PostItem from './PostItem';
 
-function Posts({ posts }) {
+function Posts({ posts, openCreatePostModal }) {
   return (
     <div className="posts">
       <div className="posts__container">
@@ -23,6 +20,7 @@ function Posts({ posts }) {
               Top
             </h1>
           </div>
+          <button className="create__new__post__button" onClick={openCreatePostModal}>Create</button>
         </div>
         <div className="posts__wrapper">
           <ul className="posts__items">

@@ -23,6 +23,7 @@ import {
 
 import FriendsList from "./pages/FriendsList/FriendsList";
 import FriendRequestWindow from "./pages/FriendsList/FriendRequest/FriendRequestWindow";
+import CreatePost from "./pages/Posts/CreatePost/CreatePost";
 import {SentFriendRequestResponse} from './Services/UserService'
 import {GetFriendsList,GetFriendsListRequests} from './Services/UserService'
 
@@ -179,6 +180,7 @@ function App() {
                       <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
                       <Route path="/ProfileMain" element={<ProtectedRoute><ProfileMain /></ProtectedRoute>} />
                       <Route path="/ProfileMain?steamId" element={<ProtectedRoute><ProfileMain /></ProtectedRoute>} />
+                      <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
                     </Routes>
                   </div>
                   <ProtectedComponent>
