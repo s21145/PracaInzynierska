@@ -3,7 +3,7 @@ import './FoundPlayer.css';
 import {AddFriendRequest} from "../../Services/UserService";
 
 
-const FoundPlayer = ({userLogin,description,birthday,image,userId}) => {
+const FoundPlayer = ({userLogin,description,birthday,image,userId,isFriend}) => {
     
     const age = calculate_age(birthday)
     function calculate_age(dob) { 
@@ -41,7 +41,7 @@ const FoundPlayer = ({userLogin,description,birthday,image,userId}) => {
             </div>
             <div className="found-player-buttons">
                 <button className="found-player-button">PROFILE</button>
-                <button className="found-player-button" onClick={handleAddFriendClick}>ADD</button>
+                {!isFriend && <button  className="found-player-button" onClick={handleAddFriendClick}>ADD</button>}
             </div>
         </div>
     </div>

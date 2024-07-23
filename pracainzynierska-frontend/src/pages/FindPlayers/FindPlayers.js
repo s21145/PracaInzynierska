@@ -96,7 +96,8 @@ function FindPlayers() {
           userId={u.userId}
           description={u.description}
           birthday={u.birthday}
-          image={u.image}/>
+          image={u.image}
+          isFriend={u.isFriend}/>
   
         ))}
               </div>
