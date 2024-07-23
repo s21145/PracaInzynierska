@@ -10,6 +10,7 @@
         public IStatsNameRepository StatsName { get; }
         public IFriendListRepository FriendLists { get; }
         public IFriendListRequestRepository FriendListRequests { get; }
+        public ICommentsRepository Comments { get; }
         public void Save();
         public Task SaveAsync();
     }

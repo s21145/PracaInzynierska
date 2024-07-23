@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getPostWithComments } from "../../Services/PostService";
+import { getPostWithComments,sendComment } from "../../Services/PostService";
 import PostComment from "./PostComment";
 import './PostWithComments.css';
 
@@ -40,11 +40,31 @@ const PostWithComments = () => {
     setNewComment("");
   };
 
-  const handleConfirmClick = () => {
+  const handleConfirmClick = async () => {
     console.log("New Comment:", newComment);
+
+    try{
+      console.log(postId);
+      var response = await sendComment(postId,newComment)
+      if(response.status===200){
+        setPost(prevPost => ({
+          ...prevPost,
+          comments: [...prevPost.comments,response.data]
+        }));
+      }
+
+    }catch(ex){
+      console.log(ex);
+    }
+ 
     setIsAddingComment(false);
+    console.log(post);
     setNewComment("");
+
   };
+  useEffect(() => {
+    console.log("Post updated:", post);
+  }, [post]);
 
   return (
     <div className="post-with-comments-wrapper">
@@ -56,7 +76,7 @@ const PostWithComments = () => {
         </div>
         <div className="post-comment-content">
           <div className="post-header">
-            <div> obrazek</div>
+            <div><img src={`data:image/png;base64, ${post.image}`}></img></div>
             <span className="post-header-username">{post.user}</span>
             <span className="post-header-username">data</span>
           </div>
@@ -95,6 +115,7 @@ const PostWithComments = () => {
                 username={item.user}
                 date={item.date}
                 text={item.content}
+                image={item.image}
               />
             ))}
         </div>

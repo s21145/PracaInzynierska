@@ -17,8 +17,11 @@ namespace pracaInzynierska_backend.Services.Repository
             StatsName = new StatsNameRepository(_db);
             FriendLists = new FriendListRepository(_db);
             FriendListRequests = new FriendListRequestRepository(_db);
+            Comments = new CommentsRepository(_db);
+
 
         }
+        public ICommentsRepository Comments { get; private set; }
         public IGameRepository Game { get; private set; }
         public IPostRepository Post { get; private set; }
         public IUserRepository User { get; private set; }
