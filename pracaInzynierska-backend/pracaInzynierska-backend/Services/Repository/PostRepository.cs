@@ -54,6 +54,10 @@ namespace pracaInzynierska_backend.Services.Repository
                     IdUserOwner = e.IdUser,
                     User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
+                    Date = e.Date,
+                    Image = Convert.ToBase64String(System.IO.File
+                        .ReadAllBytes(
+                        Path.Combine(Environment.CurrentDirectory, e.User.IconPath))),
                     Comments = _context.Comments
                     .Where(x => x.IdPost == e.PostId)
                     .Select(y => new GetCommentDto
@@ -62,7 +66,10 @@ namespace pracaInzynierska_backend.Services.Repository
                         Date = y.Date,
                         Content = y.Content,
                         User = _context.Users.Where(x => x.UserId == y.IdUser).Select(x => x.Login).First(),
-                        IdUser = y.IdUser
+                        IdUser = y.IdUser,
+                        Image = Convert.ToBase64String(System.IO.File
+                        .ReadAllBytes(
+                        Path.Combine(Environment.CurrentDirectory, y.User.IconPath))),
 
                     })
                     .ToList()

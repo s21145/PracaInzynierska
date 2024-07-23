@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import Friend from './Friend/Friend';
 import './FriendsList.css';
-import FriendRequests from './FriendRequest/FriendRequest'; 
-import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
+import FriendRequests from './FriendRequest/FriendRequest';
+import FriendRequestWindow from './FriendRequest/FriendRequestWindow';
 import dragon from '../../assets/resources/rust.jpg';
 import { UserContext } from "../../Services/UserContext";
+import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
 
 const friends = [
     {
@@ -24,7 +25,7 @@ const friends = [
 
 const pendingFriendRequests = 999;
 
-const FriendsList = () => {
+const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const { user } = useContext(UserContext);
     const toggleExpand = () => {
@@ -67,18 +68,19 @@ const FriendsList = () => {
                 )}
             </div>
             <hr />
-            <div className="friends-list-friend-requests">
-                {friendRequests.length > 0 && (
-                    <FriendRequests count={friendRequests.length} isExpanded={isExpanded} />
+            <div className="friends-list-friend-requests" onClick={ onFriendRequestClick}>
+            {user && user.requests && user.requests.length > 0 && (
+                    <FriendRequests count={user.requests.length} isExpanded={isExpanded} />
                 )}
             </div>
             <div className="friends-container">
-                {friends.map((friend) => (
+                { user && user.friends && user.friends.map((friend) => (
                     <Friend
                         key={friend.userId}
                         name={friend.userLogin}
                         imageUrl={friend.iconPath}
                         isExpanded={isExpanded}
+                        onClick={onFriendClick}
                     />
                 ))}
             </div>

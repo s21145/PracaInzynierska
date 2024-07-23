@@ -61,3 +61,27 @@ export async function getPostWithComments(postId) {
     return response;
   }
 }
+export async function sendComment(postId,content) {
+  try {
+    var body = {
+      content:content,
+      IdPost:postId
+    }
+    const response = await http.post(
+      config.apiUrl + "/Post/comment",
+      body,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}

@@ -15,6 +15,9 @@ namespace pracaInzynierska_backend.Services.Repository
         {
             var findBetter = await _context.UserGameRakings
                 .Include(x => x.User)
+                .Include(x => x.User.Friends)
+                .Include(x => x.User.RequestsSent)
+                .Include(x => x.User.RequestsReceived)
                 .Where(x => x.IdUser != forUser)
                 .Where(x => x.IdGame == IdGame)
                 .Where(x => x.score > userScore)
@@ -24,6 +27,9 @@ namespace pracaInzynierska_backend.Services.Repository
                 .ToListAsync();
             var findWorse = await _context.UserGameRakings
                 .Include(x => x.User)
+                .Include(x => x.User.Friends)
+                .Include(x => x.User.RequestsSent)
+                .Include(x => x.User.RequestsReceived)
                 .Where(x => x.IdUser != forUser)
                 .Where(x => x.IdGame == IdGame)
                 .Where(x => x.score <= userScore)
@@ -45,6 +51,9 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 findWorse = await _context.UserGameRakings
                .Include(x => x.User)
+               .Include(x => x.User.Friends)
+               .Include(x => x.User.RequestsSent)
+               .Include(x => x.User.RequestsReceived)
                .Where(x => x.IdUser != forUser)
                .Where(x => x.IdGame == IdGame)
                .Where(x => x.score <= userScore)
@@ -58,6 +67,9 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 findBetter = await _context.UserGameRakings
                                 .Include(x => x.User)
+                                .Include(x => x.User.Friends)
+                                .Include(x => x.User.RequestsSent)
+                                .Include(x => x.User.RequestsReceived)
                                 .Where(x => x.IdUser != forUser)
                                 .Where(x => x.IdGame == IdGame)
                                 .Where(x => x.score > userScore)

@@ -414,6 +414,9 @@ namespace pracaInzynierska_backend.Controllers
                 Image = Convert.ToBase64String(System.IO.File
                 .ReadAllBytes(
                     Path.Combine(Environment.CurrentDirectory, x.User.IconPath))),
+                IsFriend = x.User.Friends.Any(friend => friend.FriendId == user.UserId) ||
+                 x.User.RequestsSent.Any(req => req.ToUserId == user.UserId) ||
+                 x.User.RequestsReceived.Any(req => req.FromUserId == user.UserId)
             }));
 
 
@@ -472,7 +475,11 @@ namespace pracaInzynierska_backend.Controllers
             {
                 return StatusCode(400, $"Błąd podczas zmiany statusu - {changeStatus.Item2} ");
             }
-
+            if(status == "Declined")
+            {
+                await _unitOfWork.SaveAsync();
+                return StatusCode(200);
+            }
             var FriendList = new FriendList()
             {
                 OwnerId = user.UserId,
@@ -519,7 +526,7 @@ namespace pracaInzynierska_backend.Controllers
             {
                 return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
             }
-            var searchUsers = await _unitOfWork.User.GetUsers(nickname,user);
+            var searchUsers = await _unitOfWork.User.GetUsersWithFriendsAndRequests(nickname,user);
             var response = new List<ReturnSimilarUsersDTO>();
             searchUsers.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
             {
@@ -530,6 +537,10 @@ namespace pracaInzynierska_backend.Controllers
                 Image = Convert.ToBase64String(System.IO.File
                 .ReadAllBytes(
                     Path.Combine(Environment.CurrentDirectory, x.IconPath))),
+                IsFriend = x.Friends.Any(friend => friend.FriendId == user.UserId) ||
+                 x.RequestsSent.Any(req => req.ToUserId == user.UserId) ||
+                 x.RequestsReceived.Any(req => req.FromUserId == user.UserId) 
+                ,
             }));
 
 

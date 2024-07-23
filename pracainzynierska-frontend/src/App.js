@@ -1,5 +1,5 @@
 import "./assets/App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
 import Navbar from "./pages/Navbar/Navbar";
 import PostsPage from "./pages/Post/PostsPage";
 import Footer from "./pages/Footer/Footer";
@@ -144,7 +144,22 @@ function App() {
 
     return () => clearInterval(interval);
   }, [user]);
-
+  const ProtectedComponent = ({ children }) => {
+  
+    if (!user) {
+      return <></>;
+    }
+  
+    return children;
+  };
+  const ProtectedRoute  = ({ children }) => {
+  
+    if (!user) {
+      return <Navigate to="/" replace />;
+    }
+  
+    return children;
+  };
   return (
     <>
       <UserContext.Provider value={value}>
@@ -156,18 +171,20 @@ function App() {
                 <div className="content-with-friends">
                   <div className="content">
                     <Routes>
-                      <Route path="/posts" element={<PostsPage />} />
-                      <Route path="/posts/:postId" element={<PostWithComments />} />
-                      <Route path="/FindPlayers" element={<FindPlayers />} />
+                      <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
+                      <Route path="/posts/:postId" element={<ProtectedRoute><PostWithComments /></ProtectedRoute>} />
+                      <Route path="/FindPlayers" element={<ProtectedRoute><FindPlayers /></ProtectedRoute>} />
                       <Route path="/" element={<Main />} />
                       <Route path="/?logout" element={<Main />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/ProfileMain" element={<ProfileMain />} />
-                      <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+                      <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+                      <Route path="/ProfileMain" element={<ProtectedRoute><ProfileMain /></ProtectedRoute>} />
+                      <Route path="/ProfileMain?steamId" element={<ProtectedRoute><ProfileMain /></ProtectedRoute>} />
                     </Routes>
                   </div>
-                  {(user != null || GetCurrentUser() != null) && <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />}
-                  
+                  <ProtectedComponent>
+                  <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
+                  </ProtectedComponent>
+                  <ProtectedComponent>
                   {isChatWindowVisible && (
                     <ChatWindow
                       messages={messages}
@@ -176,8 +193,12 @@ function App() {
                       friendName={currentFriend}
                     />
                   )}
+                  </ProtectedComponent>
                 </div>
-                {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
+                <ProtectedComponent>
+                {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} 
+                onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
+                </ProtectedComponent>
               </div>
             </Router>
           </statModalContext.Provider>
