@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import "./FindPlayers.css";
 import FoundPlayer from "../../components/FoundPlayer/FoundPlayer";
 import GamesDropdownFindPlayers from "../GamesDropdown/GamesDropdownFindPlayers";
 import { getGames } from "../../Services/PostService";
 import { getSimilarUsers,getUsersByNickname } from "../../Services/GamesService";
+import GameModal from "../../pages/ProfileMain/ProfileMainSubPages/GameStatistics/GameModal";
+import { statModalContext } from "../../Services/StatsModalContext";
 
 function FindPlayers() {
   const [selected, setSelected] = useState({});
   const [users, setUsers] = useState([]);
   const [gameOptions, setGameOptions] = useState([]);
   const [userNickname,setUserNickname]=useState("");
+  const { statModal, setStatModal } = useContext(statModalContext);
   useEffect(() => {
     const fetchGames = async () => {
       const games = await getGames();
@@ -61,6 +64,7 @@ function FindPlayers() {
 
   return (
     <div className="find-players">
+        {statModal && statModal.show && <GameModal />}
       <h1>Who are you looking for?</h1>
       <div className="find-players-wrapper">
         <div className="find-players-form">
@@ -97,7 +101,8 @@ function FindPlayers() {
           description={u.description}
           birthday={u.birthday}
           image={u.image}
-          isFriend={u.isFriend}/>
+          isFriend={u.isFriend}
+          selectedGame={selected.gameId}/>
   
         ))}
               </div>
