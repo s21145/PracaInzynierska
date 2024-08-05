@@ -48,7 +48,8 @@ namespace pracaInzynierska_backend.Controllers
                 Title = body.Title,
                 Content = body.Content,
                 IdUser = user.UserId,
-                IdGame = game.GameId
+                IdGame = game.GameId,
+                Date = DateTime.Now,
             };
             await _unitOfWork.Post.InsertAsync(post);
             await _unitOfWork.SaveAsync();

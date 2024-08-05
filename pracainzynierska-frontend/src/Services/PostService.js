@@ -85,3 +85,29 @@ export async function sendComment(postId,content) {
     return response;
   }
 }
+export async function createPost(title,content,userLogin,gameName) {
+  try {
+    var body = {
+      title:title,
+      content:content,
+      userLogin:userLogin,
+      gameName:gameName
+    }
+    const response = await http.post(
+      config.apiUrl + "/Post/post",
+      body,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}

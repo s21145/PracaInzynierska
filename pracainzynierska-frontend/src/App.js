@@ -116,6 +116,7 @@ function App() {
           Logout();
         } else {
           const age = new Date(response.data.age);
+          console.log(response.data);
           setUser({
             login: response.data.login,
             image: response.data.image,
@@ -123,7 +124,8 @@ function App() {
             age: age,
             description: response.data.description,
             friends:friends.data,
-            requests:requests.data
+            requests:requests.data,
+            userId:response.data.userId
           });
         }
       }

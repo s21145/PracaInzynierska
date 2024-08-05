@@ -49,12 +49,7 @@ function PostsPage() {
   useEffect(() => {
     const fetachPosts = async () => {
       if (Object.keys(selected).length === 0) return;
-      const query = await getPosts(selected.name);
-      if (query.status !== 200) {
-        setPosts(null);
-      } else {
-        setPosts(query.data);
-      }
+     await reloadPosts();
     };
     fetachPosts();
   }, [selected]);
@@ -62,6 +57,24 @@ function PostsPage() {
   const openCreatePostModal = () =>{
     setCreatePost(true);
   }
+  const reloadPosts = async () => {
+    const query = await getPosts(selected.name);
+    if (query.status !== 200) {
+      setPosts(null);
+    } else {
+      console.log(query.data);
+      setPosts(query.data);
+    }
+  }
+  useEffect(() => {
+    const reload = async () => {
+     if(createPost==false){
+      console.log("reload");
+       await reloadPosts();
+     }
+    };
+    reload();
+  }, [createPost]);
 
   return (
     <div className="page-container">
@@ -73,7 +86,7 @@ function PostsPage() {
           gameOptions={gameOptions}
         />
       </div>
-      <Posts posts={posts} openCreatePostModal={openCreatePostModal}/>
+      <Posts posts={posts}  openCreatePostModal={openCreatePostModal}/>
     </div>
   );
 }

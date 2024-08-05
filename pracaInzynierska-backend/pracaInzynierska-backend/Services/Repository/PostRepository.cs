@@ -25,7 +25,8 @@ namespace pracaInzynierska_backend.Services.Repository
                     IdUserOwner = e.IdUser,
                     User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
-                    Comments = null
+                    Comments = null,
+                    Date = e.Date
                 })
                 .ToListAsync();
             return posts;

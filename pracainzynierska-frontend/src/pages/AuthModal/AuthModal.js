@@ -37,6 +37,7 @@ function AuthModal({ closeModal, initialMode }) {
         description: response.data.description,
         friends: friends.data,
         requests: requests.data,
+        userId:response.data.userId
       });
       closeModal(false);
     }

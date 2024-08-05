@@ -30,6 +30,7 @@ function Main() {
         steamId: null,
         age: "",
         description: "",
+        userId:""
       });
       console.log(user);
       console.log("KONIEC");
