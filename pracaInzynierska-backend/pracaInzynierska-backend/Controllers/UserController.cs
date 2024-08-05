@@ -487,7 +487,13 @@ namespace pracaInzynierska_backend.Controllers
                 From = DateTime.Now
             };
             await _unitOfWork.FriendLists.InsertAsync(FriendList);
-
+            var FriendList2 = new FriendList()
+            {
+                OwnerId = fromUserId,
+                FriendId = user.UserId,
+                From = DateTime.Now
+            };
+            await _unitOfWork.FriendLists.InsertAsync(FriendList2);
             await _unitOfWork.SaveAsync();
 
 
