@@ -1,10 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./GameModal.css";
-import { useContext } from "react";
 import { statModalContext } from "../../../../Services/StatsModalContext";
-import { getStats } from "../../../../Services/GamesService";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const GameModal = () => {
   const { statModal, setStatModal } = useContext(statModalContext);
@@ -15,15 +11,13 @@ const GameModal = () => {
         <div className="game-modal-container">
           <div className="game-modal-content">
             <div className="game-modal-content-title">
-              <div className="">
-                <h1>{statModal.stats.gameName}</h1>
-              </div>
+              <h1>{statModal.stats.gameName}</h1>
             </div>
             <div className="game-modal-content-wrapper">
               <div className="game-modal-content-stats">
                 {statModal.stats.stats &&
-                  statModal.stats.stats.map((item) => (
-                    <div className="game-stat">
+                  statModal.stats.stats.map((item, index) => (
+                    <div key={index} className="game-stat">
                       <div className="stats-text">
                         {item.name}: {item.value}
                       </div>
@@ -42,7 +36,6 @@ const GameModal = () => {
                   ></button>
                 </div>
                 <div className="game-modal-content-buttons">
-                  {/* <button className="game-button">Add game</button> */}
                   <button
                     className="game-button"
                     onClick={() => setStatModal({ show: false })}

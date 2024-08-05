@@ -1,12 +1,12 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import "./Posts.css";
 
 const MAX_LENGTH = 230;
 
-function PostItem({ idUserOwner, title, content, userLogin, postId }) {
+const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId }, ref) => {
   return (
-    <div className="posts__item__wrapper">
+    <div className="posts__item__wrapper" ref={ref}>
       <li className="posts__item">
         <div className="posts__item__container">
           <div className="posts__item__postedby">
@@ -39,6 +39,6 @@ function PostItem({ idUserOwner, title, content, userLogin, postId }) {
       </li>
     </div>
   );
-}
+});
 
 export default PostItem;

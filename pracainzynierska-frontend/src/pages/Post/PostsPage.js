@@ -1,10 +1,9 @@
 import "../../assets/App.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Posts from "../Posts/Posts";
 import "./PostsPage.css";
 import GamesDropdown from "../GamesDropdown/GamesDropdown";
 import { getGames, getPosts } from "../../Services/PostService";
-
 import CreatePost from "../Posts/CreatePost/CreatePost";
 
 const mockPosts = [
@@ -35,8 +34,22 @@ function PostsPage() {
   const [selected, setSelected] = useState({});
   const [gameOptions, setGameOptions] = useState([]);
   const [posts, setPosts] = useState(mockPosts);
-
+  const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [createPost, setCreatePost] = useState(false);
+
+  const observer = useRef();
+
+  const lastPostElementRef = useCallback(node => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && posts.length >= 10) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [isLoading, posts]);
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -47,38 +60,39 @@ function PostsPage() {
   }, []);
 
   useEffect(() => {
-    const fetachPosts = async () => {
+    const fetchPosts = async () => {
       if (Object.keys(selected).length === 0) return;
-     await reloadPosts();
+      setPage(0);
+      setPosts([]);
+      await reloadPosts(0);
     };
-    fetachPosts();
+    fetchPosts();
   }, [selected]);
 
-  const openCreatePostModal = () =>{
+  const openCreatePostModal = () => {
     setCreatePost(true);
-  }
-  const reloadPosts = async () => {
-    const query = await getPosts(selected.name);
+  };
+
+  const reloadPosts = async (pageNumber) => {
+    setIsLoading(true);
+    const query = await getPosts(selected.name, pageNumber);
+    setIsLoading(false);
     if (query.status !== 200) {
       setPosts(null);
     } else {
-      console.log(query.data);
-      setPosts(query.data);
+      setPosts(prevPosts => [...prevPosts, ...query.data]);
     }
-  }
+  };
+
   useEffect(() => {
-    const reload = async () => {
-     if(createPost==false){
-      console.log("reload");
-       await reloadPosts();
-     }
-    };
-    reload();
-  }, [createPost]);
+    if (page > 0) {
+      reloadPosts(page);
+    }
+  }, [page]);
 
   return (
     <div className="page-container">
-      {createPost && <CreatePost closeModal={setCreatePost} />} 
+      {createPost && <CreatePost closeModal={setCreatePost} />}
       <div className="page-container-search-bar">
         <GamesDropdown
           selected={selected}
@@ -86,7 +100,7 @@ function PostsPage() {
           gameOptions={gameOptions}
         />
       </div>
-      <Posts posts={posts}  openCreatePostModal={openCreatePostModal}/>
+      <Posts posts={posts} openCreatePostModal={openCreatePostModal} lastPostElementRef={lastPostElementRef} />
     </div>
   );
 }

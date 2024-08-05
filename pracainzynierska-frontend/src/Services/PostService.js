@@ -3,11 +3,11 @@ import http from "../Services/HttpService";
 import jwtDecode from "jwt-decode";
 import { setAuthorization } from "../Services/HttpService";
 
-export async function getPosts(gameName) {
+export async function getPosts(gameName, page) {
   try {
     const response = await http.get(
       config.apiUrl + "/Post/posts",
-      { params: { gameName: gameName, page: 0 } },
+      { params: { gameName: gameName, page: page } },
       {
         headers: {
           "Content-type": "application/json",
