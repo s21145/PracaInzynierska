@@ -42,12 +42,12 @@ const GameModal = () => {
                   ></button>
                 </div>
                 <div className="game-modal-content-buttons">
-                  <button className="game-button">Add game</button>
+                  {/* <button className="game-button">Add game</button> */}
                   <button
                     className="game-button"
                     onClick={() => setStatModal({ show: false })}
                   >
-                    Cancel
+                    OK
                   </button>
                 </div>
               </div>
