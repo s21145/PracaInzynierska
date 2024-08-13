@@ -68,17 +68,6 @@ function Navbar() {
             {user && (
               <li className="nav-item">
                 <Link
-                  to="/e-mates"
-                  className="nav-links"
-                  onClick={closeMobileMenu}
-                >
-                  E-MATES
-                </Link>
-              </li>
-            )}
-            {user && (
-              <li className="nav-item">
-                <Link
                   to="/findplayers"
                   className="nav-links"
                   onClick={closeMobileMenu}
@@ -95,17 +84,6 @@ function Navbar() {
                   onClick={closeMobileMenu}
                 >
                   POSTS
-                </Link>
-              </li>
-            )}
-            {user && (
-              <li className="nav-item">
-                <Link
-                  to="/contact"
-                  className="nav-links"
-                  onClick={closeMobileMenu}
-                >
-                  CONTACT
                 </Link>
               </li>
             )}
@@ -163,7 +141,16 @@ function Navbar() {
               onMouseLeave={onMouseLeave}
             >
               <div className="profile-link">
-                <div className="testtest"> </div>
+                <div
+                className="nav-picture"
+                style={{
+                  backgroundImage: `url(data:image/png;base64,${
+                    user && user.image
+                  })`,
+                }}
+                >
+
+                </div>
                 <h2 className="profile-wrap">{user && user.login}</h2>
               </div>
 
@@ -178,6 +165,3 @@ function Navbar() {
 
 export default Navbar;
 
-/*
-
-*/

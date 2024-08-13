@@ -97,7 +97,7 @@ function AuthModal({ closeModal, initialMode }) {
             <div className="modal-auth-form-wrapper">
               <form className="modal-auth-form" onSubmit={handleLogin}>
                 <div className="modal-auth-form-fields">
-                  <label className="auth-form-label">Email</label>
+                  <label className="auth-form-label">Nickname</label>
                   <input
                     name="login"
                     value={login.login}
@@ -110,6 +110,7 @@ function AuthModal({ closeModal, initialMode }) {
                     placeholder="Password"
                     className="auth-form-input"
                     name="password"
+                    type="password"
                     value={login.password}
                     onChange={(e) => handleInputChange(e, setLogin)}
                   ></input>

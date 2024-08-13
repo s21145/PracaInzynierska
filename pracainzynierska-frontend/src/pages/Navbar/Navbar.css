@@ -1,6 +1,6 @@
 .navbar {
-    background-color: #1b1818;
-    height: 10%;
+    background-color: var(--color-main-components);
+    height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,27 +9,28 @@
     top: 0;
     z-index: 998;
     border-style: solid;
-    border-color: #f39800;
+    border-color: var(--color-orange);
     border-width: 1px;
   }
   
   .navbar-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 80px;
-    border-width: 4px;
-    border-color: #f39800;
+    width: 100%;
+    padding: 0 20px;
+    margin-right: 20px;
   }
   
   .navbar-logo {
-    color: #f39800;
-    justify-self: start;
+    color: var(--color-orange);
     cursor: pointer;
     text-decoration: none;
     font-size: 2rem;
     display: flex;
     align-items: center;
+    margin-left: 0;
   }
   
   .fa-typo3 {
@@ -38,19 +39,18 @@
   }
   
   .nav-menu {
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    grid-gap: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     list-style: none;
     text-align: center;
+    margin-left: auto; 
     padding-right: 20px;
-    width: 50vw;
-    justify-content: end;
-    margin-right: 2rem;
   }
   
   .nav-item {
-    height: 80px;
+    margin-left: 20px; 
+    height: 80px
   }
   
   .nav-links {
@@ -86,7 +86,7 @@
   .profile-link{
     color: var(--color-orange);
     display: flex;
-    align-items: center;
+    align-items: right;
     text-decoration: none;
     height: 100%;
     justify-content: flex-end;
@@ -100,7 +100,7 @@
     height: 100%;
   }
 
-  .testtest{
+  .nav-picture{
     height: 90%;
     width: 50%;
     background-image: url(../../assets/resources/dragon.png);
@@ -129,7 +129,7 @@
     height: 40px;
     border-color: var(--color-orange);
     border-radius: 25px;
-    color: white;
+    color: var(--color-bright-font);
   }
 
   .sign-in-button{
@@ -139,7 +139,7 @@
     height: 40px;
     border-color: transparent;
     border-radius: 25px;
-    color: white;
+    color: var(--color-bright-font);
   }
 
 
@@ -158,9 +158,9 @@
       left: -100%;
       transition: all 0.5s ease;
     }
-  
+    
     .nav-menu.active {
-      background-color: #232020;
+      background-color: var(--color-background);
       left: 0;
       opacity: 1;
       transition: all 0.5s ease;
@@ -186,8 +186,6 @@
       top: 3px;
       left: 0;
       transform: translate(25%, 50%);
-      
-      
     }
   
     .menu-icon {

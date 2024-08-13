@@ -1,6 +1,6 @@
 .posts {
     padding: 4rem;
-    background: #141a23;
+    background: var(--color-background);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,7 +55,7 @@ h1 {
     width: 100%;
     min-width: 400px;
     height: 300px;
-    background-color: #0a0d12;
+    background-color: var(--color-secondary-background);
     box-sizing: border-box;
 }
 
@@ -166,7 +166,7 @@ h1 {
 }
 
 .post-wrapper {
-    background-color: #141a23;
+    background-color: var(--color-background);
     min-height: 100vh;
 }
 

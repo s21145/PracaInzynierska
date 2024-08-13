@@ -12,7 +12,7 @@
 }
 
 .friend-request-window {
-    background: #333;
+    background: var(--color-background);
     border-radius: 10px;
     width: 400px;
     max-width: 90%;
@@ -46,7 +46,7 @@
     background: none;
     border: none;
     font-size: 16px;
-    color:#333
+    color:var(--color-background)
 }
 
 .friend-request-body {
@@ -98,7 +98,7 @@
 }
 
 .decline-button {
-    background-color: #c9192a;
+    background-color: var(--color-red);
     color: #fff;
 }
 
