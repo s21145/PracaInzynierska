@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
 import "./FindPlayers.css";
 import FoundPlayer from "../../components/FoundPlayer/FoundPlayer";
 import GamesDropdownFindPlayers from "../GamesDropdown/GamesDropdownFindPlayers";
@@ -12,7 +12,22 @@ function FindPlayers() {
   const [users, setUsers] = useState([]);
   const [gameOptions, setGameOptions] = useState([]);
   const [userNickname, setUserNickname] = useState("");
+  const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { statModal, setStatModal } = useContext(statModalContext);
+
+  const observer = useRef();
+
+  const lastUserElementRef = useCallback(node => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && users.length >= 10) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [isLoading, users]);
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -25,24 +40,27 @@ function FindPlayers() {
   useEffect(() => {
     const fetchUsers = async () => {
       if (Object.keys(selected).length === 0) return;
-      const query = await getSimilarUsers(selected.gameId, 0);
-      if (query.status !== 200) {
-        setUsers([]);
-      } else {
-        setUsers(query.data);
-        console.log(query.data);
-      }
+      setPage(0);
+      setUsers([]);
+      await loadUsers(0);
     };
     fetchUsers();
   }, [selected]);
 
-  const fetchUsers = async (selected) => {
-    if (Object.keys(selected).length === 0) return;
-    const query = await getSimilarUsers(selected.gameId, 0);
+  useEffect(() => {
+    if (page > 0) {
+      loadUsers(page);
+    }
+  }, [page]);
+
+  const loadUsers = async (pageNumber) => {
+    setIsLoading(true);
+    const query = await getSimilarUsers(selected.gameId, pageNumber);
+    setIsLoading(false);
     if (query.status !== 200) {
       setUsers([]);
     } else {
-      setUsers(query.data);
+      setUsers(prevUsers => [...prevUsers, ...query.data]);
       console.log(query.data);
     }
   };
@@ -96,7 +114,7 @@ function FindPlayers() {
           </form>
         </div>
         <div className="found-players">
-          {users.map(u => (
+          {users.map((u, index) => (
             <FoundPlayer
               userLogin={u.userLogin}
               key={u.userLogin}
@@ -106,6 +124,7 @@ function FindPlayers() {
               image={u.image}
               isFriend={u.isFriend}
               selectedGame={selected.gameId}
+              ref={index === users.length - 1 ? lastUserElementRef : null}
             />
           ))}
         </div>
