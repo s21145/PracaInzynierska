@@ -61,7 +61,6 @@ function FindPlayers() {
       setUsers([]);
     } else {
       setUsers(prevUsers => [...prevUsers, ...query.data]);
-      console.log(query.data);
     }
   };
 

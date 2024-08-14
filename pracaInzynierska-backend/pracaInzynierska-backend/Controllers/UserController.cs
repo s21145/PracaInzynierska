@@ -268,7 +268,7 @@ namespace pracaInzynierska_backend.Controllers
                 var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
                 var user = userQuery.First();
 
-                var userStats = await _unitOfWork.Stats.GetAsync(x => x.IdGame == body.IdGame);
+                var userStats = await _unitOfWork.Stats.GetAsync(x => x.IdGame == body.IdGame && user.UserId == x.IdUser);
                 var stats = userStats.ToList();
 
                 var response = new ReturnStatsDTO()
