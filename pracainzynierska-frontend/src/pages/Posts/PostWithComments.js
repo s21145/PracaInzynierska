@@ -30,7 +30,7 @@ const PostWithComments = () => {
       // error
     } else {
       setPost(response.data);
-      console.log(post);
+
     }
   };
 
@@ -54,10 +54,10 @@ const PostWithComments = () => {
   };
 
   const handleConfirmClick = async () => {
-    console.log("New Comment:", newComment);
+
 
     try{
-      console.log(postId);
+
       var response = await sendComment(postId,newComment)
       if(response.status===200){
         setPost(prevPost => ({
@@ -71,12 +71,11 @@ const PostWithComments = () => {
     }
  
     setIsAddingComment(false);
-    console.log(post);
+
     setNewComment("");
 
   };
   useEffect(() => {
-    console.log("Post updated:", post);
   }, [post]);
 
   

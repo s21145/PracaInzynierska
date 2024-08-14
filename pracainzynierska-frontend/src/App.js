@@ -70,7 +70,6 @@ function App() {
   };
 
   const handleFriendClick = (friendName) => {
-    console.log(friendName);
     setCurrentFriend(friendName);
     setChatWindowVisible(true);
   };
@@ -116,7 +115,6 @@ function App() {
           Logout();
         } else {
           const age = new Date(response.data.age);
-          console.log(response.data);
           setUser({
             login: response.data.login,
             image: response.data.image,
@@ -130,7 +128,6 @@ function App() {
         }
       }
     }
-    console.log(user);
     reloadUser();
   }, [user]);
 
@@ -163,6 +160,7 @@ function App() {
   
     return children;
   };
+
   return (
     <>
       <UserContext.Provider value={value}>
@@ -180,8 +178,8 @@ function App() {
                       <Route path="/" element={<Main />} />
                       <Route path="/?logout" element={<Main />} />
                       <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
-                      <Route path="/ProfileMain" element={<ProtectedRoute><ProfileMain /></ProtectedRoute>} />
-                      <Route path="/ProfileMain?steamId" element={<ProtectedRoute><ProfileMain /></ProtectedRoute>} />
+                      <Route path="/ProfileMain" element={<ProfileMain />} />
+                      <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
                       <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
                     </Routes>
                   </div>

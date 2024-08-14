@@ -14,7 +14,7 @@ function SignUpModal({ closeSignUpModal }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     const response = await RegisterUser(register);
-    console.log(response);
+
     if (response.status !== 200) {
       // bad register
       console.log("bad");

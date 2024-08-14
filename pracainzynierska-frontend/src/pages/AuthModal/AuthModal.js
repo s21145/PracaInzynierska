@@ -25,7 +25,6 @@ function AuthModal({ closeModal, initialMode }) {
     const friends = await GetFriendsList();
     const requests = await GetFriendsListRequests();
     if (response.status !== 200) {
-      console.log("bad");
       console.log(response.data);
     } else {
       const age = new Date(response.data.age);
@@ -46,7 +45,6 @@ function AuthModal({ closeModal, initialMode }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     const response = await RegisterUser(register);
-    console.log(response);
     if (response.status !== 200) {
       console.log("bad");
       console.log(response.data);

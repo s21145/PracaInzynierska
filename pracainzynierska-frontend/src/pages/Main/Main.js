@@ -32,8 +32,7 @@ function Main() {
         description: "",
         userId:""
       });
-      console.log(user);
-      console.log("KONIEC");
+
       window.location.reload();
     }
   };

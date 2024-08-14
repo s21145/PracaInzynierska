@@ -19,8 +19,7 @@ function CreatePost({ closeModal }) {
     }, []);
   
     const handlePost = async () => {
-        console.log(user);
-       
+  
         try{
             var response = await createPost(title,content,user.login,selected.name)
             console.log(response);

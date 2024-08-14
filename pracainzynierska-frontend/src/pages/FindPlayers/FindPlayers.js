@@ -29,7 +29,6 @@ function FindPlayers() {
         setUsers([]);
       } else {
         setUsers(query.data);
-        console.log(query.data);
       }
     };
     fetchUsers();
@@ -42,7 +41,6 @@ function FindPlayers() {
       setUsers([]);
     } else {
       setUsers(query.data);
-      console.log(query.data);
     }
   };
   const handleSumbit = async (event) => {
@@ -55,7 +53,6 @@ function FindPlayers() {
       setUsers([]);
     } else {
       setUsers(query.data);
-      console.log(query.data);
     }
   }
   const handleInputChange = (event) => {

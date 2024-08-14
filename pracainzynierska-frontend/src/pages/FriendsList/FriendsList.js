@@ -37,8 +37,7 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
         const fetchFriendsList = async () => {
           const list = await GetFriendsList();
           const requests = await GetFriendsListRequests();
-          console.log(list);
-          console.log(requests);
+
           if(list.status === 200){
             setFriends(list.data);
           }else{
@@ -49,7 +48,7 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
           }{
             //error
           }
-         console.log(friendRequests);
+
         };
         fetchFriendsList();
       }, [user]);

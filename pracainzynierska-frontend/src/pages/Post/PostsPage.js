@@ -62,14 +62,12 @@ function PostsPage() {
     if (query.status !== 200) {
       setPosts(null);
     } else {
-      console.log(query.data);
       setPosts(query.data);
     }
   }
   useEffect(() => {
     const reload = async () => {
      if(createPost==false){
-      console.log("reload");
        await reloadPosts();
      }
     };

@@ -71,7 +71,7 @@ export async function RegisterUser(user) {
     email: user.email,
     birthday: user.birthday,
   });
-  console.log(req);
+
   try {
     const response = await http.post(config.apiUrl + "/Login/register", req, {
       headers: {
@@ -159,7 +159,7 @@ export async function ChangeDescription(description) {
       status: error.response.status,
       data: error.response.data,
     };
-    console.log(response);
+
     return response;
   }
 }
@@ -184,7 +184,7 @@ export async function ChangeEmail(email) {
       status: error.response.status,
       data: error.response.data,
     };
-    console.log(response);
+
     return response;
   }
 }
