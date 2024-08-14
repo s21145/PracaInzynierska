@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { getGames,createPost } from "../../../Services/PostService";
 import { UserContext } from "../../../Services/UserContext";
 import { useContext } from "react";
-function CreatePost({ closeModal }) {    
+function CreatePost({ closeModal,AddPost }) {    
     const [selected, setSelected] = useState({});
     const [gameOptions, setGameOptions] = useState([]);
     const [title, setTitle] = useState('');
@@ -24,13 +24,14 @@ function CreatePost({ closeModal }) {
             var response = await createPost(title,content,user.login,selected.name)
             console.log(response);
             if(response.status === 200){
-
+                AddPost(response.data);
             }else{
                 //error
             }
         }catch(ex){
 
         }
+
         closeModal(false);
     }
     const handleTitleChange = (event) => {

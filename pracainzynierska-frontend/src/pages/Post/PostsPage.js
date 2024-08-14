@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Posts from "../Posts/Posts";
 import "./PostsPage.css";
 import GamesDropdown from "../GamesDropdown/GamesDropdown";
-import { getGames, getPosts } from "../../Services/PostService";
+import { getGames, getPosts,getPostsForMainPage } from "../../Services/PostService";
 import CreatePost from "../Posts/CreatePost/CreatePost";
 
 const mockPosts = [
@@ -33,7 +33,7 @@ const mockPosts = [
 function PostsPage() {
   const [selected, setSelected] = useState({});
   const [gameOptions, setGameOptions] = useState([]);
-  const [posts, setPosts] = useState(mockPosts);
+  const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [createPost, setCreatePost] = useState(false);
@@ -58,7 +58,12 @@ function PostsPage() {
     };
     fetchGames();
   }, []);
-
+  useEffect(() => {
+    const fetchMainPagePosts = async () => {
+      await reloadPosts(0);
+    };
+    fetchMainPagePosts();
+  }, []);
   useEffect(() => {
     const fetchPosts = async () => {
       if (Object.keys(selected).length === 0) return;
@@ -75,7 +80,13 @@ function PostsPage() {
 
   const reloadPosts = async (pageNumber) => {
     setIsLoading(true);
-    const query = await getPosts(selected.name, pageNumber);
+    var query = [];
+    if(selected.name){
+      query = await getPosts(selected.name, pageNumber);
+    }else{
+      query = await getPostsForMainPage(page);
+    }
+    
     setIsLoading(false);
     if (query.status !== 200) {
       setPosts(null);
@@ -83,7 +94,10 @@ function PostsPage() {
       setPosts(prevPosts => [...prevPosts, ...query.data]);
     }
   };
-
+  const handleAddPost = async (postToAdd) => {
+    console.log(postToAdd);
+    setPosts(prevPosts => [ postToAdd, ...prevPosts]);
+  }
   useEffect(() => {
     if (page > 0) {
       reloadPosts(page);
@@ -92,7 +106,7 @@ function PostsPage() {
 
   return (
     <div className="page-container">
-      {createPost && <CreatePost closeModal={setCreatePost} />}
+      {createPost && <CreatePost closeModal={setCreatePost}  AddPost={handleAddPost}/>}
       <div className="page-container-search-bar">
         <GamesDropdown
           selected={selected}

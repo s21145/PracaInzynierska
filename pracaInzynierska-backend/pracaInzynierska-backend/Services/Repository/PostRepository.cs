@@ -15,9 +15,31 @@ namespace pracaInzynierska_backend.Services.Repository
         {
             var posts = await _context.Posts
                 .Where(x => x.Game.Name == gameName)
+                 .OrderByDescending(x => x.Date)
                 .Skip(page * 10)
                 .Take(10)
                 .Select( e => new GetPostDto
+                {
+                    PostId = e.PostId,
+                    Title = e.Title,
+                    Content = e.Content,
+                    IdUserOwner = e.IdUser,
+                    User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
+                    IdGame = e.IdGame,
+                    Comments = null,
+                    Date = e.Date
+                })
+                .ToListAsync();
+            return posts;
+
+        }
+        public async Task<List<GetPostDto>> GetMainPagePostsAsync(int page)
+        {
+            var posts = await _context.Posts
+                .OrderByDescending(x => x.Date)
+                .Skip(page * 10)
+                .Take(10)
+                .Select(e => new GetPostDto
                 {
                     PostId = e.PostId,
                     Title = e.Title,

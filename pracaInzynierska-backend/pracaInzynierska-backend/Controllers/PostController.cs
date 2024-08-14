@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services;
 using pracaInzynierska_backend.Services.IRepository;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace pracaInzynierska_backend.Controllers
 {
@@ -28,6 +31,14 @@ namespace pracaInzynierska_backend.Controllers
                 return StatusCode(400, "Nie ma takiej gry");
 
             var posts = await _unitOfWork.Post.GetPostsAsync(body.GameName,body.Page);
+            return Ok(posts);
+        }
+        [HttpGet]
+        [Route("mainPagePosts")]
+        public async Task<IActionResult> GetMainPagePostsAsync([FromQuery] int page)
+        {
+
+            var posts = await _unitOfWork.Post.GetMainPagePostsAsync(page);
             return Ok(posts);
         }
         [HttpPost("post")]
@@ -54,7 +65,18 @@ namespace pracaInzynierska_backend.Controllers
             await _unitOfWork.Post.InsertAsync(post);
             await _unitOfWork.SaveAsync();
 
-            return StatusCode(200);
+            return Ok(new GetPostDto()
+            {
+                PostId = post.PostId,
+                Title = post.Title,
+                Content = post.Content,
+                IdUserOwner = post.IdUser,
+                User = user.Login,
+                IdGame= post.IdGame,
+                Comments = null,
+                Date = post.Date
+
+            });
         }
         [HttpPost("comment")]
         public async Task<IActionResult> CreateCommentAsync(CreateCommentDTO body)
