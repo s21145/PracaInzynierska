@@ -425,6 +425,32 @@ namespace pracaInzynierska_backend.Controllers
 
             return StatusCode(200,response);
         }
+        [HttpPost("removeFriend")]
+        public async Task<IActionResult> RemoveFriend([FromQuery] int userId)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+            if (user is null)
+            {
+                return StatusCode(400);
+            }
+
+            var userToRemoveQuery = await _unitOfWork.User.GetAsync(x => x.UserId == userId);
+            var userToRemove = userToRemoveQuery.FirstOrDefault();
+            if (userToRemove == null)
+            {
+                return StatusCode(400, "Nie istnieje użytkownik o takim ID");
+            }
+            var checkIfUserIsFriend = await _unitOfWork.FriendLists.GetAsync(friend => friend.OwnerId == user.UserId && friend.FriendId == userToRemove.UserId);
+            if(checkIfUserIsFriend is null)
+            {
+                return StatusCode(403, "Nie ma takiego użytkownika na liście znajomych");
+            }
+            await _unitOfWork.FriendLists.DeleteAsync(checkIfUserIsFriend.First().Id);
+            await _unitOfWork.SaveAsync();
+            return StatusCode(200);
+        }
         [HttpPost("sentFriendRequest")]
         public async Task<IActionResult> SentFriendRequest([FromQuery] int userId)
         {
@@ -555,6 +581,7 @@ namespace pracaInzynierska_backend.Controllers
 
             return StatusCode(200, response);
         }
+       
 
         private async  Task<User> GetUserAsync()
         {
