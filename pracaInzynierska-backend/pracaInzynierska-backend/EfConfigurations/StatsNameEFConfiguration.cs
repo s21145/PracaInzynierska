@@ -24,8 +24,13 @@ namespace pracaInzynierska_backend.EfConfigurations
                 new StatsName { Id = 5, IdGame = 1, Name = "total_matches_played", PublicName = "Matches" },
                 new StatsName { Id = 6, IdGame = 1, Name = "total_shots_hit", PublicName = "Hit Shots" },
                 new StatsName { Id = 7, IdGame = 1, Name = "total_shots_fired", PublicName = "Fired Shots" },
-                new StatsName { Id = 8, IdGame = 1, Name = "total_time_played", PublicName = "Play Time" },
-                new StatsName { Id = 9, IdGame = 1, Name = "total_mvps", PublicName = "MVP" }
+                //new StatsName { Id = 8, IdGame = 1, Name = "total_time_played", PublicName = "Play Time" },
+                new StatsName { Id = 9, IdGame = 1, Name = "total_mvps", PublicName = "MVP" },
+                new StatsName { Id = 10, IdGame = 4, Name = "kill_player", PublicName = "Kills" },
+                new StatsName { Id = 11, IdGame = 4, Name = "deaths", PublicName = "Deaths" },
+                new StatsName { Id = 12, IdGame = 4, Name = "bullet_fired", PublicName = "Bullet fired" },
+                new StatsName { Id = 13, IdGame = 4, Name = "headshot", PublicName = "Headshots" },
+                new StatsName { Id = 14, IdGame = 4, Name = "bullet_hit_player", PublicName = "Hit Shots Player" }
             );
         }
     }
