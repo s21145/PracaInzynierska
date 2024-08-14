@@ -1,7 +1,7 @@
 import React from 'react';
 import PostItem from './PostItem';
 
-function Posts({ posts, openCreatePostModal }) {
+function Posts({ posts, openCreatePostModal, lastPostElementRef }) {
   return (
     <div className="posts">
       <div className="posts__container">
@@ -25,7 +25,7 @@ function Posts({ posts, openCreatePostModal }) {
         <div className="posts__wrapper">
           <ul className="posts__items">
             {posts &&
-              posts.map((item) => (
+              posts.map((item, index) => (
                 <PostItem
                   key={item.postId}
                   idUserOwner={item.idUserOwner}
@@ -33,6 +33,7 @@ function Posts({ posts, openCreatePostModal }) {
                   title={item.title}
                   content={item.content}
                   postId={item.postId}
+                  ref={index === posts.length - 1 ? lastPostElementRef : null}
                 />
               ))}
           </ul>

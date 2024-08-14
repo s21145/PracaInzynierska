@@ -11,7 +11,7 @@
 
 .dropdown .dropdown-button{
     padding: 10px 15px;
-    background-color: #10161f;
+    background-color: var(--color-secondary-background);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -23,7 +23,7 @@
     z-index: 999 !important;
     padding: 10px;    
     width: 100%;
-    background-color: #10161f;
+    background-color: var(--color-secondary-background);
 }
 
 .dropdown .dropdown-content .dropdown-item{
@@ -33,7 +33,7 @@
 }
 
 .dropdown .dropdown-content .dropdown-item:hover{
-    background: white;
+    background: var(--color-tertiary-background);
 }
 
 .dropdown-container{

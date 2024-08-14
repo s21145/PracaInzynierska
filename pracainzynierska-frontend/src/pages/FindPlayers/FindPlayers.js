@@ -1,9 +1,9 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
 import "./FindPlayers.css";
 import FoundPlayer from "../../components/FoundPlayer/FoundPlayer";
 import GamesDropdownFindPlayers from "../GamesDropdown/GamesDropdownFindPlayers";
 import { getGames } from "../../Services/PostService";
-import { getSimilarUsers,getUsersByNickname } from "../../Services/GamesService";
+import { getSimilarUsers, getUsersByNickname } from "../../Services/GamesService";
 import GameModal from "../../pages/ProfileMain/ProfileMainSubPages/GameStatistics/GameModal";
 import { statModalContext } from "../../Services/StatsModalContext";
 
@@ -11,8 +11,24 @@ function FindPlayers() {
   const [selected, setSelected] = useState({});
   const [users, setUsers] = useState([]);
   const [gameOptions, setGameOptions] = useState([]);
-  const [userNickname,setUserNickname]=useState("");
+  const [userNickname, setUserNickname] = useState("");
+  const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { statModal, setStatModal } = useContext(statModalContext);
+
+  const observer = useRef();
+
+  const lastUserElementRef = useCallback(node => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && users.length >= 10) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [isLoading, users]);
+
   useEffect(() => {
     const fetchGames = async () => {
       const games = await getGames();
@@ -24,28 +40,34 @@ function FindPlayers() {
   useEffect(() => {
     const fetchUsers = async () => {
       if (Object.keys(selected).length === 0) return;
-      const query = await getSimilarUsers(selected.gameId, 0);
-      if (query.status !== 200) {
-        setUsers([]);
-      } else {
-        setUsers(query.data);
-      }
+      setPage(0);
+      setUsers([]);
+      await loadUsers(0);
     };
     fetchUsers();
   }, [selected]);
 
-  const fetchUsers = async (selected) => {
-    if (Object.keys(selected).length === 0) return;
-    const query = await getSimilarUsers(selected.gameId, 0);
+  useEffect(() => {
+    if (page > 0) {
+      loadUsers(page);
+    }
+  }, [page]);
+
+  const loadUsers = async (pageNumber) => {
+    setIsLoading(true);
+    const query = await getSimilarUsers(selected.gameId, pageNumber);
+    setIsLoading(false);
     if (query.status !== 200) {
       setUsers([]);
     } else {
-      setUsers(query.data);
+      setUsers(prevUsers => [...prevUsers, ...query.data]);
+      console.log(query.data);
     }
   };
+
   const handleSumbit = async (event) => {
     event.preventDefault();
-    if(userNickname == ""){
+    if (userNickname === "") {
       return;
     }
     const query = await getUsersByNickname(userNickname);
@@ -54,14 +76,15 @@ function FindPlayers() {
     } else {
       setUsers(query.data);
     }
-  }
+  };
+
   const handleInputChange = (event) => {
-    setUserNickname(event.target.value); 
+    setUserNickname(event.target.value);
   };
 
   return (
     <div className="find-players">
-        {statModal && statModal.show && <GameModal />}
+      {statModal && statModal.show && <GameModal />}
       <h1>Who are you looking for?</h1>
       <div className="find-players-wrapper">
         <div className="find-players-form">
@@ -84,26 +107,26 @@ function FindPlayers() {
                 />
               </div>
               <div>
-                <button type="submit" className="find-players-search-button">Search</button>  
+                <button type="submit" className="find-players-search-button">Search</button>
               </div>
             </div>
           </form>
         </div>
         <div className="found-players">
-        {users.map(u => (
-          
-          <FoundPlayer userLogin={u.userLogin}
-          key={u.userLogin}
-          userId={u.userId}
-          description={u.description}
-          birthday={u.birthday}
-          image={u.image}
-          isFriend={u.isFriend}
-          selectedGame={selected.gameId}/>
-  
-        ))}
-              </div>
-        
+          {users.map((u, index) => (
+            <FoundPlayer
+              userLogin={u.userLogin}
+              key={u.userLogin}
+              userId={u.userId}
+              description={u.description}
+              birthday={u.birthday}
+              image={u.image}
+              isFriend={u.isFriend}
+              selectedGame={selected.gameId}
+              ref={index === users.length - 1 ? lastUserElementRef : null}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

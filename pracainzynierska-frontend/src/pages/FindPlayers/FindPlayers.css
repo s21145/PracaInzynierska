@@ -1,94 +1,114 @@
-.find-players{
+.find-players {
     padding: 1rem;
-    background: #141a23;
+    background: var(--color-background);
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 76vh;
-}
-.find-players-wrapper{
+    min-height: calc(100vh - 80px);
+  }
+  
+  .find-players-wrapper {
     padding-top: 1rem;
     width: 100%;
-    height: 100%;
+    max-width: 1200px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .find-players-form {
+    flex: 1 1 auto;
+    max-width: 700px;
+    display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.find-players-form{
-    height: 8vh;
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #1f2f47;
-    border-radius: 40px;
-}
-
-.form-container{
+    background-color: var(--color-secondary-background);
+    border-radius: 15px;
+    padding: 1rem 2rem;
+  }
+  
+  .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
     color: black;
-}
-
-.find-players-select{
-    width: 180px;
-    height: 30px;
-    border-radius: 10px;
-    color: black;
-    border-color: transparent;
-}
-
-.find-players-select:focus{
-    outline: none!important;
-}
-
-.find-players-input{
+    flex-wrap: nowrap;
+  }
+  
+  .find-players-input {
     width: 230px;
-    height: 45px;
+    height: 50px;
     padding: 10px 15px;
-    font-size: 24px;
+    font-size: 1rem;
     border-style: none;
-    background-color: #10161f;
+    background-color: var(--color-tertiary-background);
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-option{
-    color: black;
-    border-radius: 4px;
-}
-
-
-.find-players-input:focus{
-    outline: none!important;
-}
-
-.game-specific-options{
-    display: flex;
-    gap: 10px;
-}
-
-.found-players{
-    padding-top: 20px;
-    height: 80%;
-    width: 64%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-start: 3;
-    gap: 20px;
-}
-
-.find-players-search-button{
+    color: var(--color-bright-font);
+    border-radius: 5px;
+  }
+  
+  .find-players-input:focus {
+    outline: none !important;
+  }
+  
+  .find-players-search-button {
     background-color: transparent;
-    font-size: 20px;
+    font-size: 1rem;
     width: 100px;
     height: 40px;
     border-color: var(--color-orange);
     border-radius: 25px;
-    color: white;
+    color: var(--color-bright-font);
+    cursor: pointer;
+  }
+  
+  .found-players {
+    flex: 2 1 auto;
+    padding-top: 20px;
+    width: 100%;
+    max-width: 768px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
+  
+  @media (max-width: 768px) {
+    .find-players-wrapper {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .find-players-form {
+      width: 100%;
+      padding: 1rem;
+      width: 400px;
+      max-width: 500px;
+    }
+  
+    .form-container {
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .find-players-input {
+      width: 100%;
+      font-size: 1rem;
+      width: 300px;
+      max-width: 450px;
+    }
+  
+    .find-players-search-button {
+      width: 100%;
+      font-size: 1rem;
+      width: 100px;
+      max-width: 450px;
+    }
+  }
+  

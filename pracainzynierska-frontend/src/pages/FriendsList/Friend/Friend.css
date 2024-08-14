@@ -8,7 +8,7 @@
 }
 
 .friend-item:hover{
-    background-color: #3f3e3e;
+    background-color: var(--color-secondary-background);
     cursor: pointer;
 }
 

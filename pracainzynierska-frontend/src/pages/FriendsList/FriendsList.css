@@ -3,7 +3,7 @@
     height: 100vh;
     position: fixed;
     right: 0;
-    background-color: #333;
+    background-color: var(--color-main-components);
     padding: 20px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
@@ -14,7 +14,7 @@
 .friends-list hr{
     border: 0;
     height: 2px;
-    background-color: #f39800;
+    background-color: var(--color-orange);
 }
 
 .friends-list.shrunk {
@@ -66,7 +66,7 @@
 }
 
 .toggle-button {
-    background-color: #333;
+    background-color: var(--color-main-components);
     border: none;
     font-size: 1.5em;
     padding: 5px 10px;
@@ -80,7 +80,7 @@
     left: 50%;
     font-size: 1.5em;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: var(--color-main-components);
     border: none;
     padding: 5px 10px;
     cursor: pointer;
