@@ -1,35 +1,32 @@
-.profile-games-wrapper{
+.profile-games-wrapper {
     height: 100%;
-    width: 100%;
+    width: calc(100% - 60px);
     display: flex;
     flex-direction: column;
-
 }
 
-.profile-games-return-button{
-    font-size: 60px;
-    padding-left: 30px;
-    padding-top: 20px;
+.profile-games-return-button {
+    font-size: 40px;
+    padding-left: 20px;
+    padding-top: 10px;
 }
 
-.profile-games-return-button:hover{
+.profile-games-return-button:hover {
     cursor: pointer;
 }
 
-.profile-games-container{
+.profile-games-container {
     align-self: stretch;
     display: grid;
-    height: 80%;
+    height: auto;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-start: 3;
     gap: 20px;
-    padding: 30px;
+    padding: 20px;
+    justify-items: center;
 }
 
-
-
-.add-game-button{
+.add-game-button {
     background-color: transparent;
     font-size: 20px;
     font-weight: bold;
@@ -40,8 +37,9 @@
     color: white;
 }
 
-.game-icon-button{
-    width: 350px;
+.game-icon-button {
+    width: 100%;
+    max-width: 350px;
     height: 200px;
     display: flex;
     align-items: center;
@@ -49,30 +47,18 @@
     border-width: 3px;
     border-style: solid;
     border-radius: 10px;
-    
-    background-size: 100% 100%;
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-position: right, left;
 }
 
-.game-icon-button:hover{
+.game-icon-button:hover {
     cursor: pointer;
 }
 
-#leagueoflegends{
-    background-image:url('../../../assets/resources/leaguelogo.png');
-}
-
-#countestrikeglobaloffensive{
-    background-image:url('../../../assets/resources/csgo-icon.jpg');
-}
-
-#rust{
-    background-image:url('../../../assets/resources/rust.jpg');
-}
-
-.game-add-button{
-    width: 350px;
+.game-add-button {
+    width: 100%;
+    max-width: 350px;
     height: 200px;
     display: flex;
     align-items: center;
@@ -81,7 +67,65 @@
     border-style: solid;
     border-radius: 10px;
     border-color: var(--color-orange);
-    background-color: #141a23;
+    background-color: var(--color-tertiary-background);
     flex-direction: column;
-    font-size: 50px;
+    font-size: 40px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .profile-games-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 15px;
+        justify-items: center;
+    }
+
+    .game-icon-button,
+    .game-add-button {
+        max-width: 300px;
+        height: 180px;
+    }
+
+    .game-add-button {
+        font-size: 30px;
+    }
+
+    .profile-games-return-button {
+        font-size: 30px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .profile-games-wrapper {
+        width: 100%;
+    }
+
+    .profile-games-container {
+        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        
+        padding: 10px;
+        justify-items: center;
+        max-width: 100%;
+        margin: 0 auto;
+        margin-right: 60px;
+    }
+
+    .game-icon-button,
+    .game-add-button {
+        width: 100%;
+        max-width: 200px;
+        height: 140px;
+    }
+
+    .game-add-button {
+        font-size: 20px;
+    }
+
+    .profile-games-return-button {
+        font-size: 24px;
+        padding-left: 10px;
+        padding-top: 5px;
+    }
 }

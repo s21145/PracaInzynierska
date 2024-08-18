@@ -6,31 +6,27 @@ import { useContext } from "react";
 function ProfileMainStarter() {
   const { user } = useContext(UserContext);
   return (
-    <div className="starter-wrapper">
-      <div className="starter-bio">
-        <div className="starter-bio-text-area">{user && user.description}</div>
+    <div className="profile-container">
+      <div className="input-section">
+        <div className="input-wrapper">
+          <label htmlFor="age" className="input-label">Age</label>
+          <div className="input-field">{user && user.age && user.age.toLocaleDateString("en-GB")}</div>
+        </div>
+
+        <div className="input-wrapper">
+          <label htmlFor="steam" className="input-label">Steam</label>
+          <div className="input-field">{user && user.steamId}</div>
+        </div>
+
+        <div className="input-wrapper">
+          <label htmlFor="discord" className="input-label">Discord</label>
+          <div className="input-field"></div>
+        </div>
       </div>
 
-      <div className="starter-bottom-container">
-        <div className="starter-left-side">
-          <div className="starter-age-container">
-            <div className="starter-age-title">Age:</div>
-            <div className="starter-age">
-              {user && user.age && user.age.toLocaleDateString("en-GB")}
-            </div>
-          </div>
-
-          <div className="starter-socials-container">
-            <div className="starter-socials-title">Socials:</div>
-            <div className="starter-socials">
-              <div className="social-steam">
-                Steam id:{user && user.steamId}
-              </div>
-              <div className="social-discord">Discord tag:</div>
-            </div>
-          </div>
-        </div>
-        <div className="starter-posts"></div>
+      <div className="description-section">
+        <label htmlFor="description" className="description-label">Description</label>
+        <div className="description-box">{user && user.description}</div>
       </div>
     </div>
   );

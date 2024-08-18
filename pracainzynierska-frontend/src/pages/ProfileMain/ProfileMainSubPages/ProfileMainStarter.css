@@ -1,73 +1,102 @@
-.starter-wrapper{
-    height: 100%;
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
     width: 100%;
-}
-
-.starter-bio { 
-    height: 36%;
+    box-sizing: border-box;
+  }
+  
+  .input-section {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.starter-bio-text-area{
+    justify-content: space-between;
     width: 80%;
-    height: 75%;
-    border-radius: 40px;
-    padding: 30px;
-    background-color: #1f2f47;
-    color: gray;
-}
-
-.starter-bottom-container{
-    display: flex;
-    height: 64%;
-}
-.starter-left-side{
-    width: 35%;
-    padding-top: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .input-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
-}
-
-.starter-age-container{
-    width: 80%;
-}
-
-.starter-age-title{
-    padding-left: 12px;
-    font-size: 28px;
+    flex: 1;
+    margin: 0 10px;
+  }
+  
+  .input-label {
+    font-size: 18px;
+    margin-bottom: 8px;
     font-weight: bold;
-}
-
-.starter-age { 
+  }
+  
+  .input-field {
+    width: 180px;
     height: 50px;
-    background-color: #1f2f47;
-    border-radius: 20px;
-    padding: 8px;
-    padding-left: 15px;
-    font-size: 25px;
-}
-.starter-posts { 
-}
-
-
-.starter-socials-container{
+    background-color: var(--color-secondary-background);
+    color: gray;
+    border-radius: 25px;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .description-section {
     width: 80%;
-}
-
-.starter-socials-title{
-    padding-left: 12px;
-    font-size: 28px;
+  }
+  
+  .description-label {
+    font-size: 18px;
     font-weight: bold;
-}
-.starter-socials { 
-    background-color: #1f2f47;
-    border-radius: 20px;
-    padding: 8px;
-    padding-left: 15px;
-    font-size: 25px;
-}
+    margin-bottom: 8px;
+  }
+  
+  .description-box {
+    width: 100%;
+    height: 180px;
+    background-color: var(--color-secondary-background);
+    color: gray;
+    border-radius: 30px;
+    padding: 20px;
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  @media only screen and (max-width: 1024px) {
+    .input-section {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .input-field {
+      width: 150px;
+    }
+  
+    .description-box {
+      height: 150px;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .profile-container {
+      padding: 10px;
+    }
+  
+    .input-section {
+      width: 100%;
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .input-field {
+      width: 150px;
+    }
+  
+    .description-box {
+      height: 120px;
+      padding: 15px;
+    }
+  
+    .input-label, .description-label {
+      font-size: 16px;
+    }
+  }
+  
