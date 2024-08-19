@@ -63,27 +63,7 @@
     grid-column: 2;
     padding: 15px;
   }
-  
-  @media only screen and (min-width: 1024px) {
-    .profile-wrapper {
-      grid-template-columns: 20% 1fr;
-    }
-  
-    .profile-sidebar-name {
-      font-size: 32px;
-    }
-  
-    .profile-sidebar-picture {
-      height: 140px;
-      width: 140px;
-    }
-  
-    .profile-sidebar-button {
-      font-size: 18px;
-      height: 50px;
-    }
-  }
-  
+
   @media only screen and (max-width: 1024px) {
     .profile-wrapper {
       grid-template-columns: 25% 1fr;
@@ -117,6 +97,7 @@
     }
   
     .profile-main-content-area {
+      max-width: calc(100% - 60px);
       grid-column: 1 / -1;
       padding: 10px;
     }

@@ -1,8 +1,24 @@
-.page-container{
+.page-container {
     background-color: var(--color-background);
+    min-height: calc(100vh - 80px);
 }
-.page-container-search-bar{
+
+.page-container-search-bar {
     padding-top: 2rem;
-    padding-left: 3rem;
-    padding-right: 2rem;
+    max-width: 1000px;      
+    width: 100%;            
+    margin: 0 auto;         
+    box-sizing: border-box; 
 }
+
+@media only screen and (max-width: 1024px) {
+    .page-container-search-bar {
+        padding-top: 2rem;
+        width: 100%;
+        padding-left: 2rem;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    
+  }

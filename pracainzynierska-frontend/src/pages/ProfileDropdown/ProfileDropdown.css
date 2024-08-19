@@ -1,9 +1,11 @@
-.dropdown-menu{
+.dropdown-menu {
     width: 200px;
     position: absolute;
     top: 80px;
+    right: 5px;
     list-style: none;
     text-align: start;
+    z-index: 999;
 }
 
 .dropdown-menu li {

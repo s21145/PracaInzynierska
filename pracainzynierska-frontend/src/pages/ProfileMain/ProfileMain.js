@@ -19,19 +19,21 @@ function ProfileMain() {
   const { user } = useContext(UserContext);
   const [profile, setProfile] = useState(0);
   const { message } = useContext(MessageContext);
-  const [searchParams, setSearchParamas] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [openGameModal, setOpenGameModal] = useState(false);
   const { statModal } = useContext(statModalContext);
 
   useEffect(() => {
-    const w = searchParams.get("tab");
-    if (w === "settings") {
+    const tab = searchParams.get("tab");
+    if (tab === "settings") {
       setProfile(2);
-    }
-    if (w === "games") {
+    } else if (tab === "games") {
       setProfile(1);
+    } else {
+      setProfile(0); 
     }
-  }, []);
+  }, [searchParams]);
+
   return (
     <div className="profile-wrapper">
       {message && message.show && <MessageModal />}
@@ -56,25 +58,19 @@ function ProfileMain() {
         <div className="profile-sidebar-buttons">
           <button
             className="profile-sidebar-button"
-            onClick={() => {
-              setProfile(0);
-            }}
+            onClick={() => setProfile(0)}
           >
             MAIN PROFILE
           </button>
           <button
             className="profile-sidebar-button"
-            onClick={() => {
-              setProfile(1);
-            }}
+            onClick={() => setProfile(1)}
           >
             GAMES
           </button>
           <button
             className="profile-sidebar-button"
-            onClick={() => {
-              setProfile(2);
-            }}
+            onClick={() => setProfile(2)}
           >
             SETTINGS
           </button>
