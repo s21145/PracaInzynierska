@@ -25,11 +25,13 @@ import FriendsList from "./pages/FriendsList/FriendsList";
 import FriendRequestWindow from "./pages/FriendsList/FriendRequest/FriendRequestWindow";
 import CreatePost from "./pages/Posts/CreatePost/CreatePost";
 import {SentFriendRequestResponse} from './Services/UserService'
-import {GetFriendsList,GetFriendsListRequests} from './Services/UserService'
+import {GetFriendsList,GetFriendsListRequests,GetMessages} from './Services/UserService'
+import * as signalR from "@microsoft/signalr";
 
 function App() {
   const MINUTE_MS = 60000;
   const [user, setUser] = useState(null);
+  const [connection, setConnection] = useState(null);
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
   const [message, setMessage] = useState({
@@ -53,26 +55,75 @@ function App() {
 
 
   //#region Chat window
-  const [messages, setMessages] = useState([
-    { sender: 'me', text: 'Czy bidi jest dobrym kolegą?' },
-    { sender: 'friend', text: 'Jak najbardziej, czemu pytasz?' },
-  ]);
+  const [messages, setMessages] = useState([]);
+  const [currentChatRoom,setCurrentChatRoom]= useState("");
 
-  const handleSend = (text) => {
-    setMessages([...messages, { sender: 'me', text }]);
+  const handleSend = async (message) => {
+    if (connection && message && user) {
+      console.log(message);
+      sendMessage(message);
+  }
+    //setMessages([...messages, { sender: 'me', text:message }]);
   };
+  const sendMessage = async(message) => {
+    try{
+      
+
+      await connection.invoke("SendMessage",message,currentChatRoom,user.userId,user.login,currentFriend.id);
+    }catch(e){
+      console.log(e);
+    }
+  }
+
 
   const [isChatWindowVisible, setChatWindowVisible] = useState(false);
   const [currentFriend, setCurrentFriend] = useState('');
 
   const handleClose = () => {
     setChatWindowVisible(false);
+    setCurrentChatRoom("");
+    setConnection(null);
   };
 
-  const handleFriendClick = (friendName) => {
-    setCurrentFriend(friendName);
-    setChatWindowVisible(true);
+  const handleFriendClick = async (body) => {
+    setCurrentFriend(body);
+    try{
+      var startMessages = await GetMessages(body.login,0);
+      console.log(startMessages);
+      if(startMessages.status===200){
+        setMessages(startMessages.data);
+      }
+
+    }catch(e){
+      console.log(e);
+    }
+    console.log(user);
+    const conn = new signalR.HubConnectionBuilder()
+            .configureLogging(signalR.LogLevel.Information)
+            .withUrl("https://localhost:7194/chatHub")
+            .withAutomaticReconnect()
+            .build();
+
+     conn.on("JoinSpecificChatRoom",(username,msg) => {
+      console.log("msg: ",msg);
+     });
+     conn.on("SpecificMessage",(msg) => {
+      setMessages(messages => [...messages,
+        {senderLogin:msg.sender,
+        content:msg.message.content,
+        messageDate:msg.message.messageDate
+      }]);
+     })
+
+     var createChatRoom = [user.login,body.login].sort();
+     var chatRoom = createChatRoom[0]+createChatRoom[1];
+     setCurrentChatRoom(chatRoom);
+     await conn.start();
+     await conn.invoke("JoinSpecificChatRoom", {username: user.Login,chatRoom: chatRoom});
+        setConnection(conn);
+      setChatWindowVisible(true);
   };
+
   //#endregion
 
   //#region Friends request window
@@ -172,11 +223,11 @@ function App() {
                 <div className="content-with-friends">
                   <div className="content">
                     <Routes>
-                      <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
-                      <Route path="/posts/:postId" element={<ProtectedRoute><PostWithComments /></ProtectedRoute>} />
-                      <Route path="/FindPlayers" element={<ProtectedRoute><FindPlayers /></ProtectedRoute>} />
-                      <Route path="/" element={<Main />} />
-                      <Route path="/?logout" element={<Main />} />
+                      <Route path="/posts" element={<PostsPage />} />
+                      <Route path="/posts/:postId" element={<PostWithComments />} />
+                      <Route path="/FindPlayers" element={<FindPlayers/>} />
+                      <Route path="/" element={<Main/>} />
+                      <Route path="/?logout" element={<Main/>}/>
                       <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
                       <Route path="/ProfileMain" element={<ProfileMain />} />
                       <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
@@ -192,7 +243,7 @@ function App() {
                       messages={messages}
                       onClose={handleClose}
                       onSend={handleSend}
-                      friendName={currentFriend}
+                      friendName={currentFriend.login}
                     />
                   )}
                   </ProtectedComponent>

@@ -1,8 +1,13 @@
 import React, { useEffect, useRef} from 'react';
+import { UserContext } from "../../Services/UserContext";
+import { useContext } from "react";
 import './ChatWindow.css';
 
 const ChatWindow = ({messages, onClose, onSend, friendName}) => {
+
+    console.log(messages);
     const [newMessage, setNewMessage] = React.useState('');
+    const { user } = useContext(UserContext);
     const chatBodyRef = useRef(null);
 
     const handleSend = () => {
@@ -34,8 +39,8 @@ const ChatWindow = ({messages, onClose, onSend, friendName}) => {
             </div>
             <div className="chat-body" ref={chatBodyRef}>
             {messages.map((msg, index) => (
-          <div key={index} className={`chat-bubble ${msg.sender === 'me' ? 'me' : 'friend'}`}>
-            {msg.text}
+          <div key={index} className={`chat-bubble ${msg.senderLogin === user.login ? 'me' : 'friend'}`}>
+            {msg.senderLogin}: {msg.content}
           </div>
         ))}
             </div>

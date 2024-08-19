@@ -23,6 +23,20 @@ namespace pracaInzynierska_backend.EfConfigurations
             SeedData(builder);
 
 
+            builder
+                .HasMany(x => x.SendMessages)
+                .WithOne(x => x.Sender)
+                .OnDelete(DeleteBehavior.ClientCascade)
+                .HasForeignKey(x => x.SenderId);
+            builder
+              .HasMany(x => x.ReceivedMessages)
+              .WithOne(x => x.Receiver)
+              .OnDelete(DeleteBehavior.ClientCascade)
+              .HasForeignKey(x => x.ReceiverId);
+
+
+
+
         }
         private void SeedData(EntityTypeBuilder<User> builder)
         {

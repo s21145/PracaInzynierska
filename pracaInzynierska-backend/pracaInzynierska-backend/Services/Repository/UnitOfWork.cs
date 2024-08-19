@@ -18,6 +18,7 @@ namespace pracaInzynierska_backend.Services.Repository
             FriendLists = new FriendListRepository(_db);
             FriendListRequests = new FriendListRequestRepository(_db);
             Comments = new CommentsRepository(_db);
+            Messages = new MessageRepository(_db);
 
 
         }
@@ -29,7 +30,8 @@ namespace pracaInzynierska_backend.Services.Repository
         public IUserGameStatsRepository Stats { get; private set; }
         public IStatsNameRepository StatsName { get; private set; }
         public IFriendListRepository FriendLists { get; private set; }
-        public IFriendListRequestRepository FriendListRequests { get; private set; }    
+        public IFriendListRequestRepository FriendListRequests { get; private set; }
+        public IMessageRepository Messages { get; private set; }
         public void Save()
         {
             _db.SaveChanges();

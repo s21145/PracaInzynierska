@@ -307,4 +307,25 @@ export async function SentFriendRequestResponse(userId,status){
     return response;
   }
 }
+  export async function GetMessages(userLogin,page){
+    try {
+      const response = await http.get(
+        config.apiUrl + `/messages/messages`,
+        {params:{userLogin:userLogin,page:page}},
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      const response = {
+        status: error.response.status,
+        data: error.response.data,
+      };
+      return response;
+    }
+  }
+
 
