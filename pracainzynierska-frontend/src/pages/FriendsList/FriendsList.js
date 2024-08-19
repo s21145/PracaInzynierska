@@ -79,6 +79,7 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
                         name={friend.userLogin}
                         imageUrl={friend.iconPath}
                         isExpanded={isExpanded}
+                        userId={friend.userId}
                         onClick={onFriendClick}
                     />
                 ))}

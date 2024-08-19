@@ -11,6 +11,7 @@
         public IFriendListRepository FriendLists { get; }
         public IFriendListRequestRepository FriendListRequests { get; }
         public ICommentsRepository Comments { get; }
+        public IMessageRepository Messages { get; }
         public void Save();
         public Task SaveAsync();
     }
