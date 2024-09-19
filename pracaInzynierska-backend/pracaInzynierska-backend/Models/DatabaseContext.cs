@@ -15,6 +15,8 @@ namespace pracaInzynierska_backend.Models
         public DbSet<FriendList> FriendLists { get; set; }
 
         public  DbSet<FriendListRequest> FriendListRequests { get; set; }
+        
+        public DbSet<Message> Message { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {

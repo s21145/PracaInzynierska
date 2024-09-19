@@ -29,7 +29,7 @@ namespace pracaInzynierska_backend.Services.Repository
             {
                 return new Tuple<bool, string>(false, $"Nie ma prośby o dodanie do znajomych od użytkownika o podanym id - {FromUserId}");
             }
-            if(request.Status != FriendRequestStatus.Sent.ToString())
+            if(request.Status == FriendRequestStatus.Accepted.ToString())
             {
                 return new Tuple<bool, string>(false, $"Zaproszenie do znajomych ma już status - {request.Status}");
             }

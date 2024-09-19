@@ -1,93 +1,119 @@
-.profile-wrapper{
+.profile-wrapper {
     width: 100%;
-    min-height: 76vh;
-
+    min-height: calc(100vh - 80px);
     display: grid;
-    grid:
-        "sidebar body" 1fr
-        / 25% 1fr 25%;
-        gap: 3px;
-
-    background-color: #141a23;
-}
-/* --- entire sidebar --- */
-.profile-main-sidebar{
-    grid-area: sidebar;
-    height: 75vh;
-}
-
-/* --- sidebar picture --- */
-.profile-sidebar-picture-name{
-    height: 50%;
-    align-items: center;
+    grid-template-columns: 20% 1fr;
+    grid-gap: 5px;
+    background-color: var(--color-background);
+  }
+  
+  .profile-main-sidebar {
+    grid-column: 1;
+    padding: 15px;
+    background-color: var(--color-secondary-background);
+  }
+  
+  .profile-sidebar-picture-name {
     text-align: center;
-}
-
-.profile-sidebar-picture-wrapper{
-    height: 70%;
+  }
+  
+  .profile-sidebar-picture-wrapper {
     display: flex;
-    align-items: center;
     justify-content: center;
-    
-}
-
-.profile-sidebar-picture{
-    top: 50%;
-    left: 50%;
-    height: 190px;
-    width: 190px;
+    align-items: center;
+  }
+  
+  .profile-sidebar-picture {
+    height: 120px;
+    width: 120px;
     border-radius: 50%;
-    /* background-image:url('../../assets/resources/dragon.png'); */
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: right, left;
-}
-
-/* --- end of side bar picture --- */
-/* --- sidebar name --- */
-
-.profile-sidebar-name{
-    height: 30%;
-    font-size: 50px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: rgb(168, 167, 167);
-}
-
-/* --- end of sidebar name --- */
-/* --- buttons --- */ 
-.profile-sidebar-buttons{
-    height: 50%;
+    background-position: center;
+  }
+  
+  .profile-sidebar-name {
+    font-size: 24px;
+    margin-top: 10px;
+    color: var(--color-bright-font);
+  }
+  
+  .profile-sidebar-buttons {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 30px
-}
-
-.profile-sidebar-button{
-    width: 80%;
-    height: 70px;
-    border-width: 3px;
-    border-style: solid;
-    border-color: transparent;
-    border-radius: 40px;
-    text-align: center;
-    background-color: #202936;
-    font-weight: bold;
-    font-size: 30px;
-}
-
-.profile-sidebar-button:hover{
-    background-color: #1a222c;
-}
-
-.profile-sidebar-button:hover{
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .profile-sidebar-button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: var(--color-secondary-background);
+    border: none;
+    text-transform: uppercase;
     cursor: pointer;
-}
+  }
+  
+  .profile-sidebar-button:hover {
+    background-color: var(--color-tertiary-background);
+  }
+  
+  .profile-main-content-area {
+    grid-column: 2;
+    padding: 15px;
+  }
 
-/* --- end of buttons --- */
-/* --- end of sidebar --- */
-
-.profile-main-content-area{
-    grid-area: body;
-}
+  @media only screen and (max-width: 1024px) {
+    .profile-wrapper {
+      grid-template-columns: 25% 1fr;
+    }
+  
+    .profile-sidebar-name {
+      font-size: 20px;
+    }
+  
+    .profile-sidebar-picture {
+      height: 110px;
+      width: 110px;
+    }
+  
+    .profile-sidebar-button {
+      font-size: 16px;
+      height: 45px;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .profile-wrapper {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+    }
+  
+    .profile-main-sidebar {
+      grid-column: 1 / -1;
+      padding: 10px;
+      width: calc(100% - 60px);
+    }
+  
+    .profile-main-content-area {
+      max-width: calc(100% - 60px);
+      grid-column: 1 / -1;
+      padding: 10px;
+    }
+  
+    .profile-sidebar-picture {
+      height: 90px;
+      width: 90px;
+    }
+  
+    .profile-sidebar-name {
+      font-size: 18px;
+    }
+  
+    .profile-sidebar-button {
+      font-size: 14px;
+      height: 40px;
+    }
+  }
+  

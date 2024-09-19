@@ -4,8 +4,7 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import "./Navbar.css";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
-import LogInModal from "../LogInModal/LogInModal";
-import SignUpModal from "../SignUpModal/SignUpModal";
+import AuthModal from "../AuthModal/AuthModal";
 
 function Navbar() {
   const { user } = useContext(UserContext);
@@ -13,6 +12,7 @@ function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const [profile, setProfile] = useState(false);
+  const [leaveTimeout, setLeaveTimeout] = useState(null);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -29,23 +29,28 @@ function Navbar() {
     }
   };
 
-  const onMouseLeave = () => {
-    if (window.innerWidth < 960) {
+  const handleMouseEnter = () => {
+    if (leaveTimeout) clearTimeout(leaveTimeout);
+    setProfile(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
       setProfile(false);
-    } else {
-      setProfile(false);
-    }
+    }, 200);
+    setLeaveTimeout(timeout);
   };
 
   useEffect(() => {
     showButton();
   }, []);
+
   window.addEventListener("resize", showButton);
 
   return (
     <>
-      {openLoginModal && <LogInModal closeLogInModal={setOpenLoginModal} />}
-      {openSignupModal && <SignUpModal closeSignUpModal={setOpenSignupModal} />}
+      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} initialMode="login" />}
+      {openSignupModal && <AuthModal closeModal={setOpenLoginModal} initialMode="signup" />}
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
@@ -58,7 +63,7 @@ function Navbar() {
             {window.innerWidth <= 960 ? (
               <li className="nav-item">
                 <Link
-                  to="/contact"
+                  to="/ProfileMain"
                   className="nav-links"
                   onClick={closeMobileMenu}
                 >
@@ -66,17 +71,6 @@ function Navbar() {
                 </Link>
               </li>
             ) : null}
-            {user && (
-              <li className="nav-item">
-                <Link
-                  to="/e-mates"
-                  className="nav-links"
-                  onClick={closeMobileMenu}
-                >
-                  E-MATES
-                </Link>
-              </li>
-            )}
             {user && (
               <li className="nav-item">
                 <Link
@@ -99,21 +93,10 @@ function Navbar() {
                 </Link>
               </li>
             )}
-            {user && (
-              <li className="nav-item">
-                <Link
-                  to="/contact"
-                  className="nav-links"
-                  onClick={closeMobileMenu}
-                >
-                  CONTACT
-                </Link>
-              </li>
-            )}
             {window.innerWidth <= 960 ? (
               <li className="nav-item">
                 <Link
-                  to="/contact"
+                  to="/ProfileMain?tab=settings"
                   className="nav-links"
                   onClick={closeMobileMenu}
                 >
@@ -159,15 +142,21 @@ function Navbar() {
           ) : null}
           {user && window.innerWidth > 960 ? (
             <div
-              className="profile-span"
-              onClick={openProfileMenu}
-              onMouseLeave={onMouseLeave}
+              className="profile-area"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <div className="profile-link">
-                <div className="testtest"> </div>
+                <div
+                  className="nav-picture"
+                  style={{
+                    backgroundImage: `url(data:image/png;base64,${
+                      user && user.image
+                    })`,
+                  }}
+                ></div>
                 <h2 className="profile-wrap">{user && user.login}</h2>
               </div>
-
               {profile && <ProfileDropdown />}
             </div>
           ) : null}
@@ -178,7 +167,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-/*
-
-*/

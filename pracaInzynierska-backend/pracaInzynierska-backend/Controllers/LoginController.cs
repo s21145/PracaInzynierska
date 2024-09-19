@@ -46,7 +46,8 @@ namespace pracaInzynierska_backend.Controllers
                 login = user.Login,
                 steamId = user.SteamId,
                 age = user.BirthDate,
-                description = user.Description
+                description = user.Description,
+                userId = user.UserId,
 
             });
         }
@@ -118,7 +119,8 @@ namespace pracaInzynierska_backend.Controllers
                 login = user.Login,
                 steamId = user.SteamId,
                 age = user.BirthDate,
-                description = user.Description
+                description = user.Description,
+                userId = user.UserId,
             });
 
 

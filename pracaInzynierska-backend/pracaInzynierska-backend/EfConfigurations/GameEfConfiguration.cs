@@ -17,7 +17,7 @@ namespace pracaInzynierska_backend.EfConfigurations
                 new Game { GameId =1,Name="CounterStrike",Publisher="Valve",ImagePath= "../../images/games/csgo.jpg",SteamId="730" },
                 new Game { GameId = 2, Name = "Fortnite", Publisher = "Epic Games", ImagePath = "../../images/games/valorant.jpg" },
                 new Game { GameId = 3, Name = "Leauge of Legends", Publisher = "Riot Games", ImagePath = "../../images/games/lol.png" },
-                new Game { GameId = 4, Name = "Rust", Publisher = "ktos?", ImagePath = "../../images/games/rust.jpg" ,SteamId="252490" }
+                new Game { GameId = 4, Name = "Rust", Publisher = "ktos?", ImagePath = "../../images/games/rust.jpg" ,SteamId= "252490" }
                 );
         }
     }

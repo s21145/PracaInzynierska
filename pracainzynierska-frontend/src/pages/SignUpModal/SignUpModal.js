@@ -1,5 +1,5 @@
 import "./SignUpModal.css";
-import LogInModal from "../LogInModal/LogInModal";
+import LogInModal from "../AuthModal/AuthModal";
 import { useState } from "react";
 import React from "react";
 import { RegisterUser } from "../../Services/UserService";
@@ -14,7 +14,7 @@ function SignUpModal({ closeSignUpModal }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     const response = await RegisterUser(register);
-    console.log(response);
+
     if (response.status !== 200) {
       // bad register
       console.log("bad");

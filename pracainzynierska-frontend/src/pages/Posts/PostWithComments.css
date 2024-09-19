@@ -3,7 +3,7 @@
     flex-direction: column;
     min-height: 100vh;
     position: relative;
-    background-color: #141a23;
+    background-color: var(--color-background);
     align-items: center;
   }
   
@@ -38,7 +38,7 @@
     font-size: 1.5rem;
     margin-bottom: 20px;
     padding: 20px;
-    border: 1px solid #f0a500;
+    border: 1px solid var(--color-orange);
     border-radius: 10px;
     margin: 20px;
     word-wrap: break-word; 
@@ -94,9 +94,9 @@
   .post-comment-add {
     font-size: 1.2rem; 
     padding: 10px; 
-    border: 2px dashed #f0a500;
+    border: 2px dashed var(--color-orange);
     border-radius: 10px;
-    color: #f0a500;
+    color: var(--color-bright-font);
     cursor: pointer;
     text-align: center;
   }
@@ -108,13 +108,13 @@
   
   .post-comment-textarea {
     padding: 10px;
-    border: 2px solid #f0a500;
+    border: 2px solid var(--color-orange);
     border-radius: 10px;
     resize: vertical;
     min-height: 100px;
     font-size: 1rem;
     margin-bottom: 10px;
-    background-color: #141a23;
+    background-color: var(--color-secondary-background);
   }
   
   .comment-buttons {
@@ -126,7 +126,7 @@
   .comment-buttons button {
     font-size: 20px;
     width: 90px;
-    color: white;
+    color: var(--color-bright-font);
     background-color: var(--color-orange);
     border-radius: 14px;
     border-color: transparent;
@@ -134,7 +134,25 @@
   }
   
   .comment-buttons button:hover {
-    background-color: #d88a03;
+    background-color: var(--color-orange-hover);
+    cursor: pointer;
+  }
+
+  .post-header-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    padding: 0px;
+  }
+  .post-footer{
+    margin-top: 1.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .post-footer-likes:hover{
     cursor: pointer;
   }
   

@@ -1,6 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 :root{
   --color-orange: #f39800;
+  --color-red: #b23b3b;
+  --color-orange-hover: #d88a03;
+  --color-background: #1c1c1c;
+  --color-secondary-background: #2a2a2a;
+  --color-tertiary-background: #1e1e1e;
+  --color-main-components: #1b1818;
+  --color-bright-font: #e6e6e6;
+  --color-darker-font: #a7a7a7;
+
+  --width-phone-width: 768px;
 }
 
 *{
@@ -8,7 +18,7 @@
   margin: 0;
   padding: 0;
   font-family: 'PT Sans', sans-serif;
-  color: #f39800;
+  color: var(--color-bright-font);
 }
 
 .home{
@@ -22,6 +32,7 @@
 .main-layout {
   display: flex;
   flex-direction: column;
+  
 }
 
 .content-with-friends {

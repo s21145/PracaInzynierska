@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNet.SignalR.Messaging;
+using System.ComponentModel.DataAnnotations;
 
 namespace pracaInzynierska_backend.Models
 {
@@ -24,6 +25,8 @@ namespace pracaInzynierska_backend.Models
         public ICollection<FriendList> OnFriendList { get; set; }
         public ICollection<FriendListRequest> RequestsSent { get; set;}
         public ICollection<FriendListRequest> RequestsReceived { get; set; }
+        public ICollection<Message> SendMessages { get; set; }
+        public ICollection<Message> ReceivedMessages { get; set; }
 
     }
 }

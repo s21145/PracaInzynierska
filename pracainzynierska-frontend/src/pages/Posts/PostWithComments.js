@@ -1,8 +1,21 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getPostWithComments } from "../../Services/PostService";
+import { getPostWithComments,sendComment } from "../../Services/PostService";
 import PostComment from "./PostComment";
 import './PostWithComments.css';
+
+const formatDate = (dateString) => {
+  const options = {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false 
+  };
+  const date = new Date(dateString);
+  return date.toLocaleString('pl-PL', options).replace(',', '');
+}
 
 const PostWithComments = () => {
   const { postId } = useParams();
@@ -17,7 +30,7 @@ const PostWithComments = () => {
       // error
     } else {
       setPost(response.data);
-      console.log(post);
+
     }
   };
 
@@ -40,11 +53,32 @@ const PostWithComments = () => {
     setNewComment("");
   };
 
-  const handleConfirmClick = () => {
-    console.log("New Comment:", newComment);
+  const handleConfirmClick = async () => {
+
+
+    try{
+
+      var response = await sendComment(postId,newComment)
+      if(response.status===200){
+        setPost(prevPost => ({
+          ...prevPost,
+          comments: [...prevPost.comments,response.data]
+        }));
+      }
+
+    }catch(ex){
+      console.log(ex);
+    }
+ 
     setIsAddingComment(false);
+
     setNewComment("");
+
   };
+  useEffect(() => {
+  }, [post]);
+
+  
 
   return (
     <div className="post-with-comments-wrapper">
@@ -56,13 +90,16 @@ const PostWithComments = () => {
         </div>
         <div className="post-comment-content">
           <div className="post-header">
-            <div> obrazek</div>
+            <div><img className="post-header-image" src={`data:image/png;base64, ${post.image}`}></img></div>
             <span className="post-header-username">{post.user}</span>
-            <span className="post-header-username">data</span>
+            <span className="post-header-username">{formatDate(post.date)}</span>
           </div>
           <div className="post-header-title">{post.title}</div>
           <div className="post-body">
             {post.content}
+          </div>
+          <div className="post-footer">
+            <span className="post-footer-likes">3 <i class="fa-solid fa-heart"></i></span>
           </div>
         </div>
         <div className="post-comment-new-comment">
@@ -95,6 +132,7 @@ const PostWithComments = () => {
                 username={item.user}
                 date={item.date}
                 text={item.content}
+                image={item.image}
               />
             ))}
         </div>

@@ -56,7 +56,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 1,
                             Content = "Komentarz 1",
-                            Date = new DateTime(2024, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(5654),
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6431),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -64,7 +64,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 2,
                             Content = "Komentarz 2",
-                            Date = new DateTime(2024, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(5665),
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6435),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -72,7 +72,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 3,
                             Content = "Komentarz 3",
-                            Date = new DateTime(2024, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(5668),
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6438),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -80,7 +80,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 4,
                             Content = "Komentarz 4",
-                            Date = new DateTime(2024, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(5669),
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6440),
                             IdPost = 1,
                             IdUser = 1
                         });
@@ -202,6 +202,36 @@ namespace pracaInzynierska_backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("pracaInzynierska_backend.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("MessageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Message");
+                });
+
             modelBuilder.Entity("pracaInzynierska_backend.Models.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -213,6 +243,9 @@ namespace pracaInzynierska_backend.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("IdGame")
                         .HasColumnType("int");
@@ -237,6 +270,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 1,
                             Content = "jak w temacie",
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6307),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "Ale CunterStrike jest kozak"
@@ -245,6 +279,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 2,
                             Content = "long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versi",
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6321),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "CUNTER STRIKE"
@@ -253,6 +288,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 3,
                             Content = "jak w temacie",
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6325),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "CZY CUNTERSTRIKE JEST LEPSZE OD ESCAPE FROM TARKOV"
@@ -261,6 +297,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 4,
                             Content = "long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versi",
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6327),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "REPORT GARO"
@@ -269,6 +306,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 5,
                             Content = " are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+                            Date = new DateTime(2024, 8, 19, 13, 25, 17, 542, DateTimeKind.Local).AddTicks(6329),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "CZY KTOS TO CZYTA?"
@@ -352,17 +390,45 @@ namespace pracaInzynierska_backend.Migrations
                         },
                         new
                         {
-                            Id = 8,
-                            IdGame = 1,
-                            Name = "total_time_played",
-                            PublicName = "Play Time"
-                        },
-                        new
-                        {
                             Id = 9,
                             IdGame = 1,
                             Name = "total_mvps",
                             PublicName = "MVP"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IdGame = 4,
+                            Name = "kill_player",
+                            PublicName = "Kills"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IdGame = 4,
+                            Name = "deaths",
+                            PublicName = "Deaths"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IdGame = 4,
+                            Name = "bullet_fired",
+                            PublicName = "Bullet fired"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            IdGame = 4,
+                            Name = "headshot",
+                            PublicName = "Headshots"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            IdGame = 4,
+                            Name = "bullet_hit_player",
+                            PublicName = "Hit Shots Player"
                         });
                 });
 
@@ -413,7 +479,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2004, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(3540),
+                            BirthDate = new DateTime(2004, 8, 19, 13, 25, 17, 541, DateTimeKind.Local).AddTicks(774),
                             Description = "Lubie CS GO",
                             Email = "adres@o2.pl",
                             IconPath = "../../images/users/default.png",
@@ -423,7 +489,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 2,
-                            BirthDate = new DateTime(1999, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(3570),
+                            BirthDate = new DateTime(1999, 8, 19, 13, 25, 17, 541, DateTimeKind.Local).AddTicks(804),
                             Description = "Lubie CS GO",
                             Email = "tendrugiUser@gmail.com",
                             IconPath = "../../images/users/default.png",
@@ -433,7 +499,7 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 3,
-                            BirthDate = new DateTime(1994, 5, 20, 19, 47, 14, 686, DateTimeKind.Local).AddTicks(3573),
+                            BirthDate = new DateTime(1994, 8, 19, 13, 25, 17, 541, DateTimeKind.Local).AddTicks(807),
                             Description = "Lubie CS GO",
                             Email = "Zielony@o2.pl",
                             IconPath = "../../images/users/default.png",
@@ -555,6 +621,25 @@ namespace pracaInzynierska_backend.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("pracaInzynierska_backend.Models.Message", b =>
+                {
+                    b.HasOne("pracaInzynierska_backend.Models.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("pracaInzynierska_backend.Models.User", "Sender")
+                        .WithMany("SendMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("pracaInzynierska_backend.Models.Post", b =>
                 {
                     b.HasOne("pracaInzynierska_backend.Models.Game", "Game")
@@ -651,9 +736,13 @@ namespace pracaInzynierska_backend.Migrations
 
                     b.Navigation("Ranking");
 
+                    b.Navigation("ReceivedMessages");
+
                     b.Navigation("RequestsReceived");
 
                     b.Navigation("RequestsSent");
+
+                    b.Navigation("SendMessages");
 
                     b.Navigation("Stats");
                 });

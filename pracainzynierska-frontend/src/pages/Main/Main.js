@@ -1,16 +1,13 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Main.css";
-import { useState, useEffect } from "react";
 import league from "../../assets/resources/lol-icon.jpg";
 import csgo from "../../assets/resources/csgo-icon.jpg";
 import valorant from "../../assets/resources/valorant-icon.jpg";
-import LogInModal from "../LogInModal/LogInModal";
-import SignUpModal from "../SignUpModal/SignUpModal";
-import MessageModal from "../../components/MessageModal";
+import AuthModal from "../AuthModal/AuthModal";
 import { Logout } from "../../Services/UserService";
-import { useSearchParams } from "react-router-dom";
-import { useContext } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import { UserContext } from "../../Services/UserContext";
+
 function Main() {
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openSignupModal, setOpenSignupModal] = useState(false);
@@ -33,44 +30,54 @@ function Main() {
         steamId: null,
         age: "",
         description: "",
+        userId:""
       });
-      console.log(user);
-      console.log("KONIEC");
+
       window.location.reload();
     }
   };
 
   return (
     <div className="main-page-container">
-      {openLoginModal && <LogInModal closeLogInModal={setOpenLoginModal} />}
-      {openSignupModal && <SignUpModal closeSignUpModal={setOpenSignupModal} />}
-      <div className="main-page-signup">
-        Search for new people to play with, <br />
-        find your perfect teammates and <br />
-        NEVER play solo again <br />
-        <button
-          className="signup-button"
-          onClick={() => {
-            setOpenSignupModal(true);
-          }}
-        >
-          Sign Up Here!
-        </button>
-        <br />
-        Already a member?
-        <button
-          className="login-button"
-          onClick={() => {
-            setOpenLoginModal(true);
-          }}
-        >
-          Log in here!
-        </button>
-      </div>
+      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} initialMode="login" />}
+      {openSignupModal && <AuthModal closeModal={setOpenSignupModal} initialMode="signup" />}
+      {user == null ? (
+        <div className="main-page-signup">
+          Search for new people to play with, <br />
+          find your perfect teammates and <br />
+          NEVER play solo again <br />
+          <button
+            className="signup-button"
+            onClick={() => {
+              setOpenSignupModal(true);
+            }}
+          >
+            Sign Up Here!
+          </button>
+          <br />
+          Already a member?
+          <button
+            className="login-button"
+            onClick={() => {
+              setOpenLoginModal(true);
+            }}
+          >
+            Log in here!
+          </button>
+        </div>
+      ) : (
+        <div className="main-page-signup">
+          Welcome back {user.login}!<br />
+          Search for new teammates <Link to="/findplayers"><button className="login-button">here!</button><br /></Link>
+          Or browse all the posts by clicking on the button below! <br />
+          <Link to="/posts"><button className="signup-button">Browse posts</button></Link>
+        </div>
+      )}
+
       <div className="main-page-games">
-        <img src={league} />
-        <img src={valorant} />
-        <img src={csgo} />
+        <img src={league} alt="League of Legends" />
+        <img src={valorant} alt="Valorant" />
+        <img src={csgo} alt="CS:GO" />
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services;
 using pracaInzynierska_backend.Services.IRepository;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace pracaInzynierska_backend.Controllers
 {
@@ -30,7 +33,15 @@ namespace pracaInzynierska_backend.Controllers
             var posts = await _unitOfWork.Post.GetPostsAsync(body.GameName,body.Page);
             return Ok(posts);
         }
-        [HttpPost("posts")]
+        [HttpGet]
+        [Route("mainPagePosts")]
+        public async Task<IActionResult> GetMainPagePostsAsync([FromQuery] int page)
+        {
+
+            var posts = await _unitOfWork.Post.GetMainPagePostsAsync(page);
+            return Ok(posts);
+        }
+        [HttpPost("post")]
         public async Task<IActionResult> CreatePostAsync(CreatePostDTO body)
         {
             var findGame = await _unitOfWork.Game.GetAsync(x => x.Name == body.GameName);
@@ -48,11 +59,44 @@ namespace pracaInzynierska_backend.Controllers
                 Title = body.Title,
                 Content = body.Content,
                 IdUser = user.UserId,
-                IdGame = game.GameId
+                IdGame = game.GameId,
+                Date = DateTime.Now,
             };
             await _unitOfWork.Post.InsertAsync(post);
+            await _unitOfWork.SaveAsync();
 
-            return StatusCode(200);
+            return Ok(new GetPostDto()
+            {
+                PostId = post.PostId,
+                Title = post.Title,
+                Content = post.Content,
+                IdUserOwner = post.IdUser,
+                User = user.Login,
+                IdGame= post.IdGame,
+                Comments = null,
+                Date = post.Date
+
+            });
+        }
+        [HttpPost("comment")]
+        public async Task<IActionResult> CreateCommentAsync(CreateCommentDTO body)
+        {
+
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            var comment = new Comment()
+            {
+                Date =  DateTime.Now,
+                Content = body.Content,
+                IdUser = user.UserId,
+                IdPost = body.IdPost
+            };
+            await _unitOfWork.Comments.InsertAsync(comment);
+            await _unitOfWork.SaveAsync();
+
+            return Ok(Comment.GetCommentDto(comment));
         }
         [HttpGet("post")]
         public async Task<IActionResult> GetPostWithComment(int id)

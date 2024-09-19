@@ -7,5 +7,6 @@
         public string Content { get; set; }
         public string User { get; set; }
         public int IdUser { get; set; }
+        public string Image { get; set; }
     }
 }

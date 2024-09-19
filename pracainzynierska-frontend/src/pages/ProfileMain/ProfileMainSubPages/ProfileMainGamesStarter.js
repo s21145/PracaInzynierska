@@ -25,6 +25,7 @@ function ProfileMainGamesStarter({ profileChanger, ...rest }) {
     if (Object.keys(selected).length === 0) return;
 
     var response = await getStats(selected.gameId);
+    console.log(response);
     if (response.status !== 200) {
       //blad
     } else {

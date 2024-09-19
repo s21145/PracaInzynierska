@@ -268,7 +268,7 @@ namespace pracaInzynierska_backend.Controllers
                 var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
                 var user = userQuery.First();
 
-                var userStats = await _unitOfWork.Stats.GetAsync(x => x.IdGame == body.IdGame);
+                var userStats = await _unitOfWork.Stats.GetAsync(x => x.IdGame == body.IdGame && user.UserId == x.IdUser);
                 var stats = userStats.ToList();
 
                 var response = new ReturnStatsDTO()
@@ -414,6 +414,9 @@ namespace pracaInzynierska_backend.Controllers
                 Image = Convert.ToBase64String(System.IO.File
                 .ReadAllBytes(
                     Path.Combine(Environment.CurrentDirectory, x.User.IconPath))),
+                IsFriend = x.User.Friends.Any(friend => friend.FriendId == user.UserId) ||
+                 x.User.RequestsSent.Any(req => req.ToUserId == user.UserId) ||
+                 x.User.RequestsReceived.Any(req => req.FromUserId == user.UserId)
             }));
 
 
@@ -421,6 +424,32 @@ namespace pracaInzynierska_backend.Controllers
 
 
             return StatusCode(200,response);
+        }
+        [HttpPost("removeFriend")]
+        public async Task<IActionResult> RemoveFriend([FromQuery] int userId)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+            if (user is null)
+            {
+                return StatusCode(400);
+            }
+
+            var userToRemoveQuery = await _unitOfWork.User.GetAsync(x => x.UserId == userId);
+            var userToRemove = userToRemoveQuery.FirstOrDefault();
+            if (userToRemove == null)
+            {
+                return StatusCode(400, "Nie istnieje użytkownik o takim ID");
+            }
+            var checkIfUserIsFriend = await _unitOfWork.FriendLists.GetAsync(friend => friend.OwnerId == user.UserId && friend.FriendId == userToRemove.UserId);
+            if(checkIfUserIsFriend is null)
+            {
+                return StatusCode(403, "Nie ma takiego użytkownika na liście znajomych");
+            }
+            await _unitOfWork.FriendLists.DeleteAsync(checkIfUserIsFriend.First().Id);
+            await _unitOfWork.SaveAsync();
+            return StatusCode(200);
         }
         [HttpPost("sentFriendRequest")]
         public async Task<IActionResult> SentFriendRequest([FromQuery] int userId)
@@ -472,7 +501,11 @@ namespace pracaInzynierska_backend.Controllers
             {
                 return StatusCode(400, $"Błąd podczas zmiany statusu - {changeStatus.Item2} ");
             }
-
+            if(status == "Declined")
+            {
+                await _unitOfWork.SaveAsync();
+                return StatusCode(200);
+            }
             var FriendList = new FriendList()
             {
                 OwnerId = user.UserId,
@@ -480,7 +513,13 @@ namespace pracaInzynierska_backend.Controllers
                 From = DateTime.Now
             };
             await _unitOfWork.FriendLists.InsertAsync(FriendList);
-
+            var FriendList2 = new FriendList()
+            {
+                OwnerId = fromUserId,
+                FriendId = user.UserId,
+                From = DateTime.Now
+            };
+            await _unitOfWork.FriendLists.InsertAsync(FriendList2);
             await _unitOfWork.SaveAsync();
 
 
@@ -519,7 +558,7 @@ namespace pracaInzynierska_backend.Controllers
             {
                 return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
             }
-            var searchUsers = await _unitOfWork.User.GetUsers(nickname,user);
+            var searchUsers = await _unitOfWork.User.GetUsersWithFriendsAndRequests(nickname,user);
             var response = new List<ReturnSimilarUsersDTO>();
             searchUsers.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
             {
@@ -530,6 +569,10 @@ namespace pracaInzynierska_backend.Controllers
                 Image = Convert.ToBase64String(System.IO.File
                 .ReadAllBytes(
                     Path.Combine(Environment.CurrentDirectory, x.IconPath))),
+                IsFriend = x.Friends.Any(friend => friend.FriendId == user.UserId) ||
+                 x.RequestsSent.Any(req => req.ToUserId == user.UserId) ||
+                 x.RequestsReceived.Any(req => req.FromUserId == user.UserId) 
+                ,
             }));
 
 
@@ -538,6 +581,7 @@ namespace pracaInzynierska_backend.Controllers
 
             return StatusCode(200, response);
         }
+       
 
         private async  Task<User> GetUserAsync()
         {

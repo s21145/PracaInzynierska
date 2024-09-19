@@ -22,6 +22,7 @@ function ProfileMainSettings() {
   const [searchParams, setSearchParamas] = useSearchParams();
   const { user, setUser } = useContext(UserContext);
   const { message, setMessage } = useContext(MessageContext);
+  const [steamNumber, setSteamNumber] = useState(null);
   const [userData, setUserData] = useState({
     description: "",
     email: "",
@@ -78,7 +79,7 @@ function ProfileMainSettings() {
       userData.oldPassword,
       userData.newPassword
     );
-    console.log(response);
+
     if (response.status !== 200) {
       setMessage({
         content: response.status + " :" + response.data,
@@ -99,7 +100,7 @@ function ProfileMainSettings() {
     try {
       removeAuthorization();
       const test = await http.get(config.openIdUrl + "auth/steam");
-      console.log(test);
+
       window.location.replace(test.data.url);
     } catch (error) {
       console.log("error: " + error);
@@ -108,10 +109,14 @@ function ProfileMainSettings() {
 
   useEffect(() => {
     handleSteamId();
-  }, []);
+  }, [user]);
   
-  console.log(user);
+
   async function handleSteamId() {
+    if(!user)
+    {
+      return;
+    }
     const steamId = searchParams.get("steamId");
     searchParams.delete("steamId");
     setSearchParamas(searchParams);
@@ -126,10 +131,19 @@ function ProfileMainSettings() {
         show: true,
       });
     } else {
-      setUser({ ...user, steamId: steamId });
+      
       showMessage("Konto steam zostało przypisane do konta");
+      setUser({ ...user, steamId: steamId });
+     
+      
     }
   }
+  // useEffect(() => {
+  //   if (user && steamNumber) {
+  //     setUser({ ...user, steamId: steamNumber });
+  //   }
+  // }, [user]);
+
   return (
     <div className="settings-wrapper">
       <div className="settings-container">

@@ -28,5 +28,21 @@ namespace pracaInzynierska_backend.Services.Repository
                 .ToListAsync();
             return result;
         }
+        public async Task<List<User>> GetUsersWithFriendsAndRequests(string nickname, User userLogged)
+        {
+            var result = new List<User>();
+            if (nickname == string.Empty)
+            {
+                return result;
+            }
+            result = await _context.Users
+               .Where(user => user.Login.Contains(nickname))
+               .Where(user => user.Login != userLogged.Login)
+               .Include(user => user.Friends)
+               .Include(user => user.RequestsReceived)
+               .Include(user => user.RequestsSent)
+               .ToListAsync();
+            return result;
+        }
     }
 }

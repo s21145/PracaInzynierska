@@ -7,5 +7,6 @@ namespace pracaInzynierska_backend.Services.IRepository
     {
         public Task<GetPostDto> GetPostWithCommentsAsync(int postId);
         public Task<List<GetPostDto>> GetPostsAsync(string gameName,int page);
+        Task<List<GetPostDto>> GetMainPagePostsAsync(int page);
     }
 }

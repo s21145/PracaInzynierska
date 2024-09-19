@@ -8,5 +8,6 @@ export const UserContext = createContext({
   age: "",
   description: "",
   friends:[],
-  requests:[]
+  requests:[],
+  userId:''
 });

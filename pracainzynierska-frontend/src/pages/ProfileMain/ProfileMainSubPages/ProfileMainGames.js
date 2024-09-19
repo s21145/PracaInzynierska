@@ -14,7 +14,6 @@ function ProfileMainGames({ profileChanger, ...rest }) {
     if (response.status !== 200) {
       //blad
     } else {
-      console.log(response.data);
       setGames(response.data);
     }
   };

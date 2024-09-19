@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using pracaInzynierska_backend.Hubs;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Services;
 using pracaInzynierska_backend.Services.IRepository;
@@ -22,8 +23,13 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
 */
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options =>
+//    {
+//        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+//    });
 
-
+builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -31,7 +37,8 @@ builder.Services.AddCors(options =>
                       {
                           policy.WithOrigins("http://localhost:3000")
                           .AllowAnyHeader().
-                          AllowAnyMethod();
+                          AllowAnyMethod()
+                          .AllowCredentials();
                       });
 });
 
@@ -105,5 +112,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();

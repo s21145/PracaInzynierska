@@ -1,7 +1,7 @@
 .friend-requests-container hr {
     border: 0;
     height: 2px;
-    background-color: #f39800;
+    background-color: var(--color-orange);
 }
 
 .friend-requests {
@@ -16,7 +16,7 @@
 }
 
 .friend-requests-container:hover{
-    background-color: #3f3e3e;
+    background-color: var(--color-secondary-background);
     cursor: pointer;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .friend-requests-counter {
-    background-color: #f39800;
+    background-color: var(--color-orange);
     color: #333;
     padding: 0 5px; 
     min-width: 20px; 
