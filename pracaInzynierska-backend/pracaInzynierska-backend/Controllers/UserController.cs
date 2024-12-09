@@ -19,13 +19,16 @@ namespace pracaInzynierska_backend.Controllers
 
         IUnitOfWork _unitOfWork;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
         private readonly string GetStatsSteam = "https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/";
         private readonly string GetPlayTime = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v1/";
-        private readonly string key = "D65CABD4B8E9A882FC8D5651E8787645";
-        public UserController(IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory)
+        private string key;
+        public UserController(IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory,IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+            key = _configuration["steamKey"];
         }
         [HttpGet("userData")]
         public async Task<IActionResult> GetUserDataAsync()
@@ -226,13 +229,17 @@ namespace pracaInzynierska_backend.Controllers
             });
             await _unitOfWork.Stats.InsertAsync(statPlayTime);
             //
-
+            var userRating = 0;
+           foreach (var stat in statsToAdd)
+            {
+                userRating += (int)stat.Value;
+            }
 
             var rating = new UserGameRanking()
             {
                 IdUser = user.UserId,
                 IdGame = game.GameId,
-                score = 1000, // do zmiany
+                score = userRating
             };
             await _unitOfWork.Ranking.InsertAsync(rating);
 
@@ -375,10 +382,34 @@ namespace pracaInzynierska_backend.Controllers
                     _unitOfWork.Stats.Update(old);
                 }
                 statsToAdd.Add(tmp);
-               
-
-
             }
+            //update rating
+            var userRating = 0;
+            foreach (var stat in statsToAdd)
+            {
+                userRating += (int)stat.Value;
+            }
+
+
+            var oldRating = (await _unitOfWork.Ranking.GetAsync(rating => rating.IdUser == user.UserId &&  rating.IdGame == gameId)).FirstOrDefault();
+            if(oldRating is null)
+            {
+                var rating = new UserGameRanking()
+                {
+                    IdUser = user.UserId,
+                    IdGame = game.GameId,
+                    score = userRating
+                };
+                await _unitOfWork.Ranking.InsertAsync(rating);
+            }
+            else
+            {
+                oldRating.score = userRating;
+                 _unitOfWork.Ranking.Update(oldRating);
+            }
+            
+
+            await _unitOfWork.SaveAsync();
 
 
             return StatusCode(200,statsToAdd);
