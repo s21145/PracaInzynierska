@@ -29,7 +29,7 @@ import {GetFriendsList,GetFriendsListRequests,GetMessages} from './Services/User
 import * as signalR from "@microsoft/signalr";
 
 function App() {
-  const MINUTE_MS = 60000;
+  const MINUTE_MS = 3600000;
   const [user, setUser] = useState(null);
   const [connection, setConnection] = useState(null);
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);

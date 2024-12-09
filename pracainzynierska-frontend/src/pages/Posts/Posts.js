@@ -2,7 +2,6 @@ import React from 'react';
 import PostItem from './PostItem';
 
 function Posts({ posts, openCreatePostModal, lastPostElementRef,handlePostLike }) {
-  console.log(posts);
   return (
     <div className="posts">
       <div className="posts__container">
