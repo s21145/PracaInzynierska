@@ -39,11 +39,6 @@
     cursor: pointer;
   }
   
-  .small-container-header {
-  }
-  
-  .small-container-form {
-  }
   
   .small-container-form-content {
     display: flex;
@@ -115,8 +110,6 @@
     background-color: var(--color-orange-hover);
   }
   
-  .change-bio-container {
-  }
   
   @media only screen and (max-width: 1024px) {
     .settings-container {

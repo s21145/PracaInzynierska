@@ -12,6 +12,7 @@ function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const [profile, setProfile] = useState(false);
+  const [leaveTimeout, setLeaveTimeout] = useState(null);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -28,17 +29,22 @@ function Navbar() {
     }
   };
 
-  const onMouseLeave = () => {
-    if (window.innerWidth < 960) {
+  const handleMouseEnter = () => {
+    if (leaveTimeout) clearTimeout(leaveTimeout);
+    setProfile(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
       setProfile(false);
-    } else {
-      setProfile(false);
-    }
+    }, 200);
+    setLeaveTimeout(timeout);
   };
 
   useEffect(() => {
     showButton();
   }, []);
+
   window.addEventListener("resize", showButton);
 
   return (
@@ -57,7 +63,7 @@ function Navbar() {
             {window.innerWidth <= 960 ? (
               <li className="nav-item">
                 <Link
-                  to="/contact"
+                  to="/ProfileMain"
                   className="nav-links"
                   onClick={closeMobileMenu}
                 >
@@ -90,7 +96,7 @@ function Navbar() {
             {window.innerWidth <= 960 ? (
               <li className="nav-item">
                 <Link
-                  to="/contact"
+                  to="/ProfileMain?tab=settings"
                   className="nav-links"
                   onClick={closeMobileMenu}
                 >
@@ -136,24 +142,21 @@ function Navbar() {
           ) : null}
           {user && window.innerWidth > 960 ? (
             <div
-              className="profile-span"
-              onClick={openProfileMenu}
-              onMouseLeave={onMouseLeave}
+              className="profile-area"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <div className="profile-link">
                 <div
-                className="nav-picture"
-                style={{
-                  backgroundImage: `url(data:image/png;base64,${
-                    user && user.image
-                  })`,
-                }}
-                >
-
-                </div>
+                  className="nav-picture"
+                  style={{
+                    backgroundImage: `url(data:image/png;base64,${
+                      user && user.image
+                    })`,
+                  }}
+                ></div>
                 <h2 className="profile-wrap">{user && user.login}</h2>
               </div>
-
               {profile && <ProfileDropdown />}
             </div>
           ) : null}
@@ -164,4 +167,3 @@ function Navbar() {
 }
 
 export default Navbar;
-

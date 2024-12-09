@@ -14,7 +14,7 @@ function ProfileMainStarter() {
         </div>
 
         <div className="input-wrapper">
-          <label htmlFor="steam" className="input-label">Steam</label>
+          <label htmlFor="steam" className="input-label">Steam ID</label>
           <div className="input-field">{user && user.steamId}</div>
         </div>
 
