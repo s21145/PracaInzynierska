@@ -12,6 +12,7 @@ namespace pracaInzynierska_backend.Models
         public DateTime Date { get; set; }
         public User User { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<PostLike> Likes { get; set; }
         public int IdGame { get; set; }
         public Game Game { get; set; }
       

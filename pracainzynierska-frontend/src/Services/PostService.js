@@ -23,6 +23,26 @@ export async function getPosts(gameName, page) {
     return response;
   }
 }
+export async function likePost(userId, postId) {
+  try {
+    const response = await http.post(
+      config.apiUrl + "/Post/like",
+      { userId: userId, postId: postId } ,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    const response = {
+      status: error.response.status,
+      data: error.response.data,
+    };
+    return response;
+  }
+}
 export async function getPostsForMainPage(page) {
   try {
     const response = await http.get(

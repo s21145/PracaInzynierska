@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.Extensions.Hosting;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services;
@@ -26,19 +27,24 @@ namespace pracaInzynierska_backend.Controllers
         [Route("posts")]
         public async Task<IActionResult> GetPostsAsync([FromQuery] GetPostsDTO body)
         {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
             var findGame = await _unitOfWork.Game.GetAsync(x => x.Name == body.GameName);
             if (findGame.Count() == 0 )
                 return StatusCode(400, "Nie ma takiej gry");
 
-            var posts = await _unitOfWork.Post.GetPostsAsync(body.GameName,body.Page);
+            var posts = await _unitOfWork.Post.GetPostsAsync(body.GameName,body.Page,user.UserId);
             return Ok(posts);
         }
         [HttpGet]
         [Route("mainPagePosts")]
         public async Task<IActionResult> GetMainPagePostsAsync([FromQuery] int page)
         {
-
-            var posts = await _unitOfWork.Post.GetMainPagePostsAsync(page);
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+            var posts = await _unitOfWork.Post.GetMainPagePostsAsync(page,user.UserId);
             return Ok(posts);
         }
         [HttpPost("post")]
@@ -107,6 +113,32 @@ namespace pracaInzynierska_backend.Controllers
 
             var posts = await _unitOfWork.Post.GetPostWithCommentsAsync(id);
             return StatusCode(200,posts);
+        }
+        [HttpPost("like")]
+        public async Task<IActionResult> AddLikeToPost(LikeDTO request)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
+            var checkLike = (await _unitOfWork.PostLikes.GetAsync(like => like.UserId == request.UserId && like.PostId == request.PostId)).FirstOrDefault();
+            if(checkLike != null)
+            {
+                return StatusCode(400, "Użytkownik polubił już ten post");
+            }
+            var like = new PostLike()
+            {
+                UserId = request.UserId,
+                PostId = request.PostId,
+
+            };
+            await _unitOfWork.PostLikes.InsertAsync(like);
+            await _unitOfWork.SaveAsync();
+
+
+
+
+            return StatusCode(200);
         }
     }
    

@@ -17,6 +17,7 @@ namespace pracaInzynierska_backend.Models
         public  DbSet<FriendListRequest> FriendListRequests { get; set; }
         
         public DbSet<Message> Message { get; set; }
+        public DbSet<PostLike> PostLikes { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
@@ -36,6 +37,7 @@ namespace pracaInzynierska_backend.Models
             modelBuilder.ApplyConfiguration(new StatsNameEFConfiguration());
             modelBuilder.ApplyConfiguration(new FriendListEFConfiguration());
             modelBuilder.ApplyConfiguration(new FriendListRequestEFConfiguration());
+            modelBuilder.ApplyConfiguration(new PostLikeEFConfiguration());
             
 
 

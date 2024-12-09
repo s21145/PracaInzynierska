@@ -1,10 +1,13 @@
 import React, { forwardRef } from "react";
 import { Link } from "react-router-dom";
+
 import "./Posts.css";
 
 const MAX_LENGTH = 230;
 
-const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId }, ref) => {
+const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId,likes,isLiked,handlePostLike }, ref) => {
+
+
   return (
     <div className="posts__item__wrapper" ref={ref}>
       <li className="posts__item">
@@ -32,7 +35,8 @@ const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId },
               </Link>
             </div>
             <div className="posts__item__likes">
-              <h2>3 <i className="fa-solid fa-heart"></i></h2>
+              <span>{likes}</span>
+              <span>{isLiked ?  <i className="fa-solid fa-heart"></i> : <i class="fa-regular fa-heart" onClick={() => handlePostLike(postId)}></i>}</span>
             </div>
           </div>
         </div>
