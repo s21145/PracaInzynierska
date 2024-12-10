@@ -165,6 +165,12 @@
     font-size: 35px;
 }
 
-
+.auth-form-input::placeholder {
+    color: var(--placeholder-color, gray);
+}
+  
+.input-error {
+    border: 2px solid red;
+}
 
 

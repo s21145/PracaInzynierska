@@ -244,6 +244,7 @@ function App() {
                       onClose={handleClose}
                       onSend={handleSend}
                       friendName={currentFriend.login}
+                      friend={currentFriend}
                     />
                   )}
                   </ProtectedComponent>

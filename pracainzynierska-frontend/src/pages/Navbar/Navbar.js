@@ -50,7 +50,7 @@ function Navbar() {
   return (
     <>
       {openLoginModal && <AuthModal closeModal={setOpenLoginModal} initialMode="login" />}
-      {openSignupModal && <AuthModal closeModal={setOpenLoginModal} initialMode="signup" />}
+      {openSignupModal && <AuthModal closeModal={setOpenSignupModal} initialMode="signup" />}
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
