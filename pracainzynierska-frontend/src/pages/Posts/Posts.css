@@ -92,6 +92,13 @@ h1 {
 .posts__item__likes {
     padding-top: 6px;
 }
+.posts__item__likes  span {
+    margin-right: 8px;
+    font-size:25px;
+  }
+  .posts__item__likes span:last-child {
+    margin-right: 0;
+  }
 
 .posts__item__comments__link {
     text-decoration: none;

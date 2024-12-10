@@ -9,6 +9,8 @@
         public string User { get; set; }
         public int IdGame { get; set; }
         public string Image { get; set; }
+        public int Likes { get; set; }
+        public bool IsLiked { get; set; }
         public DateTime Date { get; set; }
         public List<GetCommentDto> Comments { get; set; }
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pracaInzynierska_backend.Models;
 
@@ -11,9 +12,10 @@ using pracaInzynierska_backend.Models;
 namespace pracaInzynierska_backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241209145042_added PostLike table")]
+    partial class addedPostLiketable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 1,
                             Content = "Komentarz 1",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1827),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1404),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -64,7 +66,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 2,
                             Content = "Komentarz 2",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1830),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1408),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -72,7 +74,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 3,
                             Content = "Komentarz 3",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1832),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1409),
                             IdPost = 1,
                             IdUser = 1
                         },
@@ -80,7 +82,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             CommentId = 4,
                             Content = "Komentarz 4",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1833),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1411),
                             IdPost = 1,
                             IdUser = 1
                         });
@@ -270,7 +272,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 1,
                             Content = "jak w temacie",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1710),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1304),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "Ale CunterStrike jest kozak"
@@ -279,7 +281,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 2,
                             Content = "long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versi",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1722),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1316),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "CUNTER STRIKE"
@@ -288,7 +290,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 3,
                             Content = "jak w temacie",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1724),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1318),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "CZY CUNTERSTRIKE JEST LEPSZE OD ESCAPE FROM TARKOV"
@@ -297,7 +299,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 4,
                             Content = "long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versi",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1726),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1320),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "REPORT GARO"
@@ -306,7 +308,7 @@ namespace pracaInzynierska_backend.Migrations
                         {
                             PostId = 5,
                             Content = " are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
-                            Date = new DateTime(2024, 12, 9, 17, 57, 42, 278, DateTimeKind.Local).AddTicks(1727),
+                            Date = new DateTime(2024, 12, 9, 15, 50, 41, 806, DateTimeKind.Local).AddTicks(1321),
                             IdGame = 1,
                             IdUser = 1,
                             Title = "CZY KTOS TO CZYTA?"
@@ -502,32 +504,32 @@ namespace pracaInzynierska_backend.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2004, 12, 9, 17, 57, 42, 276, DateTimeKind.Local).AddTicks(7325),
+                            BirthDate = new DateTime(2004, 12, 9, 15, 50, 41, 804, DateTimeKind.Local).AddTicks(8290),
                             Description = "Lubie CS GO",
                             Email = "adres@o2.pl",
                             IconPath = "../../images/users/default.png",
                             Login = "Czarek12",
-                            Password = "59Vrw5YDQ2QrbnB3ArrLUK6nkGhl+cf+V3hG9RuMFuN4HfKnS7ymZu4XEIcCPWuN"
+                            Password = "bedzieHash"
                         },
                         new
                         {
                             UserId = 2,
-                            BirthDate = new DateTime(1999, 12, 9, 17, 57, 42, 276, DateTimeKind.Local).AddTicks(7360),
+                            BirthDate = new DateTime(1999, 12, 9, 15, 50, 41, 804, DateTimeKind.Local).AddTicks(8327),
                             Description = "Lubie CS GO",
                             Email = "tendrugiUser@gmail.com",
                             IconPath = "../../images/users/default.png",
                             Login = "kozak5222",
-                            Password = "59Vrw5YDQ2QrbnB3ArrLUK6nkGhl+cf+V3hG9RuMFuN4HfKnS7ymZu4XEIcCPWuN"
+                            Password = "bedzieHash"
                         },
                         new
                         {
                             UserId = 3,
-                            BirthDate = new DateTime(1994, 12, 9, 17, 57, 42, 276, DateTimeKind.Local).AddTicks(7364),
+                            BirthDate = new DateTime(1994, 12, 9, 15, 50, 41, 804, DateTimeKind.Local).AddTicks(8330),
                             Description = "Lubie CS GO",
                             Email = "Zielony@o2.pl",
                             IconPath = "../../images/users/default.png",
                             Login = "Garo",
-                            Password = "59Vrw5YDQ2QrbnB3ArrLUK6nkGhl+cf+V3hG9RuMFuN4HfKnS7ymZu4XEIcCPWuN"
+                            Password = "bedzieHash"
                         });
                 });
 

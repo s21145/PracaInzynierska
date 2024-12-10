@@ -1,12 +1,13 @@
 import React from 'react';
 import PostItem from './PostItem';
 
-function Posts({ posts, openCreatePostModal, lastPostElementRef }) {
+function Posts({ posts, openCreatePostModal, lastPostElementRef,handlePostLike }) {
   return (
     <div className="posts">
       <div className="posts__container">
         <div className="posts__sort__options">
-          <div className="posts__sort__wrapper">
+          <div></div>
+          {/* <div className="posts__sort__wrapper">
             <h1>
               <i className="fa-solid fa-fire" />
               Hot
@@ -19,7 +20,7 @@ function Posts({ posts, openCreatePostModal, lastPostElementRef }) {
               <i className="fa-solid fa-arrow-up-right-dots" />
               Top
             </h1>
-          </div>
+          </div> */}
           <button className="create__new__post__button" onClick={openCreatePostModal}>Create</button>
         </div>
         <div className="posts__wrapper">
@@ -27,12 +28,15 @@ function Posts({ posts, openCreatePostModal, lastPostElementRef }) {
             {posts &&
               posts.map((item, index) => (
                 <PostItem
+                  handlePostLike={handlePostLike}
                   key={item.postId}
                   idUserOwner={item.idUserOwner}
                   userLogin={item.user}
                   title={item.title}
                   content={item.content}
                   postId={item.postId}
+                  likes={item.likes}
+                  isLiked={item.isLiked}
                   ref={index === posts.length - 1 ? lastPostElementRef : null}
                 />
               ))}

@@ -3,7 +3,7 @@ import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
 import './ChatWindow.css';
 
-const ChatWindow = ({messages, onClose, onSend, friendName}) => {
+const ChatWindow = ({messages, onClose, onSend, friendName, friendIcon}) => {
 
     console.log(messages);
     const [newMessage, setNewMessage] = React.useState('');
@@ -40,7 +40,18 @@ const ChatWindow = ({messages, onClose, onSend, friendName}) => {
             <div className="chat-body" ref={chatBodyRef}>
             {messages.map((msg, index) => (
           <div key={index} className={`chat-bubble ${msg.senderLogin === user.login ? 'me' : 'friend'}`}>
-            {msg.senderLogin}: {msg.content}
+            {msg.senderLogin !== user.login && (
+                <div>
+                    <div
+                    className="friend-chat-image"
+                    style={{
+                    backgroundImage: `url(data:image/png;base64,${
+                        user && user.image
+                    })`,
+                    }}
+                ></div>
+              </div>
+            )} {msg.content}
           </div>
         ))}
             </div>

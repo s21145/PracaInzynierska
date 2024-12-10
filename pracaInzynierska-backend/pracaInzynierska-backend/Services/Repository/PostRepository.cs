@@ -11,14 +11,14 @@ namespace pracaInzynierska_backend.Services.Repository
         {
         }
 
-        public async Task<List<GetPostDto>> GetPostsAsync(string gameName, int page)
+        public async Task<List<GetPostDto>> GetPostsAsync(string gameName, int page,int userId)
         {
             var posts = await _context.Posts
                 .Where(x => x.Game.Name == gameName)
                  .OrderByDescending(x => x.Date)
                 .Skip(page * 10)
                 .Take(10)
-                .Select( e => new GetPostDto
+                .Select(e => new GetPostDto
                 {
                     PostId = e.PostId,
                     Title = e.Title,
@@ -27,13 +27,15 @@ namespace pracaInzynierska_backend.Services.Repository
                     User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
                     Comments = null,
-                    Date = e.Date
+                    Date = e.Date,
+                    Likes = e.Likes.Count,
+                    IsLiked = e.Likes.Where(like => like.PostId == e.PostId && like.UserId == userId).FirstOrDefault() != null ? true: false
                 })
                 .ToListAsync();
             return posts;
 
         }
-        public async Task<List<GetPostDto>> GetMainPagePostsAsync(int page)
+        public async Task<List<GetPostDto>> GetMainPagePostsAsync(int page,int userId)
         {
             var posts = await _context.Posts
                 .OrderByDescending(x => x.Date)
@@ -48,7 +50,9 @@ namespace pracaInzynierska_backend.Services.Repository
                     User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
                     Comments = null,
-                    Date = e.Date
+                    Date = e.Date,
+                    Likes = e.Likes.Count,
+                    IsLiked = e.Likes.Where(like => like.PostId == e.PostId && like.UserId == userId).FirstOrDefault() != null ? true : false
                 })
                 .ToListAsync();
             return posts;

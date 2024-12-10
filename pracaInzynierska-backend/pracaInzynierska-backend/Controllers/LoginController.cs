@@ -25,13 +25,19 @@ namespace pracaInzynierska_backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
         {
+           
             var query = await _unitOfWork.User
-                .GetAsync(user => user.Login == loginRequest.Login && user.Password == loginRequest.Password);
+                .GetAsync(user => user.Login == loginRequest.Login);
             var user = query.FirstOrDefault();
                 
             if (user == default)
             {
                 return StatusCode(404, "Nie znaleziono Uzytkownika");
+            }
+            var checkPassword = PasswordHashHelper.VerifyPassword(loginRequest.Password, user.Password);
+            if(!checkPassword)
+            {
+                return StatusCode(404, "Niepoprawna nazwa użytkownika lub hasło");
             }
             user.CurrentRefreshToken = SecurityHelpers.GenerateRefreshToken();
             user.RefreshTokenExp = DateTime.Now.AddDays(1);
@@ -65,7 +71,7 @@ namespace pracaInzynierska_backend.Controllers
             User newUser = new User
             {
                 Login = register.Login,
-                Password = register.Password,
+                Password = PasswordHashHelper.HashPassword(register.Password),
                 Email = register.Email,
                 BirthDate = register.Birthday,
                 IconPath = defaultPath
@@ -138,18 +144,13 @@ namespace pracaInzynierska_backend.Controllers
                 issuer: "https://localhost:7194",
                 audience: "https://localhost:7194",
                 claims: userclaim,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(70),
                 signingCredentials: creds
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        private bool ValidateRegister()
-        {
-            //to do
-            return true;
-        }
-        
+
 
 
     }

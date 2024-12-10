@@ -5,6 +5,9 @@ import "./PostsPage.css";
 import GamesDropdown from "../GamesDropdown/GamesDropdown";
 import { getGames, getPosts,getPostsForMainPage } from "../../Services/PostService";
 import CreatePost from "../Posts/CreatePost/CreatePost";
+import { likePost } from "../../Services/PostService";
+import { UserContext } from "../../Services/UserContext";
+import { useContext } from "react";
 
 const mockPosts = [
   {
@@ -37,7 +40,7 @@ function PostsPage() {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [createPost, setCreatePost] = useState(false);
-
+  const { user } = useContext(UserContext);
   const observer = useRef();
 
   const lastPostElementRef = useCallback(node => {
@@ -103,6 +106,24 @@ function PostsPage() {
       reloadPosts(page);
     }
   }, [page]);
+  const handlePostLike = async (postId) => {
+    try {
+      console.log(user.userId,postId);
+      const response = await likePost(user.userId, postId);
+      if (response.status === 200) {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.postId === postId ? { ...post, isLiked: true, likes:post.likes+1 } : post
+          )
+        );
+
+      } else {
+          console.error("Failed to like post", response);
+      }
+  } catch (error) {
+      console.error("Error during like process :", error);
+  }
+  }
 
   return (
     <div className="page-container">
@@ -114,7 +135,7 @@ function PostsPage() {
           gameOptions={gameOptions}
         />
       </div>
-      <Posts posts={posts} openCreatePostModal={openCreatePostModal} lastPostElementRef={lastPostElementRef} />
+      <Posts posts={posts} handlePostLike={handlePostLike} openCreatePostModal={openCreatePostModal} lastPostElementRef={lastPostElementRef} />
     </div>
   );
 }

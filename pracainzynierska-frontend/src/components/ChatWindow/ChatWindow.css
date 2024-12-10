@@ -1,6 +1,6 @@
 .chat-window {
-    width: 300px;
-    height: 350px;
+    width: 450px;
+    height: 500px;
     border: 1px solid var(--color-orange);
     display: flex;
     flex-direction: column;
@@ -48,7 +48,7 @@
 
 .chat-bubble {
     max-width: 80%;
-    padding: 10px;
+    padding: 5px;
     border-radius: 10px;
     margin-bottom: 10px;
     word-wrap: break-word;
@@ -56,15 +56,35 @@
 }
 
 .chat-bubble.me {
+    padding-left: 10px;
+    padding-right: 10px;
     background-color: #cbfacb;
     align-self: flex-end;
     margin-right: 10px;
 }
 
 .chat-bubble.friend {
+    display: flex;
+    align-items: flex-start; 
     background-color: #fdf4e3;
     align-self: flex-start;
     margin-left: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    word-break: break-word;
+    padding: 10px;
+}
+
+.chat-bubble.friend .friend-image {
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.chat-bubble.friend .friend-text {
+    max-width: calc(100% - 50px); 
+    display: block;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 .chat-input-container {
@@ -91,4 +111,15 @@
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+}
+
+.friend-chat-image {
+    margin-top: -10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
 }
