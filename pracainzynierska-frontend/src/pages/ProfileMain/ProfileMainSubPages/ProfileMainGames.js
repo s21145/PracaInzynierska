@@ -39,7 +39,7 @@ function ProfileMainGames({ profileChanger, ...rest }) {
     <div className="profile-games-wrapper">
       <div className="profile-games-return-button">
         <i
-          class="fa-sharp fa-solid fa-arrow-left"
+          className="fa-sharp fa-solid fa-arrow-left"
           onClick={() => profileChanger(1)}
         />
       </div>

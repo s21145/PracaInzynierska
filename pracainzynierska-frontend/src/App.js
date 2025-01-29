@@ -20,6 +20,7 @@ import {
   Logout,
   RefreshToken,
 } from "./Services/UserService";
+import config from "./config.json";
 
 import FriendsList from "./pages/FriendsList/FriendsList";
 import FriendRequestWindow from "./pages/FriendsList/FriendRequest/FriendRequestWindow";
@@ -100,7 +101,7 @@ function App() {
     console.log(user);
     const conn = new signalR.HubConnectionBuilder()
             .configureLogging(signalR.LogLevel.Information)
-            .withUrl("https://localhost:7194/chatHub")
+            .withUrl(config.chatUrl)
             .withAutomaticReconnect()
             .build();
 

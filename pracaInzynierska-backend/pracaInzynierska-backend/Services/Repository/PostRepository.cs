@@ -59,7 +59,7 @@ namespace pracaInzynierska_backend.Services.Repository
 
         }
 
-        public async Task<GetPostDto> GetPostWithCommentsAsync(int postId)
+        public async Task<GetPostDto> GetPostWithCommentsAsync(int postId,int userId)
         {
             //errorMessage = "";
             //var checkGameId = await _data.Games
@@ -82,6 +82,8 @@ namespace pracaInzynierska_backend.Services.Repository
                     User = _context.Users.Where(x => x.UserId == e.IdUser).Select(x => x.Login).First(),
                     IdGame = e.IdGame,
                     Date = e.Date,
+                    Likes = e.Likes.Count,
+                    IsLiked = e.Likes.Where(like => like.PostId == e.PostId && like.UserId == userId).FirstOrDefault() != null ? true : false,
                     Image = Convert.ToBase64String(System.IO.File
                         .ReadAllBytes(
                         Path.Combine(Environment.CurrentDirectory, e.User.IconPath))),

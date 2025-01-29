@@ -107,11 +107,15 @@ namespace pracaInzynierska_backend.Controllers
         [HttpGet("post")]
         public async Task<IActionResult> GetPostWithComment(int id)
         {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+
             var findGame = await _unitOfWork.Post.GetByIDAsync(id);
             if (findGame is null)
                 return StatusCode(400, "Nie ma takiego posta");
 
-            var posts = await _unitOfWork.Post.GetPostWithCommentsAsync(id);
+            var posts = await _unitOfWork.Post.GetPostWithCommentsAsync(id,user.UserId);
             return StatusCode(200,posts);
         }
         [HttpPost("like")]
@@ -134,10 +138,21 @@ namespace pracaInzynierska_backend.Controllers
             };
             await _unitOfWork.PostLikes.InsertAsync(like);
             await _unitOfWork.SaveAsync();
-
-
-
-
+            return StatusCode(200);
+        }
+        [HttpPost("unlike")]
+        public async Task<IActionResult> UnlikePost(LikeDTO request)
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
+            var user = userQuery.First();
+            var checkLike = (await _unitOfWork.PostLikes.GetAsync(like => like.UserId == request.UserId && like.PostId == request.PostId)).FirstOrDefault();
+            if (checkLike == null)
+            {
+                return StatusCode(400, "Użytkownik nie polubił tego postu");
+            }
+            await _unitOfWork.PostLikes.DeleteAsync(checkLike.Id);
+            await _unitOfWork.SaveAsync();
             return StatusCode(200);
         }
     }

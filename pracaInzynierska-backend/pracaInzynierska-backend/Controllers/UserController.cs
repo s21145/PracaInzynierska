@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using pracaInzynierska_backend.Helpers;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services.IRepository;
@@ -40,25 +41,17 @@ namespace pracaInzynierska_backend.Controllers
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             // hash ?????
-            var CheckPassowrd = await _unitOfWork.User.GetAsync(x => x.Password == request.oldPassword);
-            if(CheckPassowrd.Count() == 0)
+            var user = (await _unitOfWork.User.GetAsync(u => u.Login == userName)).FirstOrDefault();
+            var CheckPassword = PasswordHashHelper.VerifyPassword(request.oldPassword, user.Password);
+            if(!CheckPassword)
             {
                 return StatusCode(400, "Stare hasło jest niepoprawne");
             }
-            var query = await _unitOfWork.User.GetAsync(x => x.Login == userName && x.Password == request.password);
-          
-            var checkPassword = query.FirstOrDefault();
-            if(checkPassword != default)
-            {
-                return StatusCode(400, "Haslo jest obecnie w użyciu");
-            }
-            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
-            var user = userQuery.FirstOrDefault();
             if(user  == default)
             {
                 return StatusCode(500, "Internal error");
             }
-            user.Password = request.password;
+            user.Password = PasswordHashHelper.HashPassword(request.password);
              _unitOfWork.User.Update(user);
             await _unitOfWork.SaveAsync();
 

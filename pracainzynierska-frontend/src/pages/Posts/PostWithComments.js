@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef,useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getPostWithComments,sendComment } from "../../Services/PostService";
+import { getPostWithComments,sendComment,likePost,unlikePost } from "../../Services/PostService";
 import PostComment from "./PostComment";
 import './PostWithComments.css';
+import { UserContext } from "../../Services/UserContext";
 
 const formatDate = (dateString) => {
   const options = {
@@ -18,6 +19,7 @@ const formatDate = (dateString) => {
 }
 
 const PostWithComments = () => {
+  const { user } = useContext(UserContext);
   const { postId } = useParams();
   const [post, setPost] = useState({});
   const [isAddingComment, setIsAddingComment] = useState(false);
@@ -77,6 +79,41 @@ const PostWithComments = () => {
   };
   useEffect(() => {
   }, [post]);
+  const handlePostLike = async (postId) => {
+    try {
+      console.log(user.userId,postId);
+      const response = await likePost(user.userId, postId);
+      if (response.status === 200) {
+        setPost(prevPost => ({
+          ...prevPost,
+          isLiked: true, 
+          likes:post.likes+1
+        }));
+
+      } else {
+          console.error("Failed to like post", response);
+      }
+  } catch (error) {
+      console.error("Error during like process :", error);
+  }
+  }
+  const handlePostUnlike = async (postId) => {
+    try{
+      const response = await unlikePost(user.userId, postId);
+      if (response.status === 200) {
+        setPost(prevPost => ({
+          ...prevPost,
+          isLiked: false, 
+          likes:post.likes-1
+        }));
+
+      } else {
+          console.error("Failed to unlike post", response);
+      }
+    }catch(error){
+      console.error("Error during unlike process :", error);
+    }
+  }
 
   
 
@@ -90,7 +127,9 @@ const PostWithComments = () => {
         </div>
         <div className="post-comment-content">
           <div className="post-header">
-            <div><img className="post-header-image" src={`data:image/png;base64, ${post.image}`}></img></div>
+            <div>  {post.image && (
+    <img className="post-header-image" src={`data:image/png;base64, ${post.image}`} alt="Post" />
+  )}</div>
             <span className="post-header-username">{post.user}</span>
             <span className="post-header-username">{formatDate(post.date)}</span>
           </div>
@@ -99,7 +138,8 @@ const PostWithComments = () => {
             {post.content}
           </div>
           <div className="post-footer">
-            <span className="post-footer-likes">3 <i class="fa-solid fa-heart"></i></span>
+          <span>{post.likes}</span>
+          <span>{post.isLiked ?  <i className="fa-solid fa-heart" onClick={() => handlePostUnlike(post.postId)}></i> : <i className="fa-regular fa-heart"onClick={() => handlePostLike(post.postId)}></i>}</span>
           </div>
         </div>
         <div className="post-comment-new-comment">
@@ -127,8 +167,9 @@ const PostWithComments = () => {
         </div>
         <div className="post-comment-section">
           {Object.keys(post).length !== 0 &&
-            post.comments.map((item) => (
+            post.comments.map((item,index) => (
               <PostComment
+              key = {index}
                 username={item.user}
                 date={item.date}
                 text={item.content}

@@ -3,35 +3,12 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Posts from "../Posts/Posts";
 import "./PostsPage.css";
 import GamesDropdown from "../GamesDropdown/GamesDropdown";
-import { getGames, getPosts,getPostsForMainPage } from "../../Services/PostService";
+import { getGames, getPosts,getPostsForMainPage, unlikePost } from "../../Services/PostService";
 import CreatePost from "../Posts/CreatePost/CreatePost";
 import { likePost } from "../../Services/PostService";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
 
-const mockPosts = [
-  {
-    postId: 1,
-    idUserOwner: 1,
-    user: "User1",
-    title: "Mock Post 1",
-    content: "Random words Random wordsRandom wordsRandom wordsRandom wordsRandom wordsRandom wordsRandom wordsRandom wordsRandom words"
-  },
-  {
-    postId: 2,
-    idUserOwner: 2,
-    user: "User2",
-    title: "Mock Post 2",
-    content: "This is the content of mock post 2."
-  },
-  {
-    postId: 3,
-    idUserOwner: 3,
-    user: "User3",
-    title: "Mock Post 3",
-    content: "This is the content of mock post 3."
-  }
-];
 
 function PostsPage() {
   const [selected, setSelected] = useState({});
@@ -124,6 +101,23 @@ function PostsPage() {
       console.error("Error during like process :", error);
   }
   }
+  const handlePostUnlike = async (postId) => {
+    try{
+      const response = await unlikePost(user.userId, postId);
+      if (response.status === 200) {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.postId === postId ? { ...post, isLiked: false, likes:post.likes-1 } : post
+          )
+        );
+
+      } else {
+          console.error("Failed to unlike post", response);
+      }
+    }catch(error){
+      console.error("Error during unlike process :", error);
+    }
+  }
 
   return (
     <div className="page-container">
@@ -135,7 +129,7 @@ function PostsPage() {
           gameOptions={gameOptions}
         />
       </div>
-      <Posts posts={posts} handlePostLike={handlePostLike} openCreatePostModal={openCreatePostModal} lastPostElementRef={lastPostElementRef} />
+      <Posts posts={posts} handlePostLike={handlePostLike} handlePostUnlike={handlePostUnlike} openCreatePostModal={openCreatePostModal} lastPostElementRef={lastPostElementRef} />
     </div>
   );
 }
