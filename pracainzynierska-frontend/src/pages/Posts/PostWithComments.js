@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getPostWithComments,sendComment } from "../../Services/PostService";
 import PostComment from "./PostComment";
 import './PostWithComments.css';
+import { useLoader } from "../../Services/LoaderContext";
 
 const formatDate = (dateString) => {
   const options = {
@@ -22,15 +23,24 @@ const PostWithComments = () => {
   const [post, setPost] = useState({});
   const [isAddingComment, setIsAddingComment] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const { startLoading, stopLoading} = useLoader();
   const textAreaRef = useRef(null);
 
   const fetchPost = async () => {
-    const response = await getPostWithComments(postId);
-    if (response.status !== 200) {
-      // error
-    } else {
-      setPost(response.data);
-
+    try{
+      startLoading();
+      const response = await getPostWithComments(postId);
+      if (response.status !== 200) {
+        // error
+      } else {
+        setPost(response.data);
+      }
+    }
+    catch(err){
+      
+    }
+    finally{
+      stopLoading();
     }
   };
 
@@ -54,8 +64,6 @@ const PostWithComments = () => {
   };
 
   const handleConfirmClick = async () => {
-
-
     try{
 
       var response = await sendComment(postId,newComment)
@@ -67,13 +75,12 @@ const PostWithComments = () => {
       }
 
     }catch(ex){
-      console.log(ex);
+      //console.log(ex);
     }
  
     setIsAddingComment(false);
 
     setNewComment("");
-
   };
   useEffect(() => {
   }, [post]);

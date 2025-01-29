@@ -55,7 +55,6 @@ export async function LoginAfterReload() {
     setAuthorization();
     return response;
   } catch (error) {
-    console.log(error);
     const response = {
       status: error.response.status,
       data: error.response.data,
@@ -312,6 +311,27 @@ export async function SentFriendRequestResponse(userId,status){
       const response = await http.get(
         config.apiUrl + `/messages/messages`,
         {params:{userLogin:userLogin,page:page}},
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      const response = {
+        status: error.response.status,
+        data: error.response.data,
+      };
+      return response;
+    }
+  }
+  
+  export async function RemoveFriend(userId){
+    try {
+      const response = await http.post(
+        config.apiUrl + `/User/removeFriend?userId=${userId}`,
+         null,
         {
           headers: {
             "Content-type": "application/json",

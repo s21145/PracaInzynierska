@@ -8,6 +8,7 @@ import CreatePost from "../Posts/CreatePost/CreatePost";
 import { likePost } from "../../Services/PostService";
 import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
+import { useLoader } from "../../Services/LoaderContext";
 
 const mockPosts = [
   {
@@ -41,6 +42,7 @@ function PostsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [createPost, setCreatePost] = useState(false);
   const { user } = useContext(UserContext);
+  const { startLoading, stopLoading} = useLoader();
   const observer = useRef();
 
   const lastPostElementRef = useCallback(node => {
@@ -82,33 +84,43 @@ function PostsPage() {
   };
 
   const reloadPosts = async (pageNumber) => {
-    setIsLoading(true);
-    var query = [];
-    if(selected.name){
-      query = await getPosts(selected.name, pageNumber);
-    }else{
-      query = await getPostsForMainPage(page);
+    try{
+      startLoading()
+      setIsLoading(true);
+      var query = [];
+      if(selected.name){
+        query = await getPosts(selected.name, pageNumber);
+      }else{
+        query = await getPostsForMainPage(page);
+      }
+      
+      setIsLoading(false);
+      if (query.status !== 200) {
+        setPosts(null);
+      } else {
+        setPosts(prevPosts => [...prevPosts, ...query.data]);
+      }
     }
-    
-    setIsLoading(false);
-    if (query.status !== 200) {
-      setPosts(null);
-    } else {
-      setPosts(prevPosts => [...prevPosts, ...query.data]);
+    catch(err){
+
+    }
+    finally{
+      stopLoading();
     }
   };
+
   const handleAddPost = async (postToAdd) => {
-    console.log(postToAdd);
     setPosts(prevPosts => [ postToAdd, ...prevPosts]);
   }
+
   useEffect(() => {
     if (page > 0) {
       reloadPosts(page);
     }
   }, [page]);
+
   const handlePostLike = async (postId) => {
     try {
-      console.log(user.userId,postId);
       const response = await likePost(user.userId, postId);
       if (response.status === 200) {
         setPosts((prevPosts) =>
@@ -118,10 +130,10 @@ function PostsPage() {
         );
 
       } else {
-          console.error("Failed to like post", response);
+          //console.error("Failed to like post", response);
       }
   } catch (error) {
-      console.error("Error during like process :", error);
+      //console.error("Error during like process :", error);
   }
   }
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using pracaInzynierska_backend.Hubs;
 using pracaInzynierska_backend.Models;
@@ -36,8 +37,9 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("http://localhost:3000")
-                          .AllowAnyHeader().
-                          AllowAnyMethod()
+                          //policy.WithOrigins("https://effervescent-phoenix-7161e0.netlify.app")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
                           .AllowCredentials();
                       });
 });
@@ -56,16 +58,20 @@ builder.Services.AddAuthentication(opt =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.FromMinutes(3),
+        ClockSkew = TimeSpan.FromMinutes(300),
+        //ValidIssuer = "https://pracainzynierska-backend20250115170601.azurewebsites.net",
         ValidIssuer = "https://localhost:7194",
         ValidAudience = "https://localhost:7194",
+        //ValidAudience = "https://pracainzynierska-backend20250115170601.azurewebsites.net",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))
     };
+
 
     opt.Events = new JwtBearerEvents
     {
         OnTokenValidated = context =>
         {
+
             return Task.CompletedTask;
         },
         OnAuthenticationFailed = context =>
@@ -74,6 +80,7 @@ builder.Services.AddAuthentication(opt =>
             {
                 context.Response.Headers.Add("Token-expired", "true");
             }
+            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
             return Task.CompletedTask;
         }
     };

@@ -27,6 +27,13 @@ import CreatePost from "./pages/Posts/CreatePost/CreatePost";
 import {SentFriendRequestResponse} from './Services/UserService'
 import {GetFriendsList,GetFriendsListRequests,GetMessages} from './Services/UserService'
 import * as signalR from "@microsoft/signalr";
+import { LoaderProvider, useLoader } from "./Services/LoaderContext"
+import Loader from "./components/Loader/Loader";
+
+function LoaderWrapper() {
+  const { isLoading } = useLoader();
+  return <Loader isActive={isLoading} />;
+}
 
 function App() {
   const MINUTE_MS = 3600000;
@@ -55,75 +62,75 @@ function App() {
 
 
   //#region Chat window
-  const [messages, setMessages] = useState([]);
-  const [currentChatRoom,setCurrentChatRoom]= useState("");
+  // const [messages, setMessages] = useState([]);
+  // const [currentChatRoom,setCurrentChatRoom]= useState("");
 
-  const handleSend = async (message) => {
-    if (connection && message && user) {
-      console.log(message);
-      sendMessage(message);
-  }
-    //setMessages([...messages, { sender: 'me', text:message }]);
-  };
-  const sendMessage = async(message) => {
-    try{
+  // const handleSend = async (message) => {
+  //   if (connection && message && user) {
+  //     sendMessage(message);
+  // }
+  // };
+  // const sendMessage = async(message) => {
+  //   try{
       
 
-      await connection.invoke("SendMessage",message,currentChatRoom,user.userId,user.login,currentFriend.id);
-    }catch(e){
-      console.log(e);
-    }
-  }
+  //     await connection.invoke("SendMessage",message,currentChatRoom,user.userId,user.login,currentFriend.id);
+  //   }catch(e){
+  //   }
+  // }
 
 
+  // const [isChatWindowVisible, setChatWindowVisible] = useState(false);
+  // const [currentFriend, setCurrentFriend] = useState('');
+
+  // const handleClose = () => {
+  //   setChatWindowVisible(false);
+  //   setCurrentChatRoom("");
+  //   setConnection(null);
+  // };
+
+  // const handleFriendClick = async (body) => {
+  //   setCurrentFriend(body);
+  //   try{
+  //     var startMessages = await GetMessages(body.login,0);
+  //     if(startMessages.status===200){
+  //       setMessages(startMessages.data);
+  //     }
+
+  //   }catch(e){
+  //   }
+  //   const conn = new signalR.HubConnectionBuilder()
+  //           .configureLogging(signalR.LogLevel.Information)
+  //           .withUrl("https://localhost:7194/chatHub")
+  //           .withAutomaticReconnect()
+  //           .build();
+
+  //    conn.on("JoinSpecificChatRoom",(username,msg) => {
+  //    });
+  //    conn.on("SpecificMessage",(msg) => {
+  //     setMessages(messages => [...messages,
+  //       {senderLogin:msg.sender,
+  //       content:msg.message.content,
+  //       messageDate:msg.message.messageDate
+  //     }]);
+  //    })
+
+  //    var createChatRoom = [user.login,body.login].sort();
+  //    var chatRoom = createChatRoom[0]+createChatRoom[1];
+  //    setCurrentChatRoom(chatRoom);
+  //    await conn.start();
+  //    await conn.invoke("JoinSpecificChatRoom", {username: user.Login,chatRoom: chatRoom});
+  //       setConnection(conn);
+  //     setChatWindowVisible(true);
+  // };
   const [isChatWindowVisible, setChatWindowVisible] = useState(false);
-  const [currentFriend, setCurrentFriend] = useState('');
-
-  const handleClose = () => {
-    setChatWindowVisible(false);
-    setCurrentChatRoom("");
-    setConnection(null);
+  const [currentFriend, setCurrentFriend] = useState(null);
+  
+  const handleFriendClick = (friend) => {
+    setCurrentFriend(friend);
+    setChatWindowVisible(true);
   };
-
-  const handleFriendClick = async (body) => {
-    setCurrentFriend(body);
-    try{
-      var startMessages = await GetMessages(body.login,0);
-      console.log(startMessages);
-      if(startMessages.status===200){
-        setMessages(startMessages.data);
-      }
-
-    }catch(e){
-      console.log(e);
-    }
-    console.log(user);
-    const conn = new signalR.HubConnectionBuilder()
-            .configureLogging(signalR.LogLevel.Information)
-            .withUrl("https://localhost:7194/chatHub")
-            .withAutomaticReconnect()
-            .build();
-
-     conn.on("JoinSpecificChatRoom",(username,msg) => {
-      console.log("msg: ",msg);
-     });
-     conn.on("SpecificMessage",(msg) => {
-      setMessages(messages => [...messages,
-        {senderLogin:msg.sender,
-        content:msg.message.content,
-        messageDate:msg.message.messageDate
-      }]);
-     })
-
-     var createChatRoom = [user.login,body.login].sort();
-     var chatRoom = createChatRoom[0]+createChatRoom[1];
-     setCurrentChatRoom(chatRoom);
-     await conn.start();
-     await conn.invoke("JoinSpecificChatRoom", {username: user.Login,chatRoom: chatRoom});
-        setConnection(conn);
-      setChatWindowVisible(true);
-  };
-
+  
   //#endregion
 
   //#region Friends request window
@@ -214,50 +221,53 @@ function App() {
 
   return (
     <>
-      <UserContext.Provider value={value}>
-        <MessageContext.Provider value={messageValue}>
-          <statModalContext.Provider value={statModalValue}>
-            <Router>
-              <div className="main-layout">
-                <Navbar />
-                <div className="content-with-friends">
-                  <div className="content">
-                    <Routes>
-                      <Route path="/posts" element={<PostsPage />} />
-                      <Route path="/posts/:postId" element={<PostWithComments />} />
-                      <Route path="/FindPlayers" element={<FindPlayers/>} />
-                      <Route path="/" element={<Main/>} />
-                      <Route path="/?logout" element={<Main/>}/>
-                      <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
-                      <Route path="/ProfileMain" element={<ProfileMain />} />
-                      <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
-                      <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
-                    </Routes>
+      <LoaderProvider>
+        <UserContext.Provider value={value}>
+          <MessageContext.Provider value={messageValue}>
+            <statModalContext.Provider value={statModalValue}>
+              <Router>
+                <div className="main-layout">
+                  <LoaderWrapper />
+                  <Navbar />
+                  <div className="content-with-friends">
+                    <div className="content">
+                      <Routes>
+                        <Route path="/posts" element={<PostsPage />} />
+                        <Route path="/posts/:postId" element={<PostWithComments />} />
+                        <Route path="/FindPlayers" element={<FindPlayers/>} />
+                        <Route path="/" element={<Main/>} />
+                        <Route path="/?logout" element={<Main/>}/>
+                        <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+                        <Route path="/ProfileMain" element={<ProfileMain />} />
+                        <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+                        <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+                      </Routes>
+                    </div>
+                    <ProtectedComponent>
+                    <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
+                    </ProtectedComponent>
+                    <ProtectedComponent>
+                    {isChatWindowVisible && currentFriend && (
+                      <ChatWindow
+                        friend={currentFriend}
+                        onClose={() => {
+                          setChatWindowVisible(false);
+                          setCurrentFriend(null);
+                        }}
+                      />
+                    )}
+                    </ProtectedComponent>
                   </div>
                   <ProtectedComponent>
-                  <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
-                  </ProtectedComponent>
-                  <ProtectedComponent>
-                  {isChatWindowVisible && (
-                    <ChatWindow
-                      messages={messages}
-                      onClose={handleClose}
-                      onSend={handleSend}
-                      friendName={currentFriend.login}
-                      friend={currentFriend}
-                    />
-                  )}
+                  {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} 
+                  onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
                   </ProtectedComponent>
                 </div>
-                <ProtectedComponent>
-                {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} 
-                onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
-                </ProtectedComponent>
-              </div>
-            </Router>
-          </statModalContext.Provider>
-        </MessageContext.Provider>
-      </UserContext.Provider>
+              </Router>
+            </statModalContext.Provider>
+          </MessageContext.Provider>
+        </UserContext.Provider>
+      </LoaderProvider>
     </>
   );
 }

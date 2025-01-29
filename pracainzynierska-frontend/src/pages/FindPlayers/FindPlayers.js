@@ -6,6 +6,7 @@ import { getGames } from "../../Services/PostService";
 import { getSimilarUsers, getUsersByNickname } from "../../Services/GamesService";
 import GameModal from "../../pages/ProfileMain/ProfileMainSubPages/GameStatistics/GameModal";
 import { statModalContext } from "../../Services/StatsModalContext";
+import { useLoader } from "../../Services/LoaderContext";
 
 function FindPlayers() {
   const [selected, setSelected] = useState({});
@@ -15,6 +16,7 @@ function FindPlayers() {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { statModal, setStatModal } = useContext(statModalContext);
+  const { startLoading, stopLoading} = useLoader();
 
   const observer = useRef();
 
@@ -54,6 +56,7 @@ function FindPlayers() {
   }, [page]);
 
   const loadUsers = async (pageNumber) => {
+    startLoading();
     setIsLoading(true);
     const query = await getSimilarUsers(selected.gameId, pageNumber);
     setIsLoading(false);
@@ -62,6 +65,7 @@ function FindPlayers() {
     } else {
       setUsers(prevUsers => [...prevUsers, ...query.data]);
     }
+    stopLoading();
   };
 
   const handleSumbit = async (event) => {
@@ -69,12 +73,14 @@ function FindPlayers() {
     if (userNickname === "") {
       return;
     }
+    startLoading();
     const query = await getUsersByNickname(userNickname);
     if (query.status !== 200) {
       setUsers([]);
     } else {
       setUsers(query.data);
     }
+    stopLoading();
   };
 
   const handleInputChange = (event) => {

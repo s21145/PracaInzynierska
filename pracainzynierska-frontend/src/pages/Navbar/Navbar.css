@@ -81,7 +81,11 @@
 
 .profile-area {
   height: 80px;
-  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  max-width: calc(100% - 50px); 
 }
 
 .profile-link {
@@ -94,7 +98,7 @@
 }
 
 .profile-wrap {
-  width: 50%;
+  width: calc(100% - 50px);
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;

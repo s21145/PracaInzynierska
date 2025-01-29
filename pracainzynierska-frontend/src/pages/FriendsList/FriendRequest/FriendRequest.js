@@ -2,7 +2,6 @@ import React from 'react';
 import './FriendRequest.css';
 
 const FriendRequests = ({ count, isExpanded }) => {
-    console.log(count);
     return (
         <div className={`friend-requests-container ${isExpanded ? 'expanded' : 'shrunk'}`}>
             <div className={`friend-requests ${isExpanded ? '' : 'shrunk'}`}>
