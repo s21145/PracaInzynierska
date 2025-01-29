@@ -1,30 +1,15 @@
 import React from "react";
+import { useEffect } from "react";
 import './FriendRequestWindow.css';
 
-import rust from '../../../assets/resources/rust.jpg';
-import dragon from '../../../assets/resources/dragon.png';
 
-
-// const pendingFriendRequests = [
-//     {
-//         name: 'Kejnar',
-//         imageUrl: dragon,
-//     },
-//     {
-//         name: 'BidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidiBidi',
-//         imageUrl: dragon,
-//     },
-//     {
-//         name: 'Drecki',
-//         imageUrl: dragon,
-//     },
-//     {
-//         name: 'Sempu',
-//         imageUrl: dragon,
-//     },
-// ];
 
 const FriendRequestWindow = ({ onClose, pendingFriendRequests, onResponse }) => {
+  useEffect(() => {
+    if (pendingFriendRequests.length === 0) {
+      onClose();
+    }
+  }, [pendingFriendRequests, onClose]);
     return (
       <div className="friend-request-overlay">
         <div className="friend-request-window">

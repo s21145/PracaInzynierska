@@ -440,7 +440,7 @@ namespace pracaInzynierska_backend.Controllers
                 .ReadAllBytes(
                     Path.Combine(Environment.CurrentDirectory, x.User.IconPath))),
                 IsFriend = x.User.Friends.Any(friend => friend.FriendId == user.UserId) ||
-                 x.User.RequestsSent.Any(req => req.ToUserId == user.UserId) ||
+                 x.User.RequestsSent.Any(req => req.ToUserId == user.UserId  ) ||
                  x.User.RequestsReceived.Any(req => req.FromUserId == user.UserId)
             }));
 
@@ -473,6 +473,15 @@ namespace pracaInzynierska_backend.Controllers
                 return StatusCode(403, "Nie ma takiego użytkownika na liście znajomych");
             }
             await _unitOfWork.FriendLists.DeleteAsync(checkIfUserIsFriend.First().Id);
+            var removeFromFriendList = await _unitOfWork.FriendLists.GetAsync(friend => friend.OwnerId == userToRemove.UserId && friend.FriendId == user.UserId);
+            if (checkIfUserIsFriend is null)
+            {
+                return StatusCode(403, "Nie ma takiego użytkownika na liście znajomych");
+            }
+            await _unitOfWork.FriendLists.DeleteAsync(removeFromFriendList.First().Id);
+            var requestRemove = await _unitOfWork.FriendListRequests.GetAsync(friendRequest => ((friendRequest.FromUserId == user.UserId && friendRequest.ToUserId == userToRemove.UserId)
+            || (friendRequest.FromUserId == userToRemove.UserId && friendRequest.ToUserId == user.UserId)) && friendRequest.Status == "Accepted");
+            await _unitOfWork.FriendListRequests.DeleteAsync(requestRemove.First().Id);
             await _unitOfWork.SaveAsync();
             return StatusCode(200);
         }
