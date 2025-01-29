@@ -7,7 +7,7 @@ import FriendRequestWindow from "./FriendRequest/FriendRequestWindow";
 import { UserContext } from "../../Services/UserContext";
 import { GetFriendsList, GetFriendsListRequests, SentFriendRequestResponse } from "../../Services/UserService";
 
-const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
+const FriendsList = React.memo(({ onFriendClick, onFriendRequestClick }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const { user } = useContext(UserContext);
   const [friends, setFriends] = useState([]);
@@ -34,7 +34,7 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
     fetchFriendsAndRequests();
     const intervalId = setInterval(() => {
       fetchFriendsAndRequests();
-    }, 30000);
+    }, 3000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -102,6 +102,6 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
       </div>
     </>
   );
-};
+});
 
 export default FriendsList;

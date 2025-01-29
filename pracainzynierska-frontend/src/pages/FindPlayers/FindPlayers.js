@@ -62,7 +62,13 @@ function FindPlayers() {
   const loadUsers = async (pageNumber) => {
     startLoading();
     setIsLoading(true);
-    const query = await getSimilarUsers(selected.gameId, pageNumber);
+    var query = null;
+    if(selected.gameId){
+     query = await getSimilarUsers(selected.gameId, pageNumber);
+    }else{
+      query =  await getUsersByNickname(userNickname,pageNumber);
+    }
+
     setIsLoading(false);
     if (query.status !== 200) {
       setUsers([]);
@@ -96,7 +102,7 @@ function FindPlayers() {
       return;
     }
     startLoading();
-    const query = await getUsersByNickname(userNickname);
+    const query = await getUsersByNickname(userNickname,0);
     if (query.status !== 200) {
       setUsers([]);
     } else {

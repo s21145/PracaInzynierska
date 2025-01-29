@@ -93,11 +93,11 @@ export async function getSimilarUsers(gameId, page) {
     return response;
   }
 }
-  export async function getUsersByNickname(nickname) {
+  export async function getUsersByNickname(nickname,page) {
     try {
       const response = await http.get(
         config.apiUrl + "/User/searchForFindPlayers",
-        { params: { nickname: nickname } },
+        { params: { username: nickname , page:page} },
         {
           headers: {
             "Content-type": "application/json",

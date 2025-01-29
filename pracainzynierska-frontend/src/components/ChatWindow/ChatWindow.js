@@ -17,7 +17,7 @@ export default function ChatWindow({ friend, onClose }) {
     if (!friend || !user) return;
 
     const conn = new signalR.HubConnectionBuilder()
-      .configureLogging(signalR.LogLevel.Information)
+      .configureLogging(signalR.LogLevel.None)
       .withUrl("https://localhost:7194/chatHub") 
       .withAutomaticReconnect()
       .build();

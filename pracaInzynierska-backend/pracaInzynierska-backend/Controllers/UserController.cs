@@ -585,14 +585,14 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200, requests);
         }
         [HttpGet("searchForFindPlayers")]
-        public async Task<IActionResult> GetUsersForFindPlayers([FromQuery] string nickname)
+        public async Task<IActionResult> GetUsersForFindPlayers([FromQuery] GetUserByNameDTO body)
         {
             var user = await GetUserAsync();
             if (user == null)
             {
                 return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
             }
-            var searchUsers = await _unitOfWork.User.GetUsersWithFriendsAndRequests(nickname,user);
+            var searchUsers = await _unitOfWork.User.GetUsersWithFriendsAndRequests(body.Username,user,body.Page);
             var response = new List<ReturnSimilarUsersDTO>();
             searchUsers.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
             {
