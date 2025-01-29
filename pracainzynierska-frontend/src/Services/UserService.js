@@ -114,6 +114,7 @@ export async function Login(credentials) {
 
 export function Logout() {
   localStorage.removeItem("userData");
+  
 }
 
 export function GetCurrentUser() {

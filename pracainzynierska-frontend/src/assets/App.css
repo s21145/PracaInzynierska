@@ -20,7 +20,18 @@
   font-family: 'PT Sans', sans-serif;
   color: var(--color-bright-font);
 }
+.main-layout {
+  background-color: var(--color-background); 
 
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh; 
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 .home{
   display: flex;
   height: 90vh;
