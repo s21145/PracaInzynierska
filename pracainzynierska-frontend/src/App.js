@@ -60,77 +60,45 @@ function App() {
     [statModal, setStatModal]
   );
 
-
-  //#region Chat window
-  // const [messages, setMessages] = useState([]);
-  // const [currentChatRoom,setCurrentChatRoom]= useState("");
-
-  // const handleSend = async (message) => {
-  //   if (connection && message && user) {
-  //     sendMessage(message);
-  // }
-  // };
-  // const sendMessage = async(message) => {
-  //   try{
-      
-
-  //     await connection.invoke("SendMessage",message,currentChatRoom,user.userId,user.login,currentFriend.id);
-  //   }catch(e){
-  //   }
-  // }
-
-
-  // const [isChatWindowVisible, setChatWindowVisible] = useState(false);
-  // const [currentFriend, setCurrentFriend] = useState('');
-
-  // const handleClose = () => {
-  //   setChatWindowVisible(false);
-  //   setCurrentChatRoom("");
-  //   setConnection(null);
-  // };
-
-  // const handleFriendClick = async (body) => {
-  //   setCurrentFriend(body);
-  //   try{
-  //     var startMessages = await GetMessages(body.login,0);
-  //     if(startMessages.status===200){
-  //       setMessages(startMessages.data);
-  //     }
-
-  //   }catch(e){
-  //   }
-  //   const conn = new signalR.HubConnectionBuilder()
-  //           .configureLogging(signalR.LogLevel.Information)
-  //           .withUrl("https://localhost:7194/chatHub")
-  //           .withAutomaticReconnect()
-  //           .build();
-
-  //    conn.on("JoinSpecificChatRoom",(username,msg) => {
-  //    });
-  //    conn.on("SpecificMessage",(msg) => {
-  //     setMessages(messages => [...messages,
-  //       {senderLogin:msg.sender,
-  //       content:msg.message.content,
-  //       messageDate:msg.message.messageDate
-  //     }]);
-  //    })
-
-  //    var createChatRoom = [user.login,body.login].sort();
-  //    var chatRoom = createChatRoom[0]+createChatRoom[1];
-  //    setCurrentChatRoom(chatRoom);
-  //    await conn.start();
-  //    await conn.invoke("JoinSpecificChatRoom", {username: user.Login,chatRoom: chatRoom});
-  //       setConnection(conn);
-  //     setChatWindowVisible(true);
-  // };
   const [isChatWindowVisible, setChatWindowVisible] = useState(false);
   const [currentFriend, setCurrentFriend] = useState(null);
+  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const handleFriendClick = (friend) => {
     setCurrentFriend(friend);
     setChatWindowVisible(true);
   };
   
+  const fetchFriendsAndRequests = async () => {
+      try {
+        setIsLoading(true);
+        const [friendsResp, requestsResp] = await Promise.all([
+          GetFriendsList(),
+          GetFriendsListRequests(),
+        ]);
+  
+        if (friendsResp.status === 200) {
+          setFriends(friendsResp.data);
+        }
+        if (requestsResp.status === 200) {
+          setFriendRequests(requestsResp.data);
+        }
+      } catch {}
+      finally{
+        setIsLoading(false);
+      }
+    };
+
+  useEffect(() => {
+      fetchFriendsAndRequests();
+      const intervalId = setInterval(() => {
+        fetchFriendsAndRequests();
+      }, 45000);
+      return () => clearInterval(intervalId);
+    }, []);
+
   //#endregion
 
   //#region Friends request window
@@ -219,6 +187,10 @@ function App() {
     return children;
   };
 
+  useEffect(() => {
+    console.log("Friend requests updated:", friendRequests);
+  }, [friendRequests]);
+
   return (
     <>
       <LoaderProvider>
@@ -244,7 +216,7 @@ function App() {
                       </Routes>
                     </div>
                     <ProtectedComponent>
-                    <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
+                    <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} updatedFriends={friends} requests={friendRequests} updateFriends={fetchFriendsAndRequests} />
                     </ProtectedComponent>
                     <ProtectedComponent>
                     {isChatWindowVisible && currentFriend && (
@@ -259,8 +231,13 @@ function App() {
                     </ProtectedComponent>
                   </div>
                   <ProtectedComponent>
-                  {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} 
-                  onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
+                  {showFriendRequestWindow && !isLoading && friendRequests.length > 0 && (
+                      <FriendRequestWindow
+                        pendingFriendRequests={friendRequests}
+                        onClose={closeFriendRequestWindow}
+                        onResponse={handleResponse}
+                      />
+                    )}
                   </ProtectedComponent>
                 </div>
               </Router>

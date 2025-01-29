@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './FriendRequestWindow.css';
 
 import rust from '../../../assets/resources/rust.jpg';

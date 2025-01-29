@@ -236,14 +236,15 @@ function AuthModal({ closeModal, initialMode }) {
                     <label className="auth-form-label">Password</label>
                     <input
                       name="password"
-                      value={register.password}
+                      type="password"
+                      value={register.password || ""}  
                       onChange={(e) => handleInputChange(e, setRegister)}
-                      placeholder="Please enter your password."
+                      placeholder="Enter your password"
                       className={`auth-form-input ${registerErrors.password ? "input-error" : ""}`}
                       style={{
                         "--placeholder-color": registerErrors.password ? "red" : "gray",
                       }}
-                    ></input>
+                    />
                   </div>
                   <button type="submit" id="submit-button" className="auth-form-button">
                     Sign Up
