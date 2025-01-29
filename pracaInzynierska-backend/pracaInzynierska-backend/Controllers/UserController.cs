@@ -43,21 +43,22 @@ namespace pracaInzynierska_backend.Controllers
             // hash ?????
             var user = (await _unitOfWork.User.GetAsync(u => u.Login == userName)).FirstOrDefault();
             var CheckPassword = PasswordHashHelper.VerifyPassword(request.oldPassword, user.Password);
-            if(!CheckPassword)
+            if (!CheckPassword)
             {
                 return StatusCode(400, "Stare hasło jest niepoprawne");
             }
-            if(user  == default)
+            if (user == default)
             {
                 return StatusCode(500, "Internal error");
             }
             user.Password = PasswordHashHelper.HashPassword(request.password);
-             _unitOfWork.User.Update(user);
+            _unitOfWork.User.Update(user);
             await _unitOfWork.SaveAsync();
 
 
             return StatusCode(200, "Hasło zostało zmienione");
         }
+
         [HttpPost("description")]
         public async Task<IActionResult> ChangeDescriptionAsync([FromBody] string Description)
         {

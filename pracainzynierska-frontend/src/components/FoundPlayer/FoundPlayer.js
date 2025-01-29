@@ -20,13 +20,13 @@ const FoundPlayer = forwardRef(({ userLogin, description, birthday, image, userI
     const handleAddFriendClick = async () => {
         try {
             const response = await AddFriendRequest(userId);
-            if (response.status === 200) {
-                console.log("Successfully sent a friend request.");
-            } else {
-                console.error("Failed to send a friend request", response);
-            }
+        //     if (response.status === 200) {
+        //         console.log("Successfully sent a friend request.");
+        //     } else {
+        //         console.error("Failed to send a friend request", response);
+        //     }
         } catch (error) {
-            console.error("Error sending friend request:", error);
+            //console.error("Error sending friend request:", error);
         }
     };
 
@@ -36,10 +36,10 @@ const FoundPlayer = forwardRef(({ userLogin, description, birthday, image, userI
             if (response.status === 200) {
                 setStatModal({ stats: response.data, show: true });
             } else {
-                console.error("Failed to fetch stats", response);
+                //console.error("Failed to fetch stats", response);
             }
         } catch (error) {
-            console.error("Error fetching stats:", error);
+            //console.error("Error fetching stats:", error);
         }
     };
 

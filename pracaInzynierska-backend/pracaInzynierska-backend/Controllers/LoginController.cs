@@ -141,6 +141,8 @@ namespace pracaInzynierska_backend.Controllers
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new JwtSecurityToken(
+                //issuer: "https://pracainzynierska-backend20250115170601.azurewebsites.net",
+                //audience: "https://pracainzynierska-backend20250115170601.azurewebsites.net",
                 issuer: "https://localhost:7194",
                 audience: "https://localhost:7194",
                 claims: userclaim,

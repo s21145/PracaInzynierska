@@ -22,7 +22,6 @@ function CreatePost({ closeModal,AddPost }) {
   
         try{
             var response = await createPost(title,content,user.login,selected.name)
-            console.log(response);
             if(response.status === 200){
                 AddPost(response.data);
             }else{

@@ -1,0 +1,8 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/8b095cb6-83aa-48d5-b051-a35c55feac7c/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/backend-steamconnector",
+    "appService.deploySubpath": ".",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ]
+}
