@@ -43,6 +43,12 @@ function App() {
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
   const [loading, setLoading] = useState(true);
 
+  const [isFriendsListExpanded, setIsFriendsListExpanded] = useState(true);
+
+  const toggleFriendsList = () => {
+    setIsFriendsListExpanded(prevState => !prevState);
+  };
+
   const [message, setMessage] = useState({
     content: "",
     show: false,
@@ -95,12 +101,11 @@ function App() {
 
   useEffect(() => {
       const intervalId = setInterval(() => {
-        if(user){
-          fetchFriendsAndRequests();
-        }
+        fetchFriendsAndRequests();
       }, 45000);
       return () => clearInterval(intervalId);
     }, []);
+    
 
   //#endregion
 
@@ -134,7 +139,7 @@ function App() {
 
   //#endregion
   const handleLogin = async () => {
-      await fetchFriendsAndRequests();
+    await fetchFriendsAndRequests();
   }
   useEffect(() => {
     async function reloadUser() {
@@ -222,13 +227,13 @@ function App() {
 
                       {user ? (
                         <>
-                          <Route path="/posts" element={<PostsPage />} />
+                          <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
                           <Route path="/posts/:postId" element={<PostWithComments />} />
                           <Route path="/FindPlayers" element={<FindPlayers />} />
-                          <Route path="/contact" element={<Contact />} />
+                          <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
                           <Route path="/ProfileMain" element={<ProfileMain />} />
                           <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
-                          <Route path="/CreatePost" element={<CreatePost />} />
+                          <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
                         </>
                       ) : (
                         !loading && <Route path="*" element={<Navigate to="/" />} />
@@ -236,7 +241,15 @@ function App() {
                     </Routes>
                     </div>
                     <ProtectedComponent>
-                    <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} updatedFriends={friends} requests={friendRequests} updateFriends={fetchFriendsAndRequests} />
+                    <FriendsList 
+                      onFriendClick={handleFriendClick} 
+                      onFriendRequestClick={handleFriendRequestClick} 
+                      updatedFriends={friends} 
+                      requests={friendRequests} 
+                      updateFriends={fetchFriendsAndRequests}
+                      isExpanded={isFriendsListExpanded} 
+                      onToggleExpand={toggleFriendsList} 
+                    />
                     </ProtectedComponent>
                     <ProtectedComponent>
                     {isChatWindowVisible && currentFriend && (

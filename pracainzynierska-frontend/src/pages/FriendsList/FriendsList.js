@@ -7,15 +7,15 @@ import FriendRequestWindow from "./FriendRequest/FriendRequestWindow";
 import { UserContext } from "../../Services/UserContext";
 import { GetFriendsList, GetFriendsListRequests, SentFriendRequestResponse } from "../../Services/UserService";
 
-const FriendsList = ({ onFriendClick, onFriendRequestClick, updatedFriends, requests, updateFriends }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+const FriendsList = ({   onFriendClick,  onFriendRequestClick,  updatedFriends,  requests,  updateFriends, isExpanded, onToggleExpand }) => {
+  const [isExpanded2, setIsExpanded] = useState(true);
   const { user } = useContext(UserContext);
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [showFriendRequestWindow, setShowFriendRequestWindow] = useState(false);
 
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded(!isExpanded2);
   };
 
   const handleResponse = async (request, status) => {
@@ -42,11 +42,11 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick, updatedFriends, requ
       <div className={`friends-list ${isExpanded ? "expanded" : "shrunk"}`}>
         <div className="friends-list-header">
           <span>Friends List</span>
-          <button onClick={toggleExpand} className="toggle-button">
+          <button onClick={onToggleExpand} className="toggle-button">
             <i className="fa-solid fa-arrow-right-to-bracket"></i>
           </button>
           {!isExpanded && (
-            <button onClick={toggleExpand} className="expand-button">
+            <button onClick={onToggleExpand} className="expand-button">
               <i className="fa-solid fa-user-group"></i>
             </button>
           )}

@@ -7,10 +7,11 @@ import "./ChatWindow.css";
 
 export default function ChatWindow({ friend, onClose }) {
   const { user } = useContext(UserContext);
-
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [connection, setConnection] = useState(null);
+  const [page, setPage] = useState(0); 
+  const [hasMore, setHasMore] = useState(true); 
 
   const chatBodyRef = useRef(null);
 
@@ -19,7 +20,7 @@ export default function ChatWindow({ friend, onClose }) {
 
     const conn = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.None)
-      .withUrl(config.chatUrl) 
+      .withUrl(config.chatUrl)
       .withAutomaticReconnect()
       .build();
 
@@ -41,11 +42,7 @@ export default function ChatWindow({ friend, onClose }) {
     (async () => {
       try {
         await conn.start();
-
-        const response = await GetMessages(friend.login, 0);
-        if (response.status === 200) {
-          setMessages(response.data);
-        }
+        await fetchMessages(0, true); 
 
         const roomName = [user.login, friend.login].sort().join("");
         await conn.invoke("JoinSpecificChatRoom", {
@@ -63,6 +60,49 @@ export default function ChatWindow({ friend, onClose }) {
       conn.stop();
     };
   }, [friend, user]);
+
+  const fetchMessages = async (pageNumber, initialLoad = false) => {
+    const response = await GetMessages(friend.login, pageNumber);
+    if (response.status === 200) {
+      const newMessages = response.data;
+
+      setMessages((prev) =>
+        initialLoad ? newMessages : [...newMessages, ...prev]
+      );
+      
+      setPage(pageNumber);
+      setHasMore(newMessages.length > 0); 
+    }
+  };
+
+  const fetchOlderMessages = async () => {
+    if (!hasMore) return;
+
+    const prevScrollHeight = chatBodyRef.current.scrollHeight;
+    await fetchMessages(page + 1);
+    
+    setTimeout(() => {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight - prevScrollHeight;
+    }, 100);
+  };
+
+  const handleScroll = () => {
+    if (chatBodyRef.current.scrollTop === 0) {
+      fetchOlderMessages();
+    }
+  };
+
+  useEffect(() => {
+    const chatBody = chatBodyRef.current;
+    if (chatBody) {
+      chatBody.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (chatBody) {
+        chatBody.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [messages]);
 
   const handleSend = async () => {
     if (!connection || !newMessage.trim()) return;
@@ -100,36 +140,31 @@ export default function ChatWindow({ friend, onClose }) {
       handleSend();
     }
   };
+
   const handleClose = () => {
     connection.stop();
     onClose();
-  }
+  };
 
   return (
     <div className="chat-window">
       <div className="chat-header">
         <span>{friend.login}</span>
-        <button className="close-button" onClick={handleClose}>
-          X
-        </button>
+        <button className="close-button" onClick={handleClose}>X</button>
       </div>
 
       <div className="chat-body" ref={chatBodyRef}>
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`chat-bubble ${
-              msg.senderLogin === user.login ? "me" : "friend"
-            }`}
+            className={`chat-bubble ${msg.senderLogin === user.login ? "me" : "friend"}`}
           >
             {msg.senderLogin !== user.login && (
               <div>
                 <div
                   className="friend-chat-image"
                   style={{
-                    backgroundImage: `url(data:image/png;base64,${
-                      user && user.image
-                    })`,
+                    backgroundImage: `url(data:image/png;base64,${user && user.image})`,
                   }}
                 ></div>
               </div>
