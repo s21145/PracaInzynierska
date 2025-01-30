@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import { UserContext } from "../../Services/UserContext";
 import * as signalR from "@microsoft/signalr";
 import { GetMessages } from "../../Services/UserService";
+import config from "../../config.json";
 import "./ChatWindow.css";
 
 export default function ChatWindow({ friend, onClose }) {
@@ -18,7 +19,7 @@ export default function ChatWindow({ friend, onClose }) {
 
     const conn = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.None)
-      .withUrl("https://localhost:7194/chatHub") 
+      .withUrl(config.chatUrl) 
       .withAutomaticReconnect()
       .build();
 
@@ -99,12 +100,16 @@ export default function ChatWindow({ friend, onClose }) {
       handleSend();
     }
   };
+  const handleClose = () => {
+    connection.stop();
+    onClose();
+  }
 
   return (
     <div className="chat-window">
       <div className="chat-header">
         <span>{friend.login}</span>
-        <button className="close-button" onClick={onClose}>
+        <button className="close-button" onClick={handleClose}>
           X
         </button>
       </div>
