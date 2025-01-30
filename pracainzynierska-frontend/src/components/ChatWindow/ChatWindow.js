@@ -1,25 +1,35 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState, useContext, forwardRef, useImperativeHandle } from "react";
 import { UserContext } from "../../Services/UserContext";
 import * as signalR from "@microsoft/signalr";
 import { GetMessages } from "../../Services/UserService";
 import config from "../../config.json";
 import "./ChatWindow.css";
 
-export default function ChatWindow({ friend, onClose }) {
+const ChatWindow = forwardRef(({ friend, onClose }, ref) => {
   const { user } = useContext(UserContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [connection, setConnection] = useState(null);
-  const [page, setPage] = useState(0); 
-  const [hasMore, setHasMore] = useState(true); 
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
   const chatBodyRef = useRef(null);
 
+  useImperativeHandle(ref, () => ({
+    clearConnection: () => {
+      if (connection) {
+        connection.stop();
+      }
+    },
+  }));
+
   useEffect(() => {
     if (!friend || !user) return;
-    if(connection){
+
+    if (connection) {
       connection.stop();
     }
+
     const conn = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.None)
       .withUrl(config.chatUrl)
@@ -30,7 +40,6 @@ export default function ChatWindow({ friend, onClose }) {
       if (msg.sender === user.login) {
         return;
       }
-
       setMessages((prev) => [
         ...prev,
         {
@@ -44,7 +53,7 @@ export default function ChatWindow({ friend, onClose }) {
     (async () => {
       try {
         await conn.start();
-        await fetchMessages(0, true); 
+        await fetchMessages(0, true);
 
         const roomName = [user.login, friend.login].sort().join("");
         await conn.invoke("JoinSpecificChatRoom", {
@@ -71,9 +80,9 @@ export default function ChatWindow({ friend, onClose }) {
       setMessages((prev) =>
         initialLoad ? newMessages : [...newMessages, ...prev]
       );
-      
+
       setPage(pageNumber);
-      setHasMore(newMessages.length > 0); 
+      setHasMore(newMessages.length > 0);
     }
   };
 
@@ -82,7 +91,7 @@ export default function ChatWindow({ friend, onClose }) {
 
     const prevScrollHeight = chatBodyRef.current.scrollHeight;
     await fetchMessages(page + 1);
-    
+
     setTimeout(() => {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight - prevScrollHeight;
     }, 100);
@@ -110,7 +119,6 @@ export default function ChatWindow({ friend, onClose }) {
     if (!connection || !newMessage.trim()) return;
     try {
       const chatRoom = [user.login, friend.login].sort().join("");
-
       await connection.invoke(
         "SendMessage",
         newMessage,
@@ -119,7 +127,6 @@ export default function ChatWindow({ friend, onClose }) {
         user.login,
         friend.id
       );
-
       setMessages((prev) => [
         ...prev,
         { senderLogin: user.login, content: newMessage, messageDate: new Date() },
@@ -130,12 +137,6 @@ export default function ChatWindow({ friend, onClose }) {
     }
   };
 
-  useEffect(() => {
-    if (chatBodyRef.current) {
-      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-    }
-  }, [messages]);
-
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -144,7 +145,9 @@ export default function ChatWindow({ friend, onClose }) {
   };
 
   const handleClose = () => {
-    connection.stop();
+    if (connection) {
+      connection.stop();
+    }
     onClose();
   };
 
@@ -154,7 +157,6 @@ export default function ChatWindow({ friend, onClose }) {
         <span>{friend.login}</span>
         <button className="close-button" onClick={handleClose}>X</button>
       </div>
-
       <div className="chat-body" ref={chatBodyRef}>
         {messages.map((msg, index) => (
           <div
@@ -175,7 +177,6 @@ export default function ChatWindow({ friend, onClose }) {
           </div>
         ))}
       </div>
-
       <div className="chat-input-container">
         <input
           type="text"
@@ -188,4 +189,6 @@ export default function ChatWindow({ friend, onClose }) {
       </div>
     </div>
   );
-}
+});
+
+export default ChatWindow;

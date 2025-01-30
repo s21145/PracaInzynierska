@@ -13,7 +13,7 @@ import { UserContext } from "./Services/UserContext";
 import { MessageContext } from "./Services/MessageContext";
 import { statModalContext } from "./Services/StatsModalContext";
 import ChatWindow from "./components/ChatWindow/ChatWindow";
-import { useMemo } from "react";
+import { useMemo,useRef } from "react";
 import {
   GetCurrentUser,
   LoginAfterReload,
@@ -73,10 +73,17 @@ function App() {
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const chatRef = useRef();
   
   const handleFriendClick = (friend) => {
+    clearChat();
     setCurrentFriend(friend);
     setChatWindowVisible(true);
+  };
+  const clearChat = () => {
+    if (chatRef.current) {
+      chatRef.current.clearConnection(); // Wywołanie funkcji z childa
+    }
   };
   
   const fetchFriendsAndRequests = async () => {
@@ -253,6 +260,7 @@ function App() {
                     </ProtectedComponent>
                     {isChatWindowVisible && currentFriend && (
                       <ChatWindow
+                        ref={chatRef}
                         friend={currentFriend}
                         onClose={() => {
                           setChatWindowVisible(false);
