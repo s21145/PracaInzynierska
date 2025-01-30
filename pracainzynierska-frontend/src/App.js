@@ -61,14 +61,46 @@ function App() {
     () => ({ statModal, setStatModal }),
     [statModal, setStatModal]
   );
+
   const [isChatWindowVisible, setChatWindowVisible] = useState(false);
   const [currentFriend, setCurrentFriend] = useState(null);
+  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const handleFriendClick = (friend) => {
     setCurrentFriend(friend);
     setChatWindowVisible(true);
   };
   
+  const fetchFriendsAndRequests = async () => {
+      try {
+        setIsLoading(true);
+        const [friendsResp, requestsResp] = await Promise.all([
+          GetFriendsList(),
+          GetFriendsListRequests(),
+        ]);
+  
+        if (friendsResp.status === 200) {
+          setFriends(friendsResp.data);
+        }
+        if (requestsResp.status === 200) {
+          setFriendRequests(requestsResp.data);
+        }
+      } catch {}
+      finally{
+        setIsLoading(false);
+      }
+    };
+
+  useEffect(() => {
+      fetchFriendsAndRequests();
+      const intervalId = setInterval(() => {
+        fetchFriendsAndRequests();
+      }, 45000);
+      return () => clearInterval(intervalId);
+    }, []);
+
   //#endregion
 
   //#region Friends request window
@@ -195,7 +227,7 @@ function App() {
                     </Routes>
                     </div>
                     <ProtectedComponent>
-                    <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
+                    <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} updatedFriends={friends} requests={friendRequests} updateFriends={fetchFriendsAndRequests} />
                     </ProtectedComponent>
                     <ProtectedComponent>
                     {isChatWindowVisible && currentFriend && (
@@ -210,8 +242,13 @@ function App() {
                     </ProtectedComponent>
                   </div>
                   <ProtectedComponent>
-                  {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} 
-                  onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
+                  {showFriendRequestWindow && !isLoading && friendRequests.length > 0 && (
+                      <FriendRequestWindow
+                        pendingFriendRequests={friendRequests}
+                        onClose={closeFriendRequestWindow}
+                        onResponse={handleResponse}
+                      />
+                    )}
                   </ProtectedComponent>
                 </div>
               </Router>
