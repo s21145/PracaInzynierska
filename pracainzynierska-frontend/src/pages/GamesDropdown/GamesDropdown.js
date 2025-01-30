@@ -3,7 +3,7 @@ import "./GamesDropdown.css";
 import { useState, useEffect } from "react";
 import { getGames } from "../../Services/PostService";
 
-function GamesDropdown({ selected, setSelected, gameOptions }) {
+function GamesDropdown({ selected, setSelected, gameOptions, resetMaxPage }) {
   const [isActive, setIsActive] = useState(false);
 
   return (
@@ -13,9 +13,9 @@ function GamesDropdown({ selected, setSelected, gameOptions }) {
         <div className="dropdown">
           <div
             className="dropdown-button"
-            onClick={(e) => setIsActive(!isActive)}
+            onClick={() => setIsActive(!isActive)}
           >
-            {selected.name}
+            {selected.name || "Select a game"}
             <i className="fa-solid fa-angle-down" id="arrow-down" />
           </div>
           {isActive && (
@@ -24,7 +24,8 @@ function GamesDropdown({ selected, setSelected, gameOptions }) {
                 <div
                   key={game.gameId}
                   className="dropdown-item"
-                  onClick={(e) => {
+                  onClick={() => {
+                    resetMaxPage();
                     setSelected(game);
                     setIsActive(false);
                   }}

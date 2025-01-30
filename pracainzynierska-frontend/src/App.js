@@ -102,7 +102,7 @@ function App() {
   useEffect(() => {
       const intervalId = setInterval(() => {
         fetchFriendsAndRequests();
-      }, 45000);
+      }, 120000);
       return () => clearInterval(intervalId);
     }, []);
     

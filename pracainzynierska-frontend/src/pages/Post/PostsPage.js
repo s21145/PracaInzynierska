@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { useLoader } from "../../Services/LoaderContext";
 
 
+
 function PostsPage() {
   const [selected, setSelected] = useState({});
   const [gameOptions, setGameOptions] = useState([]);
@@ -41,12 +42,14 @@ function PostsPage() {
     };
     fetchGames();
   }, []);
+
   useEffect(() => {
     const fetchMainPagePosts = async () => {
       await reloadPosts(0);
     };
     fetchMainPagePosts();
   }, []);
+
   useEffect(() => {
     const fetchPosts = async () => {
       if (Object.keys(selected).length === 0) return;
@@ -94,6 +97,7 @@ function PostsPage() {
       stopLoading();
     }
   };
+
 
   const handleAddPost = async (postToAdd) => {
     setPosts(prevPosts => [ postToAdd, ...prevPosts]);
@@ -144,11 +148,12 @@ function PostsPage() {
     <div className="page-container">
       {createPost && <CreatePost closeModal={setCreatePost}  AddPost={handleAddPost}/>}
       <div className="page-container-search-bar">
-        <GamesDropdown
-          selected={selected}
-          setSelected={setSelected}
-          gameOptions={gameOptions}
-        />
+      <GamesDropdown
+        selected={selected}
+        setSelected={setSelected}
+        gameOptions={gameOptions}
+        resetMaxPage={() => setMaxPage(false)}
+      />
       </div>
       <Posts posts={posts} handlePostLike={handlePostLike} handlePostUnlike={handlePostUnlike} openCreatePostModal={openCreatePostModal} lastPostElementRef={lastPostElementRef} />
     </div>
