@@ -16,7 +16,9 @@ export default function ChatWindow({ friend, onClose }) {
 
   useEffect(() => {
     if (!friend || !user) return;
-
+    if(connection){
+      connection.stop();
+    }
     const conn = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.None)
       .withUrl(config.chatUrl) 
