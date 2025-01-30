@@ -43,8 +43,8 @@ namespace pracaInzynierska_backend.Services.Repository
                .Include(user => user.RequestsReceived)
                .Include(user => user.RequestsSent)
                 .OrderBy(user => user.Login)
-                .Skip(page * 5)
-                .Take(5)
+                .Skip(page * 10)
+                .Take(10)
                .ToListAsync();
             return result;
         }

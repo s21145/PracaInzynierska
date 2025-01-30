@@ -21,6 +21,7 @@ function PostsPage() {
   const { user } = useContext(UserContext);
   const { startLoading, stopLoading} = useLoader();
   const observer = useRef();
+  const [maxPage, setMaxPage] = useState(false);
 
   const lastPostElementRef = useCallback(node => {
     if (isLoading) return;
@@ -62,6 +63,8 @@ function PostsPage() {
 
   const reloadPosts = async (pageNumber) => {
     try{
+      if(maxPage)
+        return;
       startLoading()
       setIsLoading(true);
       var query = [];
@@ -75,6 +78,12 @@ function PostsPage() {
       if (query.status !== 200) {
         setPosts(null);
       } else {
+        if(query.data.length === 0){
+          setMaxPage(true);
+          stopLoading();
+          return;
+        }
+
         setPosts(prevPosts => [...prevPosts, ...query.data]);
       }
     }

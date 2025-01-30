@@ -21,8 +21,10 @@ function FindPlayers() {
   const { statModal, setStatModal } = useContext(statModalContext);
   const { startLoading, stopLoading } = useLoader();
   const { message, setMessage } = useContext(MessageContext);
+  const [maxPage, setMaxPage] = useState(false);
 
   const observer = useRef();
+  
 
   const lastUserElementRef = useCallback(node => {
     if (isLoading) return;
@@ -60,6 +62,9 @@ function FindPlayers() {
   }, [page]);
 
   const loadUsers = async (pageNumber) => {
+    if(maxPage)
+      return;
+
     startLoading();
     setIsLoading(true);
     var query = null;
@@ -68,11 +73,17 @@ function FindPlayers() {
     }else{
       query =  await getUsersByNickname(userNickname,pageNumber);
     }
-
     setIsLoading(false);
+    
     if (query.status !== 200) {
       setUsers([]);
     } else {
+      if(query.data.length === 0)
+      {
+        setMaxPage(true);
+        stopLoading();
+        return;
+      }
       setUsers(prevUsers => [...prevUsers, ...query.data]);
     }
     stopLoading();
