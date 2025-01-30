@@ -227,7 +227,7 @@ function App() {
 
                       {user ? (
                         <>
-                          <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
+                          <Route path="/posts" element={<PostsPage />} />
                           <Route path="/posts/:postId" element={<PostWithComments />} />
                           <Route path="/FindPlayers" element={<FindPlayers />} />
                           <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
@@ -251,7 +251,6 @@ function App() {
                       onToggleExpand={toggleFriendsList} 
                     />
                     </ProtectedComponent>
-                    <ProtectedComponent>
                     {isChatWindowVisible && currentFriend && (
                       <ChatWindow
                         friend={currentFriend}
@@ -261,7 +260,6 @@ function App() {
                         }}
                       />
                     )}
-                    </ProtectedComponent>
                   </div>
                   <ProtectedComponent>
                   {showFriendRequestWindow && !isLoading && friendRequests.length > 0 && (
