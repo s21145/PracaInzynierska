@@ -78,6 +78,6 @@ const FriendsList = ({ onFriendClick, onFriendRequestClick, updatedFriends, requ
       </div>
     </>
   );
-});
+};
 
 export default FriendsList;

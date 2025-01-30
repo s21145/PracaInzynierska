@@ -7,14 +7,13 @@ import MessageModal from "../../components/MessageModal";
 import "./AuthModal.css";
 
 
-function AuthModal({ closeModal, initialMode }) {
+function AuthModal({ closeModal, initialMode,onLogin }) {
   const { user, setUser } = useContext(UserContext);
   const { message, setMessage } = useContext(MessageContext);
   const { startLoading, stopLoading} = useLoader();
   const [isLoginModal, setIsLoginModal] = useState(initialMode === "login");
   const [loginErrors, setLoginErrors] = useState({});
   const [registerErrors, setRegisterErrors] = useState({});
-
   const [login, setLogin] = useState({
     password: "",
     login: "",
@@ -73,7 +72,9 @@ function AuthModal({ closeModal, initialMode }) {
           requests: requests.data,
           userId:response.data.userId
         });
+
         closeModal(false);
+        onLogin();
       }
     }
     catch(err){
@@ -81,6 +82,7 @@ function AuthModal({ closeModal, initialMode }) {
     }
     finally{
       stopLoading();
+      onLogin();
     }
     
   };

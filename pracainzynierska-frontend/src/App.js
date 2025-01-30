@@ -94,7 +94,6 @@ function App() {
     };
 
   useEffect(() => {
-      fetchFriendsAndRequests();
       const intervalId = setInterval(() => {
         fetchFriendsAndRequests();
       }, 45000);
@@ -132,7 +131,9 @@ function App() {
   }
 
   //#endregion
-
+  const handleLogin = async () => {
+    await fetchFriendsAndRequests();
+  }
   useEffect(() => {
     async function reloadUser() {
       if (user === null && GetCurrentUser() !== null) {
@@ -155,7 +156,13 @@ function App() {
             requests: requests.data,
             userId: response.data.userId
           });
+          if (friends.status === 200) {
+            setFriends(friends.data);
+          }
+          if (requests.status === 200) {
+            setFriendRequests(requests.data);
           setLoading(false);
+          }
         }
       } else {
         setLoading(false);
@@ -204,11 +211,11 @@ function App() {
               <Router>
                 <div className="main-layout">
                   <LoaderWrapper />
-                  <Navbar />
+                  <Navbar onLogin={handleLogin} />
                   <div className="content-with-friends">
                     <div className="content">
                     <Routes>
-                      <Route path="/" element={<Main />} />
+                      <Route path="/" element={<Main handleLogin={handleLogin} />} />
                       <Route path="/?logout" element={<Main />} />
 
                       {user ? (
