@@ -1,5 +1,5 @@
 import "./assets/App.css";
-import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./pages/Navbar/Navbar";
 import PostsPage from "./pages/Post/PostsPage";
 import Footer from "./pages/Footer/Footer";
@@ -13,26 +13,41 @@ import { UserContext } from "./Services/UserContext";
 import { MessageContext } from "./Services/MessageContext";
 import { statModalContext } from "./Services/StatsModalContext";
 import ChatWindow from "./components/ChatWindow/ChatWindow";
-import { useMemo } from "react";
+import { useMemo,useRef } from "react";
 import {
   GetCurrentUser,
   LoginAfterReload,
   Logout,
   RefreshToken,
 } from "./Services/UserService";
+import config from "./config.json";
 
 import FriendsList from "./pages/FriendsList/FriendsList";
 import FriendRequestWindow from "./pages/FriendsList/FriendRequest/FriendRequestWindow";
 import CreatePost from "./pages/Posts/CreatePost/CreatePost";
-import {SentFriendRequestResponse} from './Services/UserService'
-import {GetFriendsList,GetFriendsListRequests,GetMessages} from './Services/UserService'
+import { SentFriendRequestResponse } from './Services/UserService'
+import { GetFriendsList, GetFriendsListRequests, GetMessages } from './Services/UserService'
 import * as signalR from "@microsoft/signalr";
+import { LoaderProvider, useLoader } from "./Services/LoaderContext"
+import Loader from "./components/Loader/Loader";
+
+function LoaderWrapper() {
+  const { isLoading } = useLoader();
+  return <Loader isActive={isLoading} />;
+}
 
 function App() {
   const MINUTE_MS = 3600000;
   const [user, setUser] = useState(null);
   const [connection, setConnection] = useState(null);
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const [loading, setLoading] = useState(true);
+
+  const [isFriendsListExpanded, setIsFriendsListExpanded] = useState(true);
+
+  const toggleFriendsList = () => {
+    setIsFriendsListExpanded(prevState => !prevState);
+  };
 
   const [message, setMessage] = useState({
     content: "",
@@ -53,76 +68,51 @@ function App() {
     [statModal, setStatModal]
   );
 
-
-  //#region Chat window
-  const [messages, setMessages] = useState([]);
-  const [currentChatRoom,setCurrentChatRoom]= useState("");
-
-  const handleSend = async (message) => {
-    if (connection && message && user) {
-      console.log(message);
-      sendMessage(message);
-  }
-    //setMessages([...messages, { sender: 'me', text:message }]);
-  };
-  const sendMessage = async(message) => {
-    try{
-      
-
-      await connection.invoke("SendMessage",message,currentChatRoom,user.userId,user.login,currentFriend.id);
-    }catch(e){
-      console.log(e);
-    }
-  }
-
-
   const [isChatWindowVisible, setChatWindowVisible] = useState(false);
-  const [currentFriend, setCurrentFriend] = useState('');
-
-  const handleClose = () => {
-    setChatWindowVisible(false);
-    setCurrentChatRoom("");
-    setConnection(null);
+  const [currentFriend, setCurrentFriend] = useState(null);
+  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const chatRef = useRef();
+  
+  const handleFriendClick = (friend) => {
+    clearChat();
+    setCurrentFriend(friend);
+    setChatWindowVisible(true);
   };
-
-  const handleFriendClick = async (body) => {
-    setCurrentFriend(body);
-    try{
-      var startMessages = await GetMessages(body.login,0);
-      console.log(startMessages);
-      if(startMessages.status===200){
-        setMessages(startMessages.data);
-      }
-
-    }catch(e){
-      console.log(e);
+  const clearChat = () => {
+    if (chatRef.current) {
+      chatRef.current.clearConnection(); // Wywołanie funkcji z childa
     }
-    console.log(user);
-    const conn = new signalR.HubConnectionBuilder()
-            .configureLogging(signalR.LogLevel.Information)
-            .withUrl("https://localhost:7194/chatHub")
-            .withAutomaticReconnect()
-            .build();
-
-     conn.on("JoinSpecificChatRoom",(username,msg) => {
-      console.log("msg: ",msg);
-     });
-     conn.on("SpecificMessage",(msg) => {
-      setMessages(messages => [...messages,
-        {senderLogin:msg.sender,
-        content:msg.message.content,
-        messageDate:msg.message.messageDate
-      }]);
-     })
-
-     var createChatRoom = [user.login,body.login].sort();
-     var chatRoom = createChatRoom[0]+createChatRoom[1];
-     setCurrentChatRoom(chatRoom);
-     await conn.start();
-     await conn.invoke("JoinSpecificChatRoom", {username: user.Login,chatRoom: chatRoom});
-        setConnection(conn);
-      setChatWindowVisible(true);
   };
+  
+  const fetchFriendsAndRequests = async () => {
+      try {
+        setIsLoading(true);
+        const [friendsResp, requestsResp] = await Promise.all([
+          GetFriendsList(),
+          GetFriendsListRequests(),
+        ]);
+  
+        if (friendsResp.status === 200) {
+          setFriends(friendsResp.data);
+        }
+        if (requestsResp.status === 200) {
+          setFriendRequests(requestsResp.data);
+        }
+      } catch {}
+      finally{
+        setIsLoading(false);
+      }
+    };
+
+  useEffect(() => {
+      const intervalId = setInterval(() => {
+        fetchFriendsAndRequests();
+      }, 120000);
+      return () => clearInterval(intervalId);
+    }, []);
+    
 
   //#endregion
 
@@ -133,38 +123,42 @@ function App() {
   }
 
   const closeFriendRequestWindow = () => {
-      setShowFriendRequestWindow(false);
+    setShowFriendRequestWindow(false);
   }
-  const handleResponse = async (request,status) => {
+  const handleResponse = async (request, status) => {
     try {
-        var response = await SentFriendRequestResponse(request.userId,status);
-        if(response.status === 200){
-          const friends = await GetFriendsList();
-          const updatedRequests = user.requests.filter(req => req.userId !== request.userId);
-            setUser(prevUser => ({
+      var response = await SentFriendRequestResponse(request.userId, status);
+      if (response.status === 200) {
+        const friends = await GetFriendsList();
+        const updatedRequests = user.requests.filter(req => req.userId !== request.userId);
+        setUser(prevUser => ({
           ...prevUser,
-            friends:friends.data,
+          friends: friends.data,
           requests: updatedRequests
-         }));
-        }else{
-          //error
-        }
-    }catch(ex){
+        }));
+      } else {
+        //error
+      }
+    } catch (ex) {
 
     }
-}
+  }
 
   //#endregion
-
+  const handleLogin = async () => {
+    await fetchFriendsAndRequests();
+  }
   useEffect(() => {
     async function reloadUser() {
       if (user === null && GetCurrentUser() !== null) {
+        setLoading(true);
         const response = await LoginAfterReload(setUser);
-        const friends = await GetFriendsList();
-        const requests = await GetFriendsListRequests();
+
         if (response.status !== 200) {
           Logout();
         } else {
+          const friends = await GetFriendsList();
+          const requests = await GetFriendsListRequests();
           const age = new Date(response.data.age);
           setUser({
             login: response.data.login,
@@ -172,11 +166,20 @@ function App() {
             steamId: response.data.steamId,
             age: age,
             description: response.data.description,
-            friends:friends.data,
-            requests:requests.data,
-            userId:response.data.userId
+            friends: friends.data,
+            requests: requests.data,
+            userId: response.data.userId
           });
+          if (friends.status === 200) {
+            setFriends(friends.data);
+          }
+          if (requests.status === 200) {
+            setFriendRequests(requests.data);
+          setLoading(false);
+          }
         }
+      } else {
+        setLoading(false);
       }
     }
     reloadUser();
@@ -195,69 +198,92 @@ function App() {
 
     return () => clearInterval(interval);
   }, [user]);
+
+
   const ProtectedComponent = ({ children }) => {
-  
+
     if (!user) {
       return <></>;
     }
-  
+
     return children;
   };
-  const ProtectedRoute  = ({ children }) => {
-  
+  const ProtectedRoute = ({ children }) => {
+
     if (!user) {
       return <Navigate to="/" replace />;
     }
-  
+
     return children;
   };
-
   return (
     <>
-      <UserContext.Provider value={value}>
-        <MessageContext.Provider value={messageValue}>
-          <statModalContext.Provider value={statModalValue}>
-            <Router>
-              <div className="main-layout">
-                <Navbar />
-                <div className="content-with-friends">
-                  <div className="content">
+      <LoaderProvider>
+        <UserContext.Provider value={value}>
+          <MessageContext.Provider value={messageValue}>
+            <statModalContext.Provider value={statModalValue}>
+              <Router>
+                <div className="main-layout">
+                  <LoaderWrapper />
+                  <Navbar onLogin={handleLogin} />
+                  <div className="content-with-friends">
+                    <div className="content">
                     <Routes>
-                      <Route path="/posts" element={<PostsPage />} />
-                      <Route path="/posts/:postId" element={<PostWithComments />} />
-                      <Route path="/FindPlayers" element={<FindPlayers/>} />
-                      <Route path="/" element={<Main/>} />
-                      <Route path="/?logout" element={<Main/>}/>
-                      <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
-                      <Route path="/ProfileMain" element={<ProfileMain />} />
-                      <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
-                      <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+                      <Route path="/" element={<Main handleLogin={handleLogin} />} />
+                      <Route path="/?logout" element={<Main />} />
+
+                      {user ? (
+                        <>
+                          <Route path="/posts" element={<PostsPage />} />
+                          <Route path="/posts/:postId" element={<PostWithComments />} />
+                          <Route path="/FindPlayers" element={<FindPlayers />} />
+                          <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+                          <Route path="/ProfileMain" element={<ProfileMain />} />
+                          <Route path="/ProfileMain?steamId" element={<ProfileMain />} />
+                          <Route path="/CreatePost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+                        </>
+                      ) : (
+                        !loading && <Route path="*" element={<Navigate to="/" />} />
+                      )}
                     </Routes>
+                    </div>
+                    <ProtectedComponent>
+                    <FriendsList 
+                      onFriendClick={handleFriendClick} 
+                      onFriendRequestClick={handleFriendRequestClick} 
+                      updatedFriends={friends} 
+                      requests={friendRequests} 
+                      updateFriends={fetchFriendsAndRequests}
+                      isExpanded={isFriendsListExpanded} 
+                      onToggleExpand={toggleFriendsList} 
+                    />
+                    </ProtectedComponent>
+                    {isChatWindowVisible && currentFriend && (
+                      <ChatWindow
+                        ref={chatRef}
+                        friend={currentFriend}
+                        onClose={() => {
+                          setChatWindowVisible(false);
+                          setCurrentFriend(null);
+                        }}
+                      />
+                    )}
                   </div>
                   <ProtectedComponent>
-                  <FriendsList onFriendClick={handleFriendClick} onFriendRequestClick={handleFriendRequestClick} />
-                  </ProtectedComponent>
-                  <ProtectedComponent>
-                  {isChatWindowVisible && (
-                    <ChatWindow
-                      messages={messages}
-                      onClose={handleClose}
-                      onSend={handleSend}
-                      friendName={currentFriend.login}
-                      friend={currentFriend}
-                    />
-                  )}
+                  {showFriendRequestWindow && !isLoading && friendRequests.length > 0 && (
+                      <FriendRequestWindow
+                        pendingFriendRequests={friendRequests}
+                        onClose={closeFriendRequestWindow}
+                        onResponse={handleResponse}
+                      />
+                    )}
                   </ProtectedComponent>
                 </div>
-                <ProtectedComponent>
-                {showFriendRequestWindow  && <FriendRequestWindow pendingFriendRequests={user.requests} 
-                onClose={closeFriendRequestWindow} onResponse={handleResponse} />}
-                </ProtectedComponent>
-              </div>
-            </Router>
-          </statModalContext.Provider>
-        </MessageContext.Provider>
-      </UserContext.Provider>
+              </Router>
+            </statModalContext.Provider>
+          </MessageContext.Provider>
+        </UserContext.Provider>
+      </LoaderProvider>
     </>
   );
 }

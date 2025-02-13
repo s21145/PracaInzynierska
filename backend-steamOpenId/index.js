@@ -4,8 +4,8 @@ const app = express();
 const SteamAuth = require("node-steam-openid");
 
 const steam = new SteamAuth({
-  realm: "http://localhost:7195",
-  returnUrl: "http://localhost:7195/auth/steam/authenticate",
+  realm: "https://backend-steamconnector2-czhshkb5d5ehbtfg.polandcentral-01.azurewebsites.net",
+  returnUrl: "https://backend-steamconnector2-czhshkb5d5ehbtfg.polandcentral-01.azurewebsites.net/auth/steam/authenticate",
   apiKey: "D65CABD4B8E9A882FC8D5651E8787645",
 });
 
@@ -24,7 +24,7 @@ const corsOpts = {
 app.use(cors(corsOpts));
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "https://effervescent-phoenix-7161e0.netlify.app");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
@@ -44,14 +44,14 @@ app.get("/auth/steam/authenticate", async (req, res) => {
     const user = await steam.authenticate(req);
     console.log(user);
     res.redirect(
-      `http://localhost:3000/ProfileMain?tab=settings&steamId=${user.steamid}`
+      `https://effervescent-phoenix-7161e0.netlify.app/ProfileMain?tab=settings&steamId=${user.steamid}`
     );
   } catch (error) {
     console.error("Error during Steam authentication:", error);
     res.status(500).send("Error during Steam authentication");
   }
 });
-
-app.listen(7195, () => {
-  console.log("SteamAPI openId server is running on port 7195");
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("SteamAPI openId server is running on port " + port);
 });

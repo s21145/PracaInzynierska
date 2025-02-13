@@ -12,7 +12,7 @@ const MessageModal = () => {
     <div className={styles.modalBackground}>
       <div className={styles.modalContainer}>
         <div className={styles.modalHeader}>
-          <div className={styles.modalTitle}>Komunikat</div>
+          <div className={styles.modalTitle}>Notice</div>
           <button className={styles.modalCloseMark} onClick={handleCloseModal}>
             <i className="fa-solid fa-xmark" />
           </button>

@@ -6,6 +6,10 @@ import { getGames } from "../../Services/PostService";
 import { getSimilarUsers, getUsersByNickname } from "../../Services/GamesService";
 import GameModal from "../../pages/ProfileMain/ProfileMainSubPages/GameStatistics/GameModal";
 import { statModalContext } from "../../Services/StatsModalContext";
+import { useLoader } from "../../Services/LoaderContext";
+import { MessageContext } from "../../Services/MessageContext";
+import { AddFriendRequest } from "../../Services/UserService";
+import MessageModal from "../../components/MessageModal";
 
 function FindPlayers() {
   const [selected, setSelected] = useState({});
@@ -15,8 +19,12 @@ function FindPlayers() {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { statModal, setStatModal } = useContext(statModalContext);
+  const { startLoading, stopLoading } = useLoader();
+  const { message, setMessage } = useContext(MessageContext);
+  const [maxPage, setMaxPage] = useState(false);
 
   const observer = useRef();
+  
 
   const lastUserElementRef = useCallback(node => {
     if (isLoading) return;
@@ -54,13 +62,48 @@ function FindPlayers() {
   }, [page]);
 
   const loadUsers = async (pageNumber) => {
+    if(maxPage)
+      return;
+
+    startLoading();
     setIsLoading(true);
-    const query = await getSimilarUsers(selected.gameId, pageNumber);
+    var query = null;
+    if(selected.gameId){
+     query = await getSimilarUsers(selected.gameId, pageNumber);
+    }else{
+      query =  await getUsersByNickname(userNickname,pageNumber);
+    }
     setIsLoading(false);
+    
     if (query.status !== 200) {
       setUsers([]);
     } else {
+      if(query.data.length === 0)
+      {
+        setMaxPage(true);
+        stopLoading();
+        return;
+      }
       setUsers(prevUsers => [...prevUsers, ...query.data]);
+    }
+    stopLoading();
+  };
+
+  const handleAddFriendClick = async (userId) => {
+    try {
+      const response = await AddFriendRequest(userId);
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
+          user.userId === userId ? { ...user, isFriend: true } : user
+        )
+      );
+      setMessage({
+        content: "A friend request has been sent",
+        show: true,
+      });
+
+    } catch (error) {
+      //console.error("Error sending friend request:", error);
     }
   };
 
@@ -69,12 +112,14 @@ function FindPlayers() {
     if (userNickname === "") {
       return;
     }
-    const query = await getUsersByNickname(userNickname);
+    startLoading();
+    const query = await getUsersByNickname(userNickname,0);
     if (query.status !== 200) {
       setUsers([]);
     } else {
       setUsers(query.data);
     }
+    stopLoading();
   };
 
   const handleInputChange = (event) => {
@@ -82,52 +127,56 @@ function FindPlayers() {
   };
 
   return (
-    <div className="find-players">
-      {statModal && statModal.show && <GameModal />}
-      <h1>Who are you looking for?</h1>
-      <div className="find-players-wrapper">
-        <div className="find-players-form">
-          <form onSubmit={handleSumbit}>
-            <div className="form-container">
-              <div>
-                <input
-                  type="text"
-                  className="find-players-input"
-                  placeholder="Nickname of player"
-                  value={userNickname}
-                  onChange={handleInputChange}
-                />
+    <>
+      {message && message.show && <MessageModal />}
+      <div className="find-players">
+        {statModal && statModal.show && <GameModal />}
+        <h1>Who are you looking for?</h1>
+        <div className="find-players-wrapper">
+          <div className="find-players-form">
+            <form onSubmit={handleSumbit}>
+              <div className="form-container">
+                <div>
+                  <input
+                    type="text"
+                    className="find-players-input"
+                    placeholder="Nickname of player"
+                    value={userNickname}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <GamesDropdownFindPlayers
+                    selected={selected}
+                    setSelected={setSelected}
+                    gameOptions={gameOptions}
+                  />
+                </div>
+                <div>
+                  <button type="submit" className="find-players-search-button">Search</button>
+                </div>
               </div>
-              <div>
-                <GamesDropdownFindPlayers
-                  selected={selected}
-                  setSelected={setSelected}
-                  gameOptions={gameOptions}
-                />
-              </div>
-              <div>
-                <button type="submit" className="find-players-search-button">Search</button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div className="found-players">
-          {users.map((u, index) => (
-            <FoundPlayer
-              userLogin={u.userLogin}
-              key={u.userLogin}
-              userId={u.userId}
-              description={u.description}
-              birthday={u.birthday}
-              image={u.image}
-              isFriend={u.isFriend}
-              selectedGame={selected.gameId}
-              ref={index === users.length - 1 ? lastUserElementRef : null}
-            />
-          ))}
+            </form>
+          </div>
+          <div className="found-players">
+            {users.map((u, index) => (
+              <FoundPlayer
+                handleAddFriendClick={handleAddFriendClick}
+                userLogin={u.userLogin}
+                key={u.userLogin}
+                userId={u.userId}
+                description={u.description}
+                birthday={u.birthday}
+                image={u.image}
+                isFriend={u.isFriend}
+                selectedGame={selected.gameId}
+                ref={index === users.length - 1 ? lastUserElementRef : null}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

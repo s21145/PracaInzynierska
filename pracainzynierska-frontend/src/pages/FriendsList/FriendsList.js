@@ -1,91 +1,83 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import Friend from './Friend/Friend';
-import './FriendsList.css';
-import FriendRequests from './FriendRequest/FriendRequest';
-import FriendRequestWindow from './FriendRequest/FriendRequestWindow';
-import dragon from '../../assets/resources/rust.jpg';
+import Friend from "./Friend/Friend";
+import "./FriendsList.css";
+import FriendRequests from "./FriendRequest/FriendRequest";
+import FriendRequestWindow from "./FriendRequest/FriendRequestWindow";
 import { UserContext } from "../../Services/UserContext";
-import {GetFriendsList,GetFriendsListRequests} from '../../Services/UserService'
+import { GetFriendsList, GetFriendsListRequests, SentFriendRequestResponse } from "../../Services/UserService";
 
-const friends = [
-    {
-        name: 'Bartek Konarski',
-        imageUrl: dragon,
-    },
-    {
-        name: 'Robert Puszczynski',
-        imageUrl: dragon,
-    },
-    {
-        name: 'Mateusz Grudkowski',
-        imageUrl: dragon,
-    },
-];
+const FriendsList = ({   onFriendClick,  onFriendRequestClick,  updatedFriends,  requests,  updateFriends, isExpanded, onToggleExpand }) => {
+  const [isExpanded2, setIsExpanded] = useState(true);
+  const { user } = useContext(UserContext);
+  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [showFriendRequestWindow, setShowFriendRequestWindow] = useState(false);
 
-const pendingFriendRequests = 999;
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded2);
+  };
 
-const FriendsList = ({ onFriendClick, onFriendRequestClick }) => {
-    const [isExpanded, setIsExpanded] = useState(true);
-    const { user } = useContext(UserContext);
-    const toggleExpand = () => {
-        setIsExpanded(!isExpanded);
-    };
-    const [friends, setFriends] = useState([]);
-    const [friendRequests, setFriendRequests] = useState([]);
-    useEffect(() => {
-        const fetchFriendsList = async () => {
-          const list = await GetFriendsList();
-          const requests = await GetFriendsListRequests();
+  const handleResponse = async (request, status) => {
+    const response = await SentFriendRequestResponse(request.userId, status);
+    if (response.status === 200) {
+      updateFriends();
+    }
+  };
 
-          if(list.status === 200){
-            setFriends(list.data);
-          }else{
-            //error
-          }
-          if(requests.status === 200){
-            setFriendRequests(requests.data);
-          }{
-            //error
-          }
+  const handleFriendRemoved = () => {
+    updateFriends();
+  };
 
-        };
-        fetchFriendsList();
-      }, [user]);
-    
-    return (
-        <div className={`friends-list ${isExpanded ? 'expanded' : 'shrunk'}`}>
-            <div className="friends-list-header">
-                <span>Friends List</span>
-                <button onClick={toggleExpand} className="toggle-button">
-                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
-                </button>
-                {!isExpanded && (
-                    <button onClick={toggleExpand} className="expand-button">
-                        <i className="fa-solid fa-user-group"></i>
-                    </button>
-                )}
-            </div>
-            <hr />
-            <div className="friends-list-friend-requests" onClick={ onFriendRequestClick}>
-            {user && user.requests && user.requests.length > 0 && (
-                    <FriendRequests count={user.requests.length} isExpanded={isExpanded} />
-                )}
-            </div>
-            <div className="friends-container">
-                { user && user.friends && user.friends.map((friend) => (
-                    <Friend
-                        key={friend.userId}
-                        name={friend.userLogin}
-                        imageUrl={friend.iconPath}
-                        isExpanded={isExpanded}
-                        userId={friend.userId}
-                        onClick={onFriendClick}
-                    />
-                ))}
-            </div>
+  return (
+    <>
+      {showFriendRequestWindow && (
+        <FriendRequestWindow
+          onClose={() => setShowFriendRequestWindow(false)}
+          pendingFriendRequests={requests}
+          onResponse={handleResponse}
+        />
+      )}
+
+      <div className={`friends-list ${isExpanded ? "expanded" : "shrunk"}`}>
+        <div className="friends-list-header">
+          <span>Friends List</span>
+          <button onClick={onToggleExpand} className="toggle-button">
+            <i className="fa-solid fa-arrow-right-to-bracket"></i>
+          </button>
+          {!isExpanded && (
+            <button onClick={onToggleExpand} className="expand-button">
+              <i className="fa-solid fa-user-group"></i>
+            </button>
+          )}
         </div>
-    );
+        <hr />
+
+        <div
+          className="friends-list-friend-requests"
+          onClick={() => setShowFriendRequestWindow(true)}
+        >
+          {requests && requests.length > 0 && (
+            <FriendRequests count={requests.length} isExpanded={isExpanded} />
+          )}
+        </div>
+
+        <div className="friends-container">
+          {updatedFriends.map((friend) => (
+            <Friend
+              key={friend.userId}
+              userId={friend.userId}
+              name={friend.userLogin}
+              imageUrl={friend.iconPath}
+              isExpanded={isExpanded}
+              onClick={onFriendClick}
+              afterRemove={handleFriendRemoved} 
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default FriendsList;

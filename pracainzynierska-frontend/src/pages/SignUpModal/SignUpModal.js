@@ -17,11 +17,11 @@ function SignUpModal({ closeSignUpModal }) {
 
     if (response.status !== 200) {
       // bad register
-      console.log("bad");
-      console.log(response.data);
+      // console.log("bad");
+      // console.log(response.data);
     } else {
       // successful register
-      console.log("successful");
+      //console.log("successful");
     }
   };
   const handleInputChange = (e) => {

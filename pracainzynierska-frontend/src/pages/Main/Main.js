@@ -8,11 +8,10 @@ import { Logout } from "../../Services/UserService";
 import { useSearchParams, Link } from "react-router-dom";
 import { UserContext } from "../../Services/UserContext";
 
-function Main() {
+const Main = ({handleLogin}) => {
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const { user, setUser } = useContext(UserContext);
-
   const [searchParams, setSearchParamas] = useSearchParams();
   useEffect(() => {
     handleLogout();
@@ -39,7 +38,7 @@ function Main() {
 
   return (
     <div className="main-page-container">
-      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} initialMode="login" />}
+      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} handleLogin={handleLogin} initialMode="login" />}
       {openSignupModal && <AuthModal closeModal={setOpenSignupModal} initialMode="signup" />}
       {user == null ? (
         <div className="main-page-signup">

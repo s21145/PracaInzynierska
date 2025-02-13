@@ -5,7 +5,7 @@ import "./Posts.css";
 
 const MAX_LENGTH = 230;
 
-const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId,likes,isLiked,handlePostLike }, ref) => {
+const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId,likes,isLiked,handlePostLike,handlePostUnlike }, ref) => {
 
 
   return (
@@ -36,7 +36,7 @@ const PostItem = forwardRef(({ idUserOwner, title, content, userLogin, postId,li
             </div>
             <div className="posts__item__likes">
               <span>{likes}</span>
-              <span>{isLiked ?  <i className="fa-solid fa-heart"></i> : <i class="fa-regular fa-heart" onClick={() => handlePostLike(postId)}></i>}</span>
+              <span>{isLiked ?  <i className="fa-solid fa-heart" onClick={() => handlePostUnlike(postId)}></i> : <i className="fa-regular fa-heart" onClick={() => handlePostLike(postId)}></i>}</span>
             </div>
           </div>
         </div>

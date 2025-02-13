@@ -1,4 +1,6 @@
 {
     "apiUrl": "https://localhost:7194/api",
-    "openIdUrl":"http://localhost:7195/"
+    "openIdUrl":"http://localhost:7195/",
+    "chatUrl":"https://localhost:7194/chatHub"
+
 }

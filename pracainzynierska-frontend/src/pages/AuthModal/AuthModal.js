@@ -2,16 +2,18 @@ import React, { useState, useContext } from "react";
 import { Login, RegisterUser, GetFriendsList, GetFriendsListRequests } from "../../Services/UserService";
 import { UserContext } from "../../Services/UserContext";
 import { MessageContext } from "../../Services/MessageContext";
+import { useLoader } from "../../Services/LoaderContext";
 import MessageModal from "../../components/MessageModal";
 import "./AuthModal.css";
 
-function AuthModal({ closeModal, initialMode }) {
+
+function AuthModal({ closeModal, initialMode,onLogin }) {
   const { user, setUser } = useContext(UserContext);
   const { message, setMessage } = useContext(MessageContext);
+  const { startLoading, stopLoading} = useLoader();
   const [isLoginModal, setIsLoginModal] = useState(initialMode === "login");
   const [loginErrors, setLoginErrors] = useState({});
   const [registerErrors, setRegisterErrors] = useState({});
-
   const [login, setLogin] = useState({
     password: "",
     login: "",
@@ -47,54 +49,69 @@ function AuthModal({ closeModal, initialMode }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    startLoading();
+    try{
+      if(!validateLogin()) return;
+      const response = await Login(login);
+      const friends = await GetFriendsList();
+      const requests = await GetFriendsListRequests();
+      if (response.status !== 200) {
+        setMessage({
+          content: "Login failed. Please check your credentials and try again.",
+          show: true,
+        });
+      } else {
+        const age = new Date(response.data.age);
+        setUser({
+          login: response.data.login,
+          image: response.data.image,
+          steamId: response.data.steamId,
+          age: age,
+          description: response.data.description,
+          friends: friends.data,
+          requests: requests.data,
+          userId:response.data.userId
+        });
 
-    if(!validateLogin()) return;
-
-    const response = await Login(login);
-    const friends = await GetFriendsList();
-    const requests = await GetFriendsListRequests();
-    if (response.status !== 200) {
-      console.log(response.data);
-      setMessage({
-        content: "Login failed. Please check your credentials and try again.",
-        show: true,
-      });
-    } else {
-      const age = new Date(response.data.age);
-      setUser({
-        login: response.data.login,
-        image: response.data.image,
-        steamId: response.data.steamId,
-        age: age,
-        description: response.data.description,
-        friends: friends.data,
-        requests: requests.data,
-        userId:response.data.userId
-      });
-      closeModal(false);
+        closeModal(false);
+        onLogin();
+      }
     }
+    catch(err){
+
+    }
+    finally{
+      stopLoading();
+      onLogin();
+    }
+    
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    startLoading();
+    try{
+      if(!validateRegister()) return;
 
-    if(!validateRegister()) return;
+      const response = await RegisterUser(register);
+      if (response.status !== 200) {
+        setMessage({
+          content: "Registration failed. Please check your input and try again.",
+          show: true,
+        });
+      } else {
+        setMessage({
+          content: "Account created successfully! You can now log in.",
+          show: true,
+        });
+        setIsLoginModal(true);
+      }
+    }
+    catch(err){
 
-    const response = await RegisterUser(register);
-    if (response.status !== 200) {
-      console.log("bad");
-      console.log(response.data);
-      setMessage({
-        content: "Registration failed. Please check your input and try again.",
-        show: true,
-      });
-    } else {
-      console.log("successful");
-      setMessage({
-        content: "Account created successfully! You can now log in.",
-        show: true,
-      });
-      setIsLoginModal(true);
+    }
+    finally{
+      stopLoading();
     }
   };
 
@@ -221,14 +238,15 @@ function AuthModal({ closeModal, initialMode }) {
                     <label className="auth-form-label">Password</label>
                     <input
                       name="password"
-                      value={register.password}
+                      type="password"
+                      value={register.password || ""}  
                       onChange={(e) => handleInputChange(e, setRegister)}
-                      placeholder="Please enter your password."
+                      placeholder="Enter your password"
                       className={`auth-form-input ${registerErrors.password ? "input-error" : ""}`}
                       style={{
                         "--placeholder-color": registerErrors.password ? "red" : "gray",
                       }}
-                    ></input>
+                    />
                   </div>
                   <button type="submit" id="submit-button" className="auth-form-button">
                     Sign Up

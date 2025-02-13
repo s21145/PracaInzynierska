@@ -6,7 +6,7 @@ import { UserContext } from "../../Services/UserContext";
 import { useContext } from "react";
 import AuthModal from "../AuthModal/AuthModal";
 
-function Navbar() {
+function Navbar({onLogin}) {
   const { user } = useContext(UserContext);
 
   const [click, setClick] = useState(false);
@@ -49,7 +49,7 @@ function Navbar() {
 
   return (
     <>
-      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} initialMode="login" />}
+      {openLoginModal && <AuthModal closeModal={setOpenLoginModal} onLogin={onLogin}initialMode="login" />}
       {openSignupModal && <AuthModal closeModal={setOpenSignupModal} initialMode="signup" />}
       <nav className="navbar">
         <div className="navbar-container">

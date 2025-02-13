@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using pracaInzynierska_backend.Helpers;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services.IRepository;
@@ -40,31 +41,24 @@ namespace pracaInzynierska_backend.Controllers
         {
             var userName = User.FindFirstValue(ClaimTypes.Name);
             // hash ?????
-            var CheckPassowrd = await _unitOfWork.User.GetAsync(x => x.Password == request.oldPassword);
-            if(CheckPassowrd.Count() == 0)
+            var user = (await _unitOfWork.User.GetAsync(u => u.Login == userName)).FirstOrDefault();
+            var CheckPassword = PasswordHashHelper.VerifyPassword(request.oldPassword, user.Password);
+            if (!CheckPassword)
             {
                 return StatusCode(400, "Stare hasło jest niepoprawne");
             }
-            var query = await _unitOfWork.User.GetAsync(x => x.Login == userName && x.Password == request.password);
-          
-            var checkPassword = query.FirstOrDefault();
-            if(checkPassword != default)
-            {
-                return StatusCode(400, "Haslo jest obecnie w użyciu");
-            }
-            var userQuery = await _unitOfWork.User.GetAsync(x => x.Login == userName);
-            var user = userQuery.FirstOrDefault();
-            if(user  == default)
+            if (user == default)
             {
                 return StatusCode(500, "Internal error");
             }
-            user.Password = request.password;
-             _unitOfWork.User.Update(user);
+            user.Password = PasswordHashHelper.HashPassword(request.password);
+            _unitOfWork.User.Update(user);
             await _unitOfWork.SaveAsync();
 
 
             return StatusCode(200, "Hasło zostało zmienione");
         }
+
         [HttpPost("description")]
         public async Task<IActionResult> ChangeDescriptionAsync([FromBody] string Description)
         {
@@ -446,7 +440,7 @@ namespace pracaInzynierska_backend.Controllers
                 .ReadAllBytes(
                     Path.Combine(Environment.CurrentDirectory, x.User.IconPath))),
                 IsFriend = x.User.Friends.Any(friend => friend.FriendId == user.UserId) ||
-                 x.User.RequestsSent.Any(req => req.ToUserId == user.UserId) ||
+                 x.User.RequestsSent.Any(req => req.ToUserId == user.UserId  ) ||
                  x.User.RequestsReceived.Any(req => req.FromUserId == user.UserId)
             }));
 
@@ -479,6 +473,15 @@ namespace pracaInzynierska_backend.Controllers
                 return StatusCode(403, "Nie ma takiego użytkownika na liście znajomych");
             }
             await _unitOfWork.FriendLists.DeleteAsync(checkIfUserIsFriend.First().Id);
+            var removeFromFriendList = await _unitOfWork.FriendLists.GetAsync(friend => friend.OwnerId == userToRemove.UserId && friend.FriendId == user.UserId);
+            if (checkIfUserIsFriend is null)
+            {
+                return StatusCode(403, "Nie ma takiego użytkownika na liście znajomych");
+            }
+            await _unitOfWork.FriendLists.DeleteAsync(removeFromFriendList.First().Id);
+            var requestRemove = await _unitOfWork.FriendListRequests.GetAsync(friendRequest => ((friendRequest.FromUserId == user.UserId && friendRequest.ToUserId == userToRemove.UserId)
+            || (friendRequest.FromUserId == userToRemove.UserId && friendRequest.ToUserId == user.UserId)) && friendRequest.Status == "Accepted");
+            await _unitOfWork.FriendListRequests.DeleteAsync(requestRemove.First().Id);
             await _unitOfWork.SaveAsync();
             return StatusCode(200);
         }
@@ -582,14 +585,14 @@ namespace pracaInzynierska_backend.Controllers
             return StatusCode(200, requests);
         }
         [HttpGet("searchForFindPlayers")]
-        public async Task<IActionResult> GetUsersForFindPlayers([FromQuery] string nickname)
+        public async Task<IActionResult> GetUsersForFindPlayers([FromQuery] GetUserByNameDTO body)
         {
             var user = await GetUserAsync();
             if (user == null)
             {
                 return StatusCode(400, $"Błąd podczas pobierania danych o użytkowniku");
             }
-            var searchUsers = await _unitOfWork.User.GetUsersWithFriendsAndRequests(nickname,user);
+            var searchUsers = await _unitOfWork.User.GetUsersWithFriendsAndRequests(body.Username,user,body.Page);
             var response = new List<ReturnSimilarUsersDTO>();
             searchUsers.ForEach(x => response.Add(new ReturnSimilarUsersDTO()
             {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using pracaInzynierska_backend.Models;
 using pracaInzynierska_backend.Models.Dto;
 using pracaInzynierska_backend.Services.IRepository;
@@ -28,7 +29,7 @@ namespace pracaInzynierska_backend.Services.Repository
                 .ToListAsync();
             return result;
         }
-        public async Task<List<User>> GetUsersWithFriendsAndRequests(string nickname, User userLogged)
+        public async Task<List<User>> GetUsersWithFriendsAndRequests(string nickname, User userLogged,int page)
         {
             var result = new List<User>();
             if (nickname == string.Empty)
@@ -41,6 +42,9 @@ namespace pracaInzynierska_backend.Services.Repository
                .Include(user => user.Friends)
                .Include(user => user.RequestsReceived)
                .Include(user => user.RequestsSent)
+                .OrderBy(user => user.Login)
+                .Skip(page * 10)
+                .Take(10)
                .ToListAsync();
             return result;
         }

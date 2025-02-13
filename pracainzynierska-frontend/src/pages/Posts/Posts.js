@@ -1,26 +1,11 @@
 import React from 'react';
 import PostItem from './PostItem';
 
-function Posts({ posts, openCreatePostModal, lastPostElementRef,handlePostLike }) {
+function Posts({ posts, openCreatePostModal, lastPostElementRef,handlePostLike,handlePostUnlike }) {
   return (
     <div className="posts">
       <div className="posts__container">
         <div className="posts__sort__options">
-          <div></div>
-          {/* <div className="posts__sort__wrapper">
-            <h1>
-              <i className="fa-solid fa-fire" />
-              Hot
-            </h1>
-            <h1>
-              <i className="fa-solid fa-certificate" />
-              New
-            </h1>
-            <h1>
-              <i className="fa-solid fa-arrow-up-right-dots" />
-              Top
-            </h1>
-          </div> */}
           <button className="create__new__post__button" onClick={openCreatePostModal}>Create</button>
         </div>
         <div className="posts__wrapper">
@@ -29,6 +14,7 @@ function Posts({ posts, openCreatePostModal, lastPostElementRef,handlePostLike }
               posts.map((item, index) => (
                 <PostItem
                   handlePostLike={handlePostLike}
+                  handlePostUnlike={handlePostUnlike}
                   key={item.postId}
                   idUserOwner={item.idUserOwner}
                   userLogin={item.user}
